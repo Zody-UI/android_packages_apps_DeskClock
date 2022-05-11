@@ -17,14 +17,16 @@ license {
 
 android_app {
     name: "DeskClock",
-    resource_dirs: ["res"],
+    manifest: "app/src/main/AndroidManifest.xml",
+    asset_dirs: ["app/src/main/assets"],
+    resource_dirs: ["app/src/main/res"],
     sdk_version: "current",
     overrides: [
         "AlarmClock",
     ],
     srcs: [
-        "src/**/*.kt",
-        "gen/**/*.java",
+        "app/src/main/java/**/*.kt",
+        "app/src/main/gen/**/*.java",
     ],
     product_specific: true,
     static_libs: [
