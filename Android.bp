@@ -34,7 +34,7 @@ android_app {
         "androidx.collection_collection",
         "androidx.arch.core_core-common",
         "androidx.lifecycle_lifecycle-common",
-        "com.google.android.material_material",
+        "com.google.android.material_material_1.5.0",
         "androidx.lifecycle_lifecycle-runtime",
         "androidx.percentlayout_percentlayout",
         "androidx.transition_transition",
