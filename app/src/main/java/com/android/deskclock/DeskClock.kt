@@ -109,9 +109,6 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
     /** The button right of the [.mFab] shared across all tabs in the user interface.  */
     private lateinit var mRightButton: Button
 
-    /** The controller that shows the drop shadow when content is not scrolled to the top.  */
-    private var mDropShadowController: DropShadowController? = null
-
     /** The ViewPager that pages through the fragments representing the content of the tabs.  */
     private lateinit var mFragmentTabPager: ViewPager
 
@@ -290,10 +287,6 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
     override fun onResume() {
         super.onResume()
 
-        val dropShadow: View = findViewById(R.id.drop_shadow)
-        mDropShadowController = DropShadowController(dropShadow, UiDataModel.uiDataModel,
-                mSnackbarAnchor.findViewById(R.id.tab_hairline))
-
         // ViewPager does not save state; this honors the selected tab in the user interface.
         updateCurrentTab()
     }
@@ -308,15 +301,6 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
             // paused state, even though it is the foreground activity.
             mFragmentTabPager.post(Runnable { recreate() })
         }
-    }
-
-    override fun onPause() {
-        if (mDropShadowController != null) {
-            mDropShadowController!!.stop()
-            mDropShadowController = null
-        }
-
-        super.onPause()
     }
 
     override fun onStop() {

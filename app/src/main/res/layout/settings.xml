@@ -20,8 +20,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/drop_shadow" />
-
     <FrameLayout
         android:id="@+id/main"
         android:layout_width="match_parent"

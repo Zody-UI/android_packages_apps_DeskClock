@@ -44,7 +44,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.android.deskclock.BaseActivity
-import com.android.deskclock.DropShadowController
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
 import com.android.deskclock.RingtonePreviewKlaxon
@@ -70,8 +69,6 @@ import com.android.deskclock.provider.Alarm
  */
 // TODO(b/165664115) Replace deprecated AsyncTask calls
 class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<Uri?>>> {
-    /** The controller that shows the drop shadow when content is not scrolled to the top.  */
-    private var mDropShadowController: DropShadowController? = null
 
     /** Generates the items in the activity context menu.  */
     private lateinit var mOptionsMenuManager: OptionsMenuManager
@@ -161,17 +158,7 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
         registerForContextMenu(mRecyclerView)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        val dropShadow: View = findViewById(R.id.drop_shadow)
-        mDropShadowController = DropShadowController(dropShadow, mRecyclerView)
-    }
-
     override fun onPause() {
-        mDropShadowController!!.stop()
-        mDropShadowController = null
-
         mSelectedRingtoneUri?.let {
             if (mAlarmId != -1L) {
                 val context: Context = getApplicationContext()

@@ -73,8 +73,6 @@
             android:importantForAccessibility="no"
             android:saveEnabled="false" />
 
-        <include layout="@layout/drop_shadow" />
-
     </FrameLayout>
 
     <LinearLayout

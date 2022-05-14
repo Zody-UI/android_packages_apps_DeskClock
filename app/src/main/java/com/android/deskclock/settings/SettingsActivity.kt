@@ -32,7 +32,6 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 
 import com.android.deskclock.BaseActivity
-import com.android.deskclock.DropShadowController
 import com.android.deskclock.R
 import com.android.deskclock.Utils
 import com.android.deskclock.actionbarmenu.MenuItemControllerFactory
@@ -46,11 +45,6 @@ import com.android.deskclock.ringtone.RingtonePickerActivity
  */
 class SettingsActivity : BaseActivity() {
     private val mOptionsMenuManager = OptionsMenuManager()
-
-    /**
-     * The controller that shows the drop shadow when content is not scrolled to the top.
-     */
-    private lateinit var mDropShadowController: DropShadowController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,14 +65,7 @@ class SettingsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        val dropShadow: View = findViewById(R.id.drop_shadow)
         val fragment = getSupportFragmentManager().findFragmentById(R.id.main) as PrefsFragment
-        mDropShadowController = DropShadowController(dropShadow, fragment.getListView())
-    }
-
-    override fun onPause() {
-        mDropShadowController.stop()
-        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
