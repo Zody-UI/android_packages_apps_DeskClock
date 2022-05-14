@@ -17,7 +17,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.DeskClock" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.DeskClock" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:colorBackgroundFloating" tools:targetApi="23">
             ?attr/colorBackgroundFloating
         </item>
@@ -37,7 +37,7 @@
         <item name="popupTheme">@style/ThemeOverlay.Popup</item>
     </style>
 
-    <style name="Theme.DeskClock.Settings">
+    <style name="Theme.DeskClock.Settings" parent="Theme.Material3.DayNight">
         <!-- Attributes from androidx.appcompat.appcompat -->
         <item name="actionBarStyle">@style/Widget.ActionBar</item>
         <item name="colorControlActivated">?attr/colorAccent</item>
@@ -48,26 +48,26 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-    <style name="Theme.DeskClock.RingtonePicker">
+    <style name="Theme.DeskClock.RingtonePicker" parent="Theme.Material3.DayNight">
         <!-- Attributes from androidx.appcompat.appcompat -->
         <item name="actionBarStyle">@style/Widget.ActionBar</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
 
-    <style name="Theme.DeskClock.CitySelection">
+    <style name="Theme.DeskClock.CitySelection" parent="Theme.Material3.DayNight">
         <!-- Attributes from androidx.appcompat.appcompat -->
         <item name="actionBarStyle">@style/Widget.ActionBar.NoTitle</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
 
-    <style name="ThemeOverlay.Control.Accent" parent="ThemeOverlay.AppCompat">
+    <style name="ThemeOverlay.Control.Accent" parent="ThemeOverlay.Material3">
         <!-- Attributes from androidx.appcompat.appcompat -->
         <item name="colorControlActivated">?attr/colorAccent</item>
     </style>
 
-    <style name="ThemeOverlay.Popup" parent="ThemeOverlay.AppCompat">
+    <style name="ThemeOverlay.Popup" parent="ThemeOverlay.Material3">
         <item name="android:colorBackground">?attr/colorBackgroundFloating</item>
     </style>
 
