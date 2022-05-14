@@ -18,52 +18,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.DeskClock" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:colorBackgroundFloating" tools:targetApi="23">
-            ?attr/colorBackgroundFloating
-        </item>
-        <item name="android:navigationBarColor" tools:targetApi="21">?attr/colorPrimaryDark</item>
-        <item name="android:popupTheme" tools:targetApi="21">?attr/popupTheme</item>
-        <item name="android:timePickerStyle" tools:targetApi="21">@style/Widget.TimePicker</item>
-        <item name="android:windowBackground">@color/default_background</item>
-        <item name="android:windowContentOverlay">@null</item>
-
-        <!-- Attributes from androidx.appcompat.appcompat -->
-        <item name="colorAccent">#DA4336</item>
-        <item name="colorBackgroundFloating">#303030</item>
-        <item name="colorControlActivated">@android:color/white</item>
-        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
-        <item name="colorPrimaryDark">#66000000</item>
-        <item name="imageButtonStyle">@style/Widget.ImageButton</item>
-        <item name="popupTheme">@style/ThemeOverlay.Popup</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
     </style>
 
-    <style name="Theme.DeskClock.Settings" parent="Theme.Material3.DayNight">
-        <!-- Attributes from androidx.appcompat.appcompat -->
-        <item name="actionBarStyle">@style/Widget.ActionBar</item>
-        <item name="colorControlActivated">?attr/colorAccent</item>
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
-
-        <!-- Attributes from androidx.preference.-->
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-    </style>
-
-    <style name="Theme.DeskClock.RingtonePicker" parent="Theme.Material3.DayNight">
-        <!-- Attributes from androidx.appcompat.appcompat -->
-        <item name="actionBarStyle">@style/Widget.ActionBar</item>
+    <style name="Theme.DeskClock.Settings" parent="Theme.DeskClock">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
 
-    <style name="Theme.DeskClock.CitySelection" parent="Theme.Material3.DayNight">
-        <!-- Attributes from androidx.appcompat.appcompat -->
-        <item name="actionBarStyle">@style/Widget.ActionBar.NoTitle</item>
+    <style name="Theme.DeskClock.RingtonePicker" parent="Theme.DeskClock">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
+    <style name="Theme.DeskClock.CitySelection" parent="Theme.DeskClock">
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
 
     <style name="ThemeOverlay.Control.Accent" parent="ThemeOverlay.Material3">
-        <!-- Attributes from androidx.appcompat.appcompat -->
         <item name="colorControlActivated">?attr/colorAccent</item>
     </style>
 
