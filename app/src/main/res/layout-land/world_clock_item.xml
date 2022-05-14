@@ -27,7 +27,7 @@
 
         <TextClock
             android:id="@+id/digital_clock"
-            style="@style/world_clock_time"
+            style="@style/Widget.MaterialComponents.TextView.WorldClockTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

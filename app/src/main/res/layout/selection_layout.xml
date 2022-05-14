@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/dismiss_alarm"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorSurface"
         android:textSize="@dimen/header_font_size"
         android:layout_marginBottom="@dimen/alarm_picker_margin_bottom"/>
 

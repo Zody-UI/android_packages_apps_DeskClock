@@ -51,7 +51,7 @@
 
     <CheckBox
         android:id="@+id/repeat_onoff"
-        style="@style/body"
+        style="@style/Widget.MaterialComponents.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/touch_target_min_size"
         android:paddingEnd="@dimen/checkbox_start_padding"
@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/choose_ringtone"
-        style="@style/body"
+        style="@style/Widget.MaterialComponents.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_min_size"
         android:background="?attr/selectableItemBackground"
@@ -96,7 +96,7 @@
 
     <CheckBox
         android:id="@+id/vibrate_onoff"
-        style="@style/body"
+        style="@style/Widget.MaterialComponents.TextView.Body"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/touch_target_min_size"
         android:paddingEnd="@dimen/checkbox_start_padding"
@@ -109,7 +109,7 @@
 
     <TextView
         android:id="@+id/edit_label"
-        style="@style/body"
+        style="@style/Widget.MaterialComponents.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -161,7 +161,7 @@
         android:paddingStart="@dimen/icon_margin"
         android:text="@string/delete"
         android:textAllCaps="false"
-        android:textAppearance="@style/body"
+        android:textAppearance="@style/Widget.MaterialComponents.TextView.Body"
         app:layout_column="0"
         app:layout_gravity="center_vertical"
         app:layout_row="7" />

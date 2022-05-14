@@ -24,13 +24,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="white_08p">#14FFFFFF</color>
     <color name="white_63p">#A0FFFFFF</color>
-    <color name="no_alarms">#4CFFFFFF</color>
+    <color name="no_alarms">@color/color_on_surface_29p</color>
 
     <color name="transparent">#00000000</color>
 
-    <color name="hairline">#28FFFFFF</color>
+    <color name="hairline">@color/color_on_surface_15p</color>
 
-    <color name="clock_gray">#B3FFFFFF</color>
+    <color name="clock_gray">@color/color_on_surface_gray</color>
 
     <color name="default_background">#1A237E</color>
 

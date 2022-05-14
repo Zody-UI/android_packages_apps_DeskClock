@@ -25,5 +25,5 @@
     android:gravity="center_vertical"
     android:paddingStart="@dimen/icon_margin"
     android:textAllCaps="false"
-    android:textAppearance="@style/body"
+    android:textAppearance="@style/Widget.MaterialComponents.TextView.Body"
     android:visibility="gone"/>
