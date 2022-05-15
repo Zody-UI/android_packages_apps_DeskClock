@@ -17,6 +17,7 @@
     android:name="play_pause"
     android:width="48dp"
     android:height="48dp"
+    android:tint="?attr/colorOnSurface"
     android:viewportWidth="48"
     android:viewportHeight="48">
     <group

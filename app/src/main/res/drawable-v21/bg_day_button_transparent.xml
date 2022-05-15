@@ -17,6 +17,7 @@
     android:name="day_button_circle_vector"
     android:width="24dp"
     android:height="24dp"
+    android:tint="?attr/colorOnSurface"
     android:viewportWidth="24.0"
     android:viewportHeight="24.0">
     <group
