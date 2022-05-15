@@ -17,10 +17,7 @@
 package com.android.deskclock.controller
 
 import androidx.annotation.StringRes
-
 import com.android.deskclock.events.EventTracker
-
-import java.util.ArrayList
 
 internal class EventController {
     private val mEventTrackers: MutableCollection<EventTracker> = ArrayList()

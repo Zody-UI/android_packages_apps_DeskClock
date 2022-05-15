@@ -65,13 +65,15 @@ class TimerSetupView @JvmOverloads constructor(
         val secondsLabel = bf.unicodeWrap(context.getString(R.string.seconds_label))
 
         // Create a formatted template for "00h 00m 00s".
-        mTimeTemplate = TextUtils.expandTemplate("^1^4 ^2^5 ^3^6",
-                bf.unicodeWrap("^1"),
-                bf.unicodeWrap("^2"),
-                bf.unicodeWrap("^3"),
-                FormattedTextUtils.formatText(hoursLabel, RelativeSizeSpan(0.5f)),
-                FormattedTextUtils.formatText(minutesLabel, RelativeSizeSpan(0.5f)),
-                FormattedTextUtils.formatText(secondsLabel, RelativeSizeSpan(0.5f)))
+        mTimeTemplate = TextUtils.expandTemplate(
+            "^1^4 ^2^5 ^3^6",
+            bf.unicodeWrap("^1"),
+            bf.unicodeWrap("^2"),
+            bf.unicodeWrap("^3"),
+            FormattedTextUtils.formatText(hoursLabel, RelativeSizeSpan(0.5f)),
+            FormattedTextUtils.formatText(minutesLabel, RelativeSizeSpan(0.5f)),
+            FormattedTextUtils.formatText(secondsLabel, RelativeSizeSpan(0.5f))
+        )
 
         LayoutInflater.from(context).inflate(R.layout.timer_setup_container, this)
     }
@@ -83,28 +85,37 @@ class TimerSetupView @JvmOverloads constructor(
         mDeleteView = findViewById(R.id.timer_setup_delete)
         mDividerView = findViewById(R.id.timer_setup_divider)
         mDigitViews = arrayOf(
-                findViewById<View>(R.id.timer_setup_digit_0) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_1) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_2) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_3) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_4) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_5) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_6) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_7) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_8) as TextView,
-                findViewById<View>(R.id.timer_setup_digit_9) as TextView)
+            findViewById<View>(R.id.timer_setup_digit_0) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_1) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_2) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_3) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_4) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_5) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_6) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_7) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_8) as TextView,
+            findViewById<View>(R.id.timer_setup_digit_9) as TextView
+        )
 
         // Tint the divider to match the disabled control color by default and used the activated
         // control color when there is valid input.
         val dividerContext = mDividerView.context
-        val colorControlActivated = ThemeUtils.resolveColor(dividerContext,
-                com.google.android.material.R.attr.colorControlActivated)
-        val colorControlDisabled = ThemeUtils.resolveColor(dividerContext,
-                com.google.android.material.R.attr.colorControlNormal, intArrayOf(android.R.attr.state_enabled.inv()))
-        ViewCompat.setBackgroundTintList(mDividerView,
-                ColorStateList(
-                        arrayOf(intArrayOf(android.R.attr.state_activated), intArrayOf()),
-                        intArrayOf(colorControlActivated, colorControlDisabled)))
+        val colorControlActivated = ThemeUtils.resolveColor(
+            dividerContext,
+            com.google.android.material.R.attr.colorControlActivated
+        )
+        val colorControlDisabled = ThemeUtils.resolveColor(
+            dividerContext,
+            com.google.android.material.R.attr.colorControlNormal,
+            intArrayOf(android.R.attr.state_enabled.inv())
+        )
+        ViewCompat.setBackgroundTintList(
+            mDividerView,
+            ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_activated), intArrayOf()),
+                intArrayOf(colorControlActivated, colorControlDisabled)
+            )
+        )
         ViewCompat.setBackgroundTintMode(mDividerView, PorterDuff.Mode.SRC)
 
         // Initialize the digit buttons.
@@ -182,16 +193,20 @@ class TimerSetupView @JvmOverloads constructor(
         val hours = mInput[5] * 10 + mInput[4]
 
         val uidm = UiDataModel.uiDataModel
-        mTimeView.text = TextUtils.expandTemplate(mTimeTemplate,
-                uidm.getFormattedNumber(hours, 2),
-                uidm.getFormattedNumber(minutes, 2),
-                uidm.getFormattedNumber(seconds, 2))
+        mTimeView.text = TextUtils.expandTemplate(
+            mTimeTemplate,
+            uidm.getFormattedNumber(hours, 2),
+            uidm.getFormattedNumber(minutes, 2),
+            uidm.getFormattedNumber(seconds, 2)
+        )
 
         val r = resources
-        mTimeView.contentDescription = r.getString(R.string.timer_setup_description,
-                r.getQuantityString(R.plurals.hours, hours, hours),
-                r.getQuantityString(R.plurals.minutes, minutes, minutes),
-                r.getQuantityString(R.plurals.seconds, seconds, seconds))
+        mTimeView.contentDescription = r.getString(
+            R.string.timer_setup_description,
+            r.getQuantityString(R.plurals.hours, hours, hours),
+            r.getQuantityString(R.plurals.minutes, minutes, minutes),
+            r.getQuantityString(R.plurals.seconds, seconds, seconds)
+        )
     }
 
     private fun updateDeleteAndDivider() {
@@ -225,8 +240,9 @@ class TimerSetupView @JvmOverloads constructor(
 
         // Update TalkBack to read the number being deleted.
         mDeleteView.contentDescription = context.getString(
-                R.string.timer_descriptive_delete,
-                UiDataModel.uiDataModel.getFormattedNumber(digit))
+            R.string.timer_descriptive_delete,
+            UiDataModel.uiDataModel.getFormattedNumber(digit)
+        )
 
         // Update the fab, delete, and divider when we have valid input.
         if (mInputPointer == 0) {
@@ -249,8 +265,9 @@ class TimerSetupView @JvmOverloads constructor(
         // Update TalkBack to read the number being deleted or its original description.
         if (mInputPointer >= 0) {
             mDeleteView.contentDescription = context.getString(
-                    R.string.timer_descriptive_delete,
-                    UiDataModel.uiDataModel.getFormattedNumber(mInput[0]))
+                R.string.timer_descriptive_delete,
+                UiDataModel.uiDataModel.getFormattedNumber(mInput[0])
+            )
         } else {
             mDeleteView.contentDescription = context.getString(R.string.timer_delete)
         }

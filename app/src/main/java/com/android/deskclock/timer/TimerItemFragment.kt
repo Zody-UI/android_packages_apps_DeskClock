@@ -86,9 +86,12 @@ class TimerItemFragment : Fragment() {
                 // Must re-retrieve timer because old timer is no longer accurate.
                 val currentTime: Long = this@TimerItemFragment.timer!!.remainingTime
                 if (currentTime > 0) {
-                    v.announceForAccessibility(TimerStringFormatter.formatString(
+                    v.announceForAccessibility(
+                        TimerStringFormatter.formatString(
                             context, R.string.timer_accessibility_one_minute_added, currentTime,
-                            true))
+                            true
+                        )
+                    )
                 }
             }
         }

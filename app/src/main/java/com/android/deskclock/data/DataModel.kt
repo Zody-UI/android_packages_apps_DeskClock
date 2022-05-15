@@ -33,15 +33,11 @@ import android.provider.Settings.ACTION_SOUND_SETTINGS
 import android.view.View
 import androidx.annotation.Keep
 import androidx.annotation.StringRes
-
 import com.android.deskclock.Predicate
 import com.android.deskclock.R
 import com.android.deskclock.Utils
 import com.android.deskclock.timer.TimerService
-
-import java.util.Calendar
-
-import kotlin.Comparator
+import java.util.*
 import kotlin.math.roundToInt
 
 /**
@@ -72,22 +68,30 @@ class DataModel private constructor() {
         private val mActionListener: View.OnClickListener?
     ) {
 
-        DO_NOT_DISTURB(R.string.alarms_blocked_by_dnd,
-                0,
-                Predicate.FALSE as Predicate<Context>,
-                mActionListener = null),
-        MUTED_VOLUME(R.string.alarm_volume_muted,
-                R.string.unmute_alarm_volume,
-                Predicate.TRUE as Predicate<Context>,
-                UnmuteAlarmVolumeListener()),
-        SILENT_RINGTONE(R.string.silent_default_alarm_ringtone,
-                R.string.change_setting_action,
-                ChangeSoundActionPredicate(),
-                ChangeSoundSettingsListener()),
-        BLOCKED_NOTIFICATIONS(R.string.app_notifications_blocked,
-                R.string.change_setting_action,
-                Predicate.TRUE as Predicate<Context>,
-                ChangeAppNotificationSettingsListener());
+        DO_NOT_DISTURB(
+            R.string.alarms_blocked_by_dnd,
+            0,
+            Predicate.FALSE as Predicate<Context>,
+            mActionListener = null
+        ),
+        MUTED_VOLUME(
+            R.string.alarm_volume_muted,
+            R.string.unmute_alarm_volume,
+            Predicate.TRUE as Predicate<Context>,
+            UnmuteAlarmVolumeListener()
+        ),
+        SILENT_RINGTONE(
+            R.string.silent_default_alarm_ringtone,
+            R.string.change_setting_action,
+            ChangeSoundActionPredicate(),
+            ChangeSoundSettingsListener()
+        ),
+        BLOCKED_NOTIFICATIONS(
+            R.string.app_notifications_blocked,
+            R.string.change_setting_action,
+            Predicate.TRUE as Predicate<Context>,
+            ChangeAppNotificationSettingsListener()
+        );
 
         val actionListener: View.OnClickListener?
             get() = mActionListener
@@ -110,8 +114,10 @@ class DataModel private constructor() {
         private class ChangeSoundSettingsListener : View.OnClickListener {
             override fun onClick(v: View) {
                 val context: Context = v.context
-                context.startActivity(Intent(ACTION_SOUND_SETTINGS)
-                        .addFlags(FLAG_ACTIVITY_NEW_TASK))
+                context.startActivity(
+                    Intent(ACTION_SOUND_SETTINGS)
+                        .addFlags(FLAG_ACTIVITY_NEW_TASK)
+                )
             }
         }
 
@@ -129,10 +135,11 @@ class DataModel private constructor() {
                     try {
                         // Attempt to open the notification settings for this app.
                         context.startActivity(
-                                Intent("android.settings.APP_NOTIFICATION_SETTINGS")
-                                        .putExtra("app_package", context.packageName)
-                                        .putExtra("app_uid", context.applicationInfo.uid)
-                                        .addFlags(FLAG_ACTIVITY_NEW_TASK))
+                            Intent("android.settings.APP_NOTIFICATION_SETTINGS")
+                                .putExtra("app_package", context.packageName)
+                                .putExtra("app_uid", context.applicationInfo.uid)
+                                .addFlags(FLAG_ACTIVITY_NEW_TASK)
+                        )
                         return
                     } catch (ignored: Exception) {
                         // best attempt only; recovery code below
@@ -140,9 +147,11 @@ class DataModel private constructor() {
                 }
 
                 // Fall back to opening the app settings page.
-                context.startActivity(Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
+                context.startActivity(
+                    Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
                         .setData(Uri.fromParts("package", context.packageName, null))
-                        .addFlags(FLAG_ACTIVITY_NEW_TASK))
+                        .addFlags(FLAG_ACTIVITY_NEW_TASK)
+                )
             }
         }
     }
@@ -195,8 +204,10 @@ class DataModel private constructor() {
             mAlarmModel = AlarmModel(mContext!!, mSettingsModel!!)
             mSilentSettingsModel = SilentSettingsModel(mContext!!, mNotificationModel!!)
             mStopwatchModel = StopwatchModel(mContext!!, prefs, mNotificationModel!!)
-            mTimerModel = TimerModel(mContext!!, prefs, mSettingsModel!!, mRingtoneModel!!,
-                    mNotificationModel!!)
+            mTimerModel = TimerModel(
+                mContext!!, prefs, mSettingsModel!!, mRingtoneModel!!,
+                mNotificationModel!!
+            )
         }
     }
 

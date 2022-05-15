@@ -18,11 +18,9 @@ package com.android.deskclock.data
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-
 import com.android.deskclock.R
-
 import java.text.DateFormatSymbols
-import java.util.Calendar
+import java.util.*
 
 /**
  * This class is responsible for encoding a weekly repeat cycle in a [bitset][.getBits]. It
@@ -35,12 +33,18 @@ class Weekdays private constructor(bits: Int) {
      * describe the preferred ordering.
      */
     enum class Order(vararg calendarDays: Int) {
-        SAT_TO_FRI(Calendar.SATURDAY, Calendar.SUNDAY, Calendar.MONDAY,
-                Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY),
-        SUN_TO_SAT(Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
-                Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY),
-        MON_TO_SUN(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY,
-                Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY);
+        SAT_TO_FRI(
+            Calendar.SATURDAY, Calendar.SUNDAY, Calendar.MONDAY,
+            Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY
+        ),
+        SUN_TO_SAT(
+            Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY,
+            Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY
+        ),
+        MON_TO_SUN(
+            Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY,
+            Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY
+        );
 
         val calendarDays: List<Int> = calendarDays.asList()
     }
@@ -144,7 +148,7 @@ class Weekdays private constructor(bits: Int) {
      */
     fun isBitOn(calendarDay: Int): Boolean {
         val bit = sCalendarDayToBit[calendarDay]
-                ?: throw IllegalArgumentException("$calendarDay is not a valid weekday")
+            ?: throw IllegalArgumentException("$calendarDay is not a valid weekday")
         return bits and bit > 0
     }
 

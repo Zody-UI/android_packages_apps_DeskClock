@@ -78,8 +78,12 @@ internal object TimerDAO {
                 val remainingTime: Long = prefs.getLong(REMAINING_TIME + id, totalLength)
                 val label: String? = prefs.getString(LABEL + id, null)
                 val deleteAfterUse: Boolean = prefs.getBoolean(DELETE_AFTER_USE + id, false)
-                timers.add(Timer(id, it, length, totalLength, lastStartTime,
-                        lastWallClockTime, remainingTime, label, deleteAfterUse))
+                timers.add(
+                    Timer(
+                        id, it, length, totalLength, lastStartTime,
+                        lastWallClockTime, remainingTime, label, deleteAfterUse
+                    )
+                )
             }
         }
 
@@ -115,9 +119,11 @@ internal object TimerDAO {
         editor.apply()
 
         // Return a new timer with the generated timer id present.
-        return Timer(id, timer.state, timer.length, timer.totalLength,
-                timer.lastStartTime, timer.lastWallClockTime, timer.remainingTime,
-                timer.label, timer.deleteAfterUse)
+        return Timer(
+            id, timer.state, timer.length, timer.totalLength,
+            timer.lastStartTime, timer.lastWallClockTime, timer.remainingTime,
+            timer.label, timer.deleteAfterUse
+        )
     }
 
     /**

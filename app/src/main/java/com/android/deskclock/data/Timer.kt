@@ -17,12 +17,8 @@
 package com.android.deskclock.data
 
 import android.text.TextUtils
-import android.text.format.DateUtils.HOUR_IN_MILLIS
-import android.text.format.DateUtils.MINUTE_IN_MILLIS
-import android.text.format.DateUtils.SECOND_IN_MILLIS
-
+import android.text.format.DateUtils.*
 import com.android.deskclock.Utils
-
 import kotlin.math.max
 import kotlin.math.min
 
@@ -140,8 +136,10 @@ class Timer internal constructor(
         return if (state == State.RUNNING || state == State.EXPIRED || state == State.MISSED) {
             this
         } else {
-            Timer(id, State.RUNNING, length, totalLength,
-                    Utils.now(), Utils.wallClock(), lastRemainingTime, label, deleteAfterUse)
+            Timer(
+                id, State.RUNNING, length, totalLength,
+                Utils.now(), Utils.wallClock(), lastRemainingTime, label, deleteAfterUse
+            )
         }
     }
 
@@ -156,8 +154,10 @@ class Timer internal constructor(
         }
 
         val remainingTime = this.remainingTime
-        return Timer(id, State.PAUSED, length, totalLength, UNUSED, UNUSED, remainingTime, label,
-                deleteAfterUse)
+        return Timer(
+            id, State.PAUSED, length, totalLength, UNUSED, UNUSED, remainingTime, label,
+            deleteAfterUse
+        )
     }
 
     /**
@@ -169,8 +169,10 @@ class Timer internal constructor(
         }
 
         val remainingTime = min(0L, lastRemainingTime)
-        return Timer(id, State.EXPIRED, length, 0L, Utils.now(),
-                Utils.wallClock(), remainingTime, label, deleteAfterUse)
+        return Timer(
+            id, State.EXPIRED, length, 0L, Utils.now(),
+            Utils.wallClock(), remainingTime, label, deleteAfterUse
+        )
     }
 
     /**
@@ -182,8 +184,10 @@ class Timer internal constructor(
         }
 
         val remainingTime = min(0L, lastRemainingTime)
-        return Timer(id, State.MISSED, length, 0L, Utils.now(),
-                Utils.wallClock(), remainingTime, label, deleteAfterUse)
+        return Timer(
+            id, State.MISSED, length, 0L, Utils.now(),
+            Utils.wallClock(), remainingTime, label, deleteAfterUse
+        )
     }
 
     /**
@@ -193,8 +197,10 @@ class Timer internal constructor(
         return if (state == State.RESET) {
             this
         } else {
-            Timer(id, State.RESET, length, length, UNUSED, UNUSED, length, label,
-                    deleteAfterUse)
+            Timer(
+                id, State.RESET, length, length, UNUSED, UNUSED, length, label,
+                deleteAfterUse
+            )
         }
     }
 
@@ -211,8 +217,10 @@ class Timer internal constructor(
         // update the recorded times and proceed with no change in accumulated time.
         val delta = max(0, wallClockTime - lastWallClockTime)
         val remainingTime = lastRemainingTime - delta
-        return Timer(id, state, length, totalLength, timeSinceBoot, wallClockTime,
-                remainingTime, label, deleteAfterUse)
+        return Timer(
+            id, state, length, totalLength, timeSinceBoot, wallClockTime,
+            remainingTime, label, deleteAfterUse
+        )
     }
 
     /**
@@ -232,8 +240,10 @@ class Timer internal constructor(
             // updateAfterReboot() can successfully correct the data at a later time.
             this
         } else {
-            Timer(id, state, length, totalLength, timeSinceBoot, wallClockTime,
-                    remainingTime, label, deleteAfterUse)
+            Timer(
+                id, state, length, totalLength, timeSinceBoot, wallClockTime,
+                remainingTime, label, deleteAfterUse
+            )
         }
     }
 
@@ -244,8 +254,10 @@ class Timer internal constructor(
         return if (TextUtils.equals(this.label, label)) {
             this
         } else {
-            Timer(id, state, length, totalLength, lastStartTime,
-                    lastWallClockTime, lastRemainingTime, label, deleteAfterUse)
+            Timer(
+                id, state, length, totalLength, lastStartTime,
+                lastWallClockTime, lastRemainingTime, label, deleteAfterUse
+            )
         }
     }
 
@@ -268,8 +280,10 @@ class Timer internal constructor(
             remainingTime = lastRemainingTime
         }
 
-        return Timer(id, state, length, totalLength, lastStartTime,
-                lastWallClockTime, remainingTime, label, deleteAfterUse)
+        return Timer(
+            id, state, length, totalLength, lastStartTime,
+            lastWallClockTime, remainingTime, label, deleteAfterUse
+        )
     }
 
     /**
@@ -298,8 +312,10 @@ class Timer internal constructor(
             lastWallClockTime = this.lastWallClockTime
         }
 
-        return Timer(id, state, length, totalLength, lastStartTime,
-                lastWallClockTime, remainingTime, label, deleteAfterUse)
+        return Timer(
+            id, state, length, totalLength, lastStartTime,
+            lastWallClockTime, remainingTime, label, deleteAfterUse
+        )
     }
 
     /**
@@ -358,7 +374,7 @@ class Timer internal constructor(
         @JvmField
         var EXPIRY_COMPARATOR: Comparator<Timer> = object : Comparator<Timer> {
             private val stateExpiryOrder =
-                    listOf(State.MISSED, State.EXPIRED, State.RUNNING, State.PAUSED, State.RESET)
+                listOf(State.MISSED, State.EXPIRED, State.RUNNING, State.PAUSED, State.RESET)
 
             override fun compare(timer1: Timer, timer2: Timer): Int {
                 val stateIndex1 = stateExpiryOrder.indexOf(timer1.state)

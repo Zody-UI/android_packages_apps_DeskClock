@@ -34,22 +34,13 @@ import android.provider.Settings.System.NEXT_ALARM_FORMATTED
 import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
-
-import com.android.deskclock.AlarmAlertWakeLock
-import com.android.deskclock.AlarmClockFragment
-import com.android.deskclock.AlarmUtils
-import com.android.deskclock.AsyncHandler
-import com.android.deskclock.DeskClock
+import com.android.deskclock.*
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.events.Events
-import com.android.deskclock.LogUtils
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-import com.android.deskclock.R
-import com.android.deskclock.Utils
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * This class handles all the state changes for alarm instances. You need to
@@ -112,15 +103,19 @@ class AlarmStateManager : BroadcastReceiver() {
             newState: Int
         ) {
             val timeInMillis = time.timeInMillis
-            LogUtils.i("Scheduling state change %d to instance %d at %s (%d)", newState,
-                    instance.mId, AlarmUtils.getFormattedTime(context, time), timeInMillis)
+            LogUtils.i(
+                "Scheduling state change %d to instance %d at %s (%d)", newState,
+                instance.mId, AlarmUtils.getFormattedTime(context, time), timeInMillis
+            )
             val stateChangeIntent: Intent =
-                    createStateChangeIntent(context, ALARM_MANAGER_TAG, instance, newState)
+                createStateChangeIntent(context, ALARM_MANAGER_TAG, instance, newState)
             // Treat alarm state change as high priority, use foreground broadcasts
             stateChangeIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
             val pendingIntent: PendingIntent =
-                    PendingIntent.getService(context, instance.hashCode(),
-                    stateChangeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getService(
+                    context, instance.hashCode(),
+                    stateChangeIntent, PendingIntent.FLAG_UPDATE_CURRENT
+                )
 
             val am: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             if (Utils.isMOrLater) {
@@ -136,9 +131,11 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Create a PendingIntent that will match any one set for this instance
             val pendingIntent: PendingIntent? =
-                    PendingIntent.getService(context, instance.hashCode(),
+                PendingIntent.getService(
+                    context, instance.hashCode(),
                     createStateChangeIntent(context, ALARM_MANAGER_TAG, instance, null),
-                    PendingIntent.FLAG_NO_CREATE)
+                    PendingIntent.FLAG_NO_CREATE
+                )
 
             pendingIntent?.let {
                 val am: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
@@ -226,7 +223,7 @@ class AlarmStateManager : BroadcastReceiver() {
         fun getNextFiringAlarm(context: Context): AlarmInstance? {
             val cr: ContentResolver = context.getContentResolver()
             val activeAlarmQuery: String =
-                    InstancesColumns.ALARM_STATE + "<" + InstancesColumns.FIRED_STATE
+                InstancesColumns.ALARM_STATE + "<" + InstancesColumns.FIRED_STATE
             val alarmInstances = AlarmInstance.getInstances(cr, activeAlarmQuery)
 
             var nextAlarm: AlarmInstance? = null
@@ -274,8 +271,10 @@ class AlarmStateManager : BroadcastReceiver() {
             val alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
 
             val flags = if (nextAlarm == null) PendingIntent.FLAG_NO_CREATE else 0
-            val operation: PendingIntent? = PendingIntent.getBroadcast(context, 0 /* requestCode */,
-                    createIndicatorIntent(context), flags)
+            val operation: PendingIntent? = PendingIntent.getBroadcast(
+                context, 0 /* requestCode */,
+                createIndicatorIntent(context), flags
+            )
 
             if (nextAlarm != null) {
                 LogUtils.i("Setting upcoming AlarmClockInfo for alarm: " + nextAlarm.mId)
@@ -283,9 +282,11 @@ class AlarmStateManager : BroadcastReceiver() {
 
                 // Create an intent that can be used to show or edit details of the next alarm.
                 val viewIntent: PendingIntent =
-                        PendingIntent.getActivity(context, nextAlarm.hashCode(),
+                    PendingIntent.getActivity(
+                        context, nextAlarm.hashCode(),
                         AlarmNotifications.createViewAlarmIntent(context, nextAlarm),
-                        PendingIntent.FLAG_UPDATE_CURRENT)
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
 
                 val info = AlarmClockInfo(alarmTime, viewIntent)
                 Utils.updateNextAlarm(alarmManager, info, operation)
@@ -325,13 +326,16 @@ class AlarmStateManager : BroadcastReceiver() {
                 // and has already been fired, schedule the subsequent instance.
                 var nextRepeatedInstance = alarm.createInstanceAfter(currentTime)
                 if (instance.mAlarmState > InstancesColumns.FIRED_STATE &&
-                        nextRepeatedInstance.alarmTime == instance.alarmTime) {
+                    nextRepeatedInstance.alarmTime == instance.alarmTime
+                ) {
                     nextRepeatedInstance = alarm.createInstanceAfter(instance.alarmTime)
                 }
 
-                LogUtils.i("Creating new instance for repeating alarm " + alarm.id +
-                        " at " +
-                        AlarmUtils.getFormattedTime(context, nextRepeatedInstance.alarmTime))
+                LogUtils.i(
+                    "Creating new instance for repeating alarm " + alarm.id +
+                            " at " +
+                            AlarmUtils.getFormattedTime(context, nextRepeatedInstance.alarmTime)
+                )
                 AlarmInstance.addInstance(cr, nextRepeatedInstance)
                 registerInstance(context, nextRepeatedInstance, true)
             }
@@ -359,7 +363,7 @@ class AlarmStateManager : BroadcastReceiver() {
             // fail to occur. To be safer, the call begins in AlarmService, which has the power to
             // display the firing alarm if needed, so no jump is needed.
             val intent: Intent =
-                    AlarmInstance.createIntent(context, AlarmService::class.java, instance.mId)
+                AlarmInstance.createIntent(context, AlarmService::class.java, instance.mId)
             intent.setAction(CHANGE_STATE_ACTION)
             intent.addCategory(tag)
             intent.putExtra(ALARM_GLOBAL_ID_EXTRA, DataModel.dataModel.globalIntentId)
@@ -414,8 +418,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.clearNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.lowNotificationTime,
-                    instance, InstancesColumns.LOW_NOTIFICATION_STATE)
+            scheduleInstanceStateChange(
+                context, instance.lowNotificationTime,
+                instance, InstancesColumns.LOW_NOTIFICATION_STATE
+            )
         }
 
         /**
@@ -436,8 +442,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.showLowPriorityNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.highNotificationTime,
-                    instance, InstancesColumns.HIGH_NOTIFICATION_STATE)
+            scheduleInstanceStateChange(
+                context, instance.highNotificationTime,
+                instance, InstancesColumns.HIGH_NOTIFICATION_STATE
+            )
         }
 
         /**
@@ -458,8 +466,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.clearNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.highNotificationTime,
-                    instance, InstancesColumns.HIGH_NOTIFICATION_STATE)
+            scheduleInstanceStateChange(
+                context, instance.highNotificationTime,
+                instance, InstancesColumns.HIGH_NOTIFICATION_STATE
+            )
         }
 
         /**
@@ -480,8 +490,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.showHighPriorityNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.alarmTime,
-                    instance, InstancesColumns.FIRED_STATE)
+            scheduleInstanceStateChange(
+                context, instance.alarmTime,
+                instance, InstancesColumns.FIRED_STATE
+            )
         }
 
         /**
@@ -540,16 +552,20 @@ class AlarmStateManager : BroadcastReceiver() {
             newAlarmTime.add(Calendar.MINUTE, snoozeMinutes)
 
             // Update alarm state and new alarm time in db.
-            LogUtils.i("Setting snoozed state to instance " + instance.mId + " for " +
-                    AlarmUtils.getFormattedTime(context, newAlarmTime))
+            LogUtils.i(
+                "Setting snoozed state to instance " + instance.mId + " for " +
+                        AlarmUtils.getFormattedTime(context, newAlarmTime)
+            )
             instance.alarmTime = newAlarmTime
             instance.mAlarmState = InstancesColumns.SNOOZE_STATE
             AlarmInstance.updateInstance(context.getContentResolver(), instance)
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.showSnoozeNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.alarmTime,
-                    instance, InstancesColumns.FIRED_STATE)
+            scheduleInstanceStateChange(
+                context, instance.alarmTime,
+                instance, InstancesColumns.FIRED_STATE
+            )
 
             // Display the snooze minutes in a toast.
             if (showToast) {
@@ -558,11 +574,14 @@ class AlarmStateManager : BroadcastReceiver() {
                     val displayTime =
                         String.format(
                             context
-                                    .getResources()
-                                    .getQuantityText(R.plurals.alarm_alert_snooze_set,
-                                            snoozeMinutes)
-                                    .toString(),
-                            snoozeMinutes)
+                                .getResources()
+                                .getQuantityText(
+                                    R.plurals.alarm_alert_snooze_set,
+                                    snoozeMinutes
+                                )
+                                .toString(),
+                            snoozeMinutes
+                        )
                     Toast.makeText(context, displayTime, Toast.LENGTH_LONG).show()
                 }
                 mainHandler.post(myRunnable)
@@ -597,8 +616,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.showMissedNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.missedTimeToLive,
-                    instance, InstancesColumns.DISMISSED_STATE)
+            scheduleInstanceStateChange(
+                context, instance.missedTimeToLive,
+                instance, InstancesColumns.DISMISSED_STATE
+            )
 
             // Instance is not valid anymore, so find next alarm that will fire and notify system
             updateNextAlarm(context)
@@ -622,8 +643,10 @@ class AlarmStateManager : BroadcastReceiver() {
 
             // Setup instance notification and scheduling timers
             AlarmNotifications.clearNotification(context, instance)
-            scheduleInstanceStateChange(context, instance.alarmTime, instance,
-                    InstancesColumns.DISMISSED_STATE)
+            scheduleInstanceStateChange(
+                context, instance.alarmTime, instance,
+                InstancesColumns.DISMISSED_STATE
+            )
 
             // Check parent if it needs to reschedule, disable or delete itself
             if (instance.mAlarmId != null) {
@@ -786,8 +809,10 @@ class AlarmStateManager : BroadcastReceiver() {
                 // We only want to display snooze notification and not update the time,
                 // so handle showing the notification directly
                 AlarmNotifications.showSnoozeNotification(context, instance)
-                scheduleInstanceStateChange(context, instance.alarmTime,
-                        instance, InstancesColumns.FIRED_STATE)
+                scheduleInstanceStateChange(
+                    context, instance.alarmTime,
+                    instance, InstancesColumns.FIRED_STATE
+                )
             } else if (currentTime.after(highNotificationTime)) {
                 setHighNotificationState(context, instance)
             } else if (currentTime.after(lowNotificationTime)) {
@@ -861,7 +886,8 @@ class AlarmStateManager : BroadcastReceiver() {
             // or deleted before re-scheduling prior instances (which may re-create or update the
             // later instances).
             val instances = AlarmInstance.getInstances(
-                    contentResolver, null /* selection */)
+                contentResolver, null /* selection */
+            )
             instances.sortWith(Comparator { lhs, rhs -> rhs.alarmTime.compareTo(lhs.alarmTime) })
 
             for (instance in instances) {
@@ -869,8 +895,10 @@ class AlarmStateManager : BroadcastReceiver() {
                 if (alarm == null) {
                     unregisterInstance(context, instance)
                     AlarmInstance.deleteInstance(contentResolver, instance.mId)
-                    LogUtils.e("Found instance without matching alarm; deleting instance %s",
-                            instance)
+                    LogUtils.e(
+                        "Found instance without matching alarm; deleting instance %s",
+                        instance
+                    )
                     continue
                 }
                 val priorAlarmTime = alarm.getPreviousAlarmTime(instance.alarmTime)
@@ -879,12 +907,14 @@ class AlarmStateManager : BroadcastReceiver() {
                     val oldAlarmTime: Calendar = instance.alarmTime
                     val newAlarmTime = alarm.getNextAlarmTime(currentTime)
                     val oldTime: CharSequence =
-                            DateFormat.format("MM/dd/yyyy hh:mm a", oldAlarmTime)
+                        DateFormat.format("MM/dd/yyyy hh:mm a", oldAlarmTime)
                     val newTime: CharSequence =
-                            DateFormat.format("MM/dd/yyyy hh:mm a", newAlarmTime)
-                    LogUtils.i("A time change has caused an existing alarm scheduled" +
-                            " to fire at %s to be replaced by a new alarm scheduled to fire at %s",
-                            oldTime, newTime)
+                        DateFormat.format("MM/dd/yyyy hh:mm a", newAlarmTime)
+                    LogUtils.i(
+                        "A time change has caused an existing alarm scheduled" +
+                                " to fire at %s to be replaced by a new alarm scheduled to fire at %s",
+                        oldTime, newTime
+                    )
 
                     // The time change is so dramatic the AlarmInstance doesn't make any sense;
                     // remove it and schedule the new appropriate instance.
@@ -937,8 +967,10 @@ class AlarmStateManager : BroadcastReceiver() {
             if (CHANGE_STATE_ACTION == action) {
                 val uri: Uri = intent.getData()!!
                 val instance: AlarmInstance? =
-                    AlarmInstance.getInstance(context.getContentResolver(),
-                        AlarmInstance.getId(uri))
+                    AlarmInstance.getInstance(
+                        context.getContentResolver(),
+                        AlarmInstance.getId(uri)
+                    )
                 if (instance == null) {
                     LogUtils.e("Can not change state for unknown instance: $uri")
                     return
@@ -948,11 +980,14 @@ class AlarmStateManager : BroadcastReceiver() {
                 val intentId: Int = intent.getIntExtra(ALARM_GLOBAL_ID_EXTRA, -1)
                 val alarmState: Int = intent.getIntExtra(ALARM_STATE_EXTRA, -1)
                 if (intentId != globalId) {
-                    LogUtils.i("IntentId: " + intentId + " GlobalId: " + globalId +
-                            " AlarmState: " + alarmState)
+                    LogUtils.i(
+                        "IntentId: " + intentId + " GlobalId: " + globalId +
+                                " AlarmState: " + alarmState
+                    )
                     // Allows dismiss/snooze requests to go through
                     if (!intent.hasCategory(ALARM_DISMISS_TAG) &&
-                            !intent.hasCategory(ALARM_SNOOZE_TAG)) {
+                        !intent.hasCategory(ALARM_SNOOZE_TAG)
+                    ) {
                         LogUtils.i("Ignoring old Intent")
                         return
                     }
@@ -974,8 +1009,10 @@ class AlarmStateManager : BroadcastReceiver() {
             } else if (SHOW_AND_DISMISS_ALARM_ACTION == action) {
                 val uri: Uri = intent.getData()!!
                 val instance: AlarmInstance? =
-                        AlarmInstance.getInstance(context.getContentResolver(),
-                        AlarmInstance.getId(uri))
+                    AlarmInstance.getInstance(
+                        context.getContentResolver(),
+                        AlarmInstance.getId(uri)
+                    )
 
                 if (instance == null) {
                     LogUtils.e("Null alarminstance for SHOW_AND_DISMISS")

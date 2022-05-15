@@ -17,11 +17,8 @@
 package com.android.deskclock.data
 
 import android.content.Context
-import android.text.format.DateUtils.HOUR_IN_MILLIS
-import android.text.format.DateUtils.MINUTE_IN_MILLIS
-import android.text.format.DateUtils.SECOND_IN_MILLIS
+import android.text.format.DateUtils.*
 import androidx.annotation.StringRes
-
 import com.android.deskclock.R
 import com.android.deskclock.Utils
 
@@ -75,11 +72,13 @@ object TimerStringFormatter {
 
         // The verb "remaining" may have to change tense for singular subjects in some languages.
         val remainingSuffix: String =
-                context.getString(if (minutes > 1 || hours > 1 || seconds > 1) {
+            context.getString(
+                if (minutes > 1 || hours > 1 || seconds > 1) {
                     R.string.timer_remaining_multiple
                 } else {
                     R.string.timer_remaining_single
-                })
+                }
+            )
 
         val showHours = hours > 0
         val showMinutes = minutes > 0
@@ -113,8 +112,10 @@ object TimerStringFormatter {
         return if (formatStringId == -1) {
             null
         } else {
-            String.format(context.getString(formatStringId), hourSeq, minSeq,
-                    remainingSuffix, secSeq)
+            String.format(
+                context.getString(formatStringId), hourSeq, minSeq,
+                remainingSuffix, secSeq
+            )
         }
     }
 
@@ -125,7 +126,9 @@ object TimerStringFormatter {
         currentTime: Long,
         shouldShowSeconds: Boolean
     ): String {
-        return String.format(context.getString(stringResId),
-                formatTimeRemaining(context, currentTime, shouldShowSeconds))
+        return String.format(
+            context.getString(stringResId),
+            formatTimeRemaining(context, currentTime, shouldShowSeconds)
+        )
     }
 }

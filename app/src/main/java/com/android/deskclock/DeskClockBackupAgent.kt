@@ -25,15 +25,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.ParcelFileDescriptor
 import android.os.SystemClock
-
 import com.android.deskclock.alarms.AlarmStateManager
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.provider.AlarmInstance
-
 import java.io.File
 import java.io.IOException
-import java.util.Calendar
+import java.util.*
 
 class DeskClockBackupAgent : BackupAgent() {
     @Throws(IOException::class)
@@ -93,9 +91,11 @@ class DeskClockBackupAgent : BackupAgent() {
         DataModel.dataModel.isRestoreBackupFinished = true
 
         // Create an Intent to send into DeskClock indicating restore is complete.
-        val restoreIntent = PendingIntent.getBroadcast(this, 0,
-                Intent(ACTION_COMPLETE_RESTORE).setClass(this, AlarmInitReceiver::class.java),
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT)
+        val restoreIntent = PendingIntent.getBroadcast(
+            this, 0,
+            Intent(ACTION_COMPLETE_RESTORE).setClass(this, AlarmInitReceiver::class.java),
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT
+        )
 
         // Deliver the Intent 10 seconds from now.
         val triggerAtMillis = SystemClock.elapsedRealtime() + 10000

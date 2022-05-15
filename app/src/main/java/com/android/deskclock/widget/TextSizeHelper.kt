@@ -56,8 +56,9 @@ class TextSizeHelper(private val mTextView: TextView) {
         }
 
         if (mTextView.isLayoutRequested ||
-                mWidthConstraint != widthConstraint ||
-                mHeightConstraint != heightConstraint) {
+            mWidthConstraint != widthConstraint ||
+            mHeightConstraint != heightConstraint
+        ) {
             mWidthConstraint = widthConstraint
             mHeightConstraint = heightConstraint
             adjustTextSize()
@@ -81,7 +82,8 @@ class TextSizeHelper(private val mTextView: TextView) {
         val text = mTextView.text
         var textSize = mMaxTextSize
         if (text.isNotEmpty() &&
-                (mWidthConstraint < Int.MAX_VALUE || mHeightConstraint < Int.MAX_VALUE)) {
+            (mWidthConstraint < Int.MAX_VALUE || mHeightConstraint < Int.MAX_VALUE)
+        ) {
             mMeasurePaint.set(mTextView.paint)
 
             var minTextSize = 1f

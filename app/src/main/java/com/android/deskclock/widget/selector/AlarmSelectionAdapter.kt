@@ -21,14 +21,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-
 import com.android.deskclock.R
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.Weekdays
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.widget.TextTime
-
-import java.util.Calendar
+import java.util.*
 
 class AlarmSelectionAdapter(
     context: Context,

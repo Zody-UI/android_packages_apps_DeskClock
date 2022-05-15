@@ -18,8 +18,8 @@ package com.android.deskclock.ringtone
 
 import com.android.deskclock.data.CustomRingtone
 
-internal class CustomRingtoneHolder(ringtone: CustomRingtone)
-    : RingtoneHolder(ringtone.uri, ringtone.title, ringtone.hasPermissions()) {
+internal class CustomRingtoneHolder(ringtone: CustomRingtone) :
+    RingtoneHolder(ringtone.uri, ringtone.title, ringtone.hasPermissions()) {
 
     override fun getItemViewType(): Int {
         return RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND

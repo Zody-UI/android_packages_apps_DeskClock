@@ -20,13 +20,9 @@ import android.annotation.TargetApi
 import android.app.NotificationManager
 import android.app.NotificationManager.ACTION_INTERRUPTION_FILTER_CHANGED
 import android.app.NotificationManager.INTERRUPTION_FILTER_NONE
-import android.content.BroadcastReceiver
-import android.content.ContentResolver
-import android.content.Context
+import android.content.*
 import android.content.Context.AUDIO_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
-import android.content.Intent
-import android.content.IntentFilter
 import android.database.ContentObserver
 import android.media.AudioManager
 import android.media.AudioManager.STREAM_ALARM
@@ -40,7 +36,6 @@ import android.os.Looper
 import android.provider.Settings.System.CONTENT_URI
 import android.provider.Settings.System.DEFAULT_ALARM_ALERT_URI
 import androidx.core.app.NotificationManagerCompat
-
 import com.android.deskclock.Utils
 import com.android.deskclock.data.DataModel.SilentSetting
 
@@ -60,7 +55,7 @@ internal class SilentSettingsModel(
 
     /** Used to query the do-not-disturb setting value, also called "interruption filter".  */
     private val mNotificationManager =
-            mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
     /** List of listeners to invoke upon silence state change.  */
     private val mListeners: MutableList<OnSilentSettingsListener> = ArrayList(1)

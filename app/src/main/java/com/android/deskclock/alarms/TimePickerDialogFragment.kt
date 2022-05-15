@@ -26,10 +26,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-
 import com.android.deskclock.Utils
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * DialogFragment used to show TimePicker.
@@ -58,11 +56,13 @@ class TimePickerDialogFragment : DialogFragment() {
             timePicker.setIs24HourView(DateFormat.is24HourFormat(context))
 
             builder.setView(timePicker)
-                    .setPositiveButton(android.R.string.ok, { _, _ ->
-                        listener.onTimeSet(this@TimePickerDialogFragment,
-                                timePicker.getCurrentHour(), timePicker.getCurrentMinute())
-                    }).setNegativeButton(android.R.string.cancel, null /* listener */)
-                    .create()
+                .setPositiveButton(android.R.string.ok, { _, _ ->
+                    listener.onTimeSet(
+                        this@TimePickerDialogFragment,
+                        timePicker.getCurrentHour(), timePicker.getCurrentMinute()
+                    )
+                }).setNegativeButton(android.R.string.cancel, null /* listener */)
+                .create()
         }
     }
 

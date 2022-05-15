@@ -17,11 +17,7 @@
 package com.android.deskclock.data
 
 import android.annotation.TargetApi
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -37,7 +33,6 @@ import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-
 import com.android.deskclock.AlarmUtils
 import com.android.deskclock.R
 import com.android.deskclock.Utils
@@ -53,9 +48,10 @@ internal class TimerNotificationBuilder {
     fun buildChannel(context: Context, notificationManager: NotificationManagerCompat) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                    TIMER_MODEL_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.default_label),
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                TIMER_MODEL_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.default_label),
+                NotificationManagerCompat.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -85,8 +81,8 @@ internal class TimerNotificationBuilder {
 
                 // Left button: Pause
                 val pause: Intent = Intent(context, TimerService::class.java)
-                        .setAction(TimerService.ACTION_PAUSE_TIMER)
-                        .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+                    .setAction(TimerService.ACTION_PAUSE_TIMER)
+                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
 
                 @DrawableRes val icon1: Int = R.drawable.ic_pause_24dp
                 val title1: CharSequence = res.getText(R.string.timer_pause)
@@ -95,8 +91,8 @@ internal class TimerNotificationBuilder {
 
                 // Right Button: +1 Minute
                 val addMinute: Intent = Intent(context, TimerService::class.java)
-                        .setAction(TimerService.ACTION_ADD_MINUTE_TIMER)
-                        .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+                    .setAction(TimerService.ACTION_ADD_MINUTE_TIMER)
+                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
 
                 @DrawableRes val icon2: Int = R.drawable.ic_add_24dp
                 val title2: CharSequence = res.getText(R.string.timer_plus_1_min)
@@ -108,8 +104,8 @@ internal class TimerNotificationBuilder {
 
                 // Left button: Start
                 val start: Intent = Intent(context, TimerService::class.java)
-                        .setAction(TimerService.ACTION_START_TIMER)
-                        .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+                    .setAction(TimerService.ACTION_START_TIMER)
+                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
 
                 @DrawableRes val icon1: Int = R.drawable.ic_start_24dp
                 val title1: CharSequence = res.getText(R.string.sw_resume_button)
@@ -118,8 +114,8 @@ internal class TimerNotificationBuilder {
 
                 // Right Button: Reset
                 val reset: Intent = Intent(context, TimerService::class.java)
-                        .setAction(TimerService.ACTION_RESET_TIMER)
-                        .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+                    .setAction(TimerService.ACTION_RESET_TIMER)
+                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
 
                 @DrawableRes val icon2: Int = R.drawable.ic_reset_24dp
                 val title2: CharSequence = res.getText(R.string.sw_reset_button)
@@ -145,28 +141,31 @@ internal class TimerNotificationBuilder {
 
         // Intent to load the app and show the timer when the notification is tapped.
         val showApp: Intent = Intent(context, TimerService::class.java)
-                .setAction(TimerService.ACTION_SHOW_TIMER)
-                .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
-                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_notification)
+            .setAction(TimerService.ACTION_SHOW_TIMER)
+            .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+            .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_notification)
 
         val pendingShowApp: PendingIntent =
-                PendingIntent.getService(context, REQUEST_CODE_UPCOMING, showApp,
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getService(
+                context, REQUEST_CODE_UPCOMING, showApp,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         val notification: Builder = Builder(
-                context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID)
-                .setOngoing(true)
-                .setLocalOnly(true)
-                .setShowWhen(false)
-                .setAutoCancel(false)
-                .setContentIntent(pendingShowApp)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setSmallIcon(R.drawable.stat_notify_timer)
-                .setSortKey(nm.timerNotificationSortKey)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setColor(ContextCompat.getColor(context, R.color.default_background))
+            context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID
+        )
+            .setOngoing(true)
+            .setLocalOnly(true)
+            .setShowWhen(false)
+            .setAutoCancel(false)
+            .setContentIntent(pendingShowApp)
+            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setSmallIcon(R.drawable.stat_notify_timer)
+            .setSortKey(nm.timerNotificationSortKey)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setColor(ContextCompat.getColor(context, R.color.default_background))
 
         for (action in actions) {
             notification.addAction(action)
@@ -174,7 +173,7 @@ internal class TimerNotificationBuilder {
 
         if (Utils.isNOrLater) {
             notification.setCustomContentView(buildChronometer(pname, base, running, stateText))
-                    .setGroup(nm.timerNotificationGroupKey)
+                .setGroup(nm.timerNotificationGroupKey)
         } else {
             val contentTextPreN: CharSequence?
             contentTextPreN = when {
@@ -182,8 +181,10 @@ internal class TimerNotificationBuilder {
                     TimerStringFormatter.formatTimeRemaining(context, timer.remainingTime, false)
                 }
                 running -> {
-                    val timeRemaining = TimerStringFormatter.formatTimeRemaining(context,
-                            timer.remainingTime, false)
+                    val timeRemaining = TimerStringFormatter.formatTimeRemaining(
+                        context,
+                        timer.remainingTime, false
+                    )
                     context.getString(R.string.next_timer_notif, timeRemaining)
                 }
                 else -> context.getString(R.string.all_timers_stopped_notif)
@@ -197,16 +198,20 @@ internal class TimerNotificationBuilder {
             if (timer.isRunning && remainingTime > MINUTE_IN_MILLIS) {
                 // Schedule a callback to update the time-sensitive information of the running timer
                 val pi: PendingIntent =
-                        PendingIntent.getService(context, REQUEST_CODE_UPCOMING, updateNotification,
-                        PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT)
+                    PendingIntent.getService(
+                        context, REQUEST_CODE_UPCOMING, updateNotification,
+                        PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
 
                 val nextMinuteChange: Long = remainingTime % MINUTE_IN_MILLIS
                 val triggerTime: Long = SystemClock.elapsedRealtime() + nextMinuteChange
                 TimerModel.schedulePendingIntent(am, triggerTime, pi)
             } else {
                 // Cancel the update notification callback.
-                val pi: PendingIntent? = PendingIntent.getService(context, 0, updateNotification,
-                        PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_NO_CREATE)
+                val pi: PendingIntent? = PendingIntent.getService(
+                    context, 0, updateNotification,
+                    PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_NO_CREATE
+                )
                 if (pi != null) {
                     am.cancel(pi)
                     pi.cancel()
@@ -264,22 +269,23 @@ internal class TimerNotificationBuilder {
 
         // Full screen intent has flags so it is different than the content intent.
         val fullScreen: Intent = Intent(context, ExpiredTimersActivity::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
         val pendingFullScreen: PendingIntent = Utils.pendingActivityIntent(context, fullScreen)
 
         val notification: Builder = Builder(
-                context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID)
-                .setOngoing(true)
-                .setLocalOnly(true)
-                .setShowWhen(false)
-                .setAutoCancel(false)
-                .setContentIntent(contentIntent)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .setDefaults(Notification.DEFAULT_LIGHTS)
-                .setSmallIcon(R.drawable.stat_notify_timer)
-                .setFullScreenIntent(pendingFullScreen, true)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setColor(ContextCompat.getColor(context, R.color.default_background))
+            context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID
+        )
+            .setOngoing(true)
+            .setLocalOnly(true)
+            .setShowWhen(false)
+            .setAutoCancel(false)
+            .setContentIntent(contentIntent)
+            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+            .setDefaults(Notification.DEFAULT_LIGHTS)
+            .setSmallIcon(R.drawable.stat_notify_timer)
+            .setFullScreenIntent(pendingFullScreen, true)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setColor(ContextCompat.getColor(context, R.color.default_background))
 
         for (action in actions) {
             notification.addAction(action)
@@ -320,14 +326,16 @@ internal class TimerNotificationBuilder {
             stateText = if (TextUtils.isEmpty(timer.label)) {
                 res.getString(R.string.missed_timer_notification_label)
             } else {
-                res.getString(R.string.missed_named_timer_notification_label,
-                        timer.label)
+                res.getString(
+                    R.string.missed_named_timer_notification_label,
+                    timer.label
+                )
             }
 
             // Reset button
             val reset: Intent = Intent(context, TimerService::class.java)
-                    .setAction(TimerService.ACTION_RESET_TIMER)
-                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+                .setAction(TimerService.ACTION_RESET_TIMER)
+                .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
 
             @DrawableRes val icon1: Int = R.drawable.ic_reset_24dp
             val title1: CharSequence = res.getText(R.string.timer_reset)
@@ -347,35 +355,40 @@ internal class TimerNotificationBuilder {
 
         // Intent to load the app and show the timer when the notification is tapped.
         val showApp: Intent = Intent(context, TimerService::class.java)
-                .setAction(TimerService.ACTION_SHOW_TIMER)
-                .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
-                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_notification)
+            .setAction(TimerService.ACTION_SHOW_TIMER)
+            .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+            .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_notification)
 
         val pendingShowApp: PendingIntent =
-                PendingIntent.getService(context, REQUEST_CODE_MISSING, showApp,
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getService(
+                context, REQUEST_CODE_MISSING, showApp,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         val notification: Builder = Builder(
-                context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID)
-                .setLocalOnly(true)
-                .setShowWhen(false)
-                .setAutoCancel(false)
-                .setContentIntent(pendingShowApp)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setSmallIcon(R.drawable.stat_notify_timer)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setSortKey(nm.timerNotificationMissedSortKey)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setColor(ContextCompat.getColor(context, R.color.default_background))
+            context, TIMER_MODEL_NOTIFICATION_CHANNEL_ID
+        )
+            .setLocalOnly(true)
+            .setShowWhen(false)
+            .setAutoCancel(false)
+            .setContentIntent(pendingShowApp)
+            .setPriority(NotificationManager.IMPORTANCE_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setSmallIcon(R.drawable.stat_notify_timer)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setSortKey(nm.timerNotificationMissedSortKey)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .addAction(action)
+            .setColor(ContextCompat.getColor(context, R.color.default_background))
 
         if (Utils.isNOrLater) {
             notification.setCustomContentView(buildChronometer(pname, base, true, stateText))
-                    .setGroup(nm.timerNotificationGroupKey)
+                .setGroup(nm.timerNotificationGroupKey)
         } else {
-            val contentText: CharSequence = AlarmUtils.getFormattedTime(context,
-                    timer.wallClockExpirationTime)
+            val contentText: CharSequence = AlarmUtils.getFormattedTime(
+                context,
+                timer.wallClockExpirationTime
+            )
             notification.setContentText(contentText).setContentTitle(stateText)
         }
 

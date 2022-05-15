@@ -36,7 +36,7 @@ object ThemeUtils {
      */
     @ColorInt
     fun resolveColor(context: Context, @AttrRes attr: Int): Int =
-            resolveColor(context, attr, stateSet = null)
+        resolveColor(context, attr, stateSet = null)
 
     /**
      * Convenience method for retrieving a themed color value.

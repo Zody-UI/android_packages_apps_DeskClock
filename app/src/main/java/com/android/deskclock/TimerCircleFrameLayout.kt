@@ -64,10 +64,14 @@ class TimerCircleFrameLayout : FrameLayout {
         val size = min(smallestDimension, maxSize)
 
         // Set the size of this container.
-        variableWidthMeasureSpec = MeasureSpec.makeMeasureSpec(size + paddingLeft + paddingRight,
-                MeasureSpec.EXACTLY)
-        variableHeightMeasureSpec = MeasureSpec.makeMeasureSpec(size + paddingTop + paddingBottom,
-                MeasureSpec.EXACTLY)
+        variableWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
+            size + paddingLeft + paddingRight,
+            MeasureSpec.EXACTLY
+        )
+        variableHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+            size + paddingTop + paddingBottom,
+            MeasureSpec.EXACTLY
+        )
 
         super.onMeasure(variableWidthMeasureSpec, variableHeightMeasureSpec)
     }

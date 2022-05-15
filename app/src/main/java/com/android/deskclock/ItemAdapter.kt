@@ -147,7 +147,8 @@ class ItemAdapter<T : ItemHolder<*>> : RecyclerView.Adapter<ItemViewHolder<T>>()
                 for (newItemHolder in itemHolders) {
                     for (oldItemHolder in oldItemHolders) {
                         if (newItemHolder.itemId == oldItemHolder.itemId &&
-                                newItemHolder !== oldItemHolder) {
+                            newItemHolder !== oldItemHolder
+                        ) {
                             // clear any existing state from the bundle
                             bundle.clear()
 
@@ -360,8 +361,8 @@ class ItemAdapter<T : ItemHolder<*>> : RecyclerView.Adapter<ItemViewHolder<T>>()
      * [ItemViewHolder]. Provides an interface for binding to an [ItemHolder] and later
      * being recycled.
      */
-    open class ItemViewHolder<T : ItemHolder<*>>(itemView: View)
-        : RecyclerView.ViewHolder(itemView) {
+    open class ItemViewHolder<T : ItemHolder<*>>(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         /**
          * The current [ItemHolder] bound to this holder, or `null` if unbound.
          */

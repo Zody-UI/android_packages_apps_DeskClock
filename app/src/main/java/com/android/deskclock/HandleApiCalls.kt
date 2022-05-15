@@ -28,7 +28,6 @@ import android.provider.AlarmClock
 import android.text.TextUtils
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-
 import com.android.deskclock.AlarmUtils.popAlarmSetToast
 import com.android.deskclock.alarms.AlarmStateManager
 import com.android.deskclock.controller.Controller
@@ -44,9 +43,7 @@ import com.android.deskclock.provider.ClockContract.AlarmsColumns
 import com.android.deskclock.timer.TimerFragment
 import com.android.deskclock.timer.TimerService
 import com.android.deskclock.uidata.UiDataModel
-
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 
 /**
  * This activity is never visible. It processes all public intents defined by [AlarmClock]
@@ -113,7 +110,8 @@ class HandleApiCalls : Activity() {
             while (i.hasNext()) {
                 val instance = AlarmInstance.getNextUpcomingInstanceByAlarmId(cr, i.next().id)
                 if (instance == null ||
-                        instance.mAlarmState > ClockContract.InstancesColumns.FIRED_STATE) {
+                    instance.mAlarmState > ClockContract.InstancesColumns.FIRED_STATE
+                ) {
                     i.remove()
                 }
             }
@@ -121,13 +119,19 @@ class HandleApiCalls : Activity() {
             val searchMode = mIntent.getStringExtra(AlarmClock.EXTRA_ALARM_SEARCH_MODE)
             if (searchMode == null && alarms.size > 1) {
                 // shows the UI where user picks which alarm they want to DISMISS
-                val pickSelectionIntent = Intent(mContext,
-                        AlarmSelectionActivity::class.java)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra(AlarmSelectionActivity.EXTRA_ACTION,
-                                AlarmSelectionActivity.ACTION_DISMISS)
-                        .putExtra(AlarmSelectionActivity.EXTRA_ALARMS,
-                                alarms.toTypedArray<Parcelable>())
+                val pickSelectionIntent = Intent(
+                    mContext,
+                    AlarmSelectionActivity::class.java
+                )
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(
+                        AlarmSelectionActivity.EXTRA_ACTION,
+                        AlarmSelectionActivity.ACTION_DISMISS
+                    )
+                    .putExtra(
+                        AlarmSelectionActivity.EXTRA_ALARMS,
+                        alarms.toTypedArray<Parcelable>()
+                    )
                 mContext.startActivity(pickSelectionIntent)
                 val voiceMessage = mContext.getString(R.string.pick_alarm_to_dismiss)
                 Controller.getController().notifyVoiceSuccess(mActivity, voiceMessage)
@@ -143,11 +147,15 @@ class HandleApiCalls : Activity() {
             // disambiguate what the user meant
             if (AlarmClock.ALARM_SEARCH_MODE_ALL != searchMode && matchingAlarms.size > 1) {
                 val pickSelectionIntent = Intent(mContext, AlarmSelectionActivity::class.java)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra(AlarmSelectionActivity.EXTRA_ACTION,
-                                AlarmSelectionActivity.ACTION_DISMISS)
-                        .putExtra(AlarmSelectionActivity.EXTRA_ALARMS,
-                                matchingAlarms.toTypedArray<Parcelable>())
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(
+                        AlarmSelectionActivity.EXTRA_ACTION,
+                        AlarmSelectionActivity.ACTION_DISMISS
+                    )
+                    .putExtra(
+                        AlarmSelectionActivity.EXTRA_ALARMS,
+                        matchingAlarms.toTypedArray<Parcelable>()
+                    )
                 mContext.startActivity(pickSelectionIntent)
                 val voiceMessage = mContext.getString(R.string.pick_alarm_to_dismiss)
                 Controller.getController().notifyVoiceSuccess(mActivity, voiceMessage)
@@ -184,7 +192,8 @@ class HandleApiCalls : Activity() {
         override fun doInBackground(vararg parameters: Void?): Void? {
             val cr = mContext.contentResolver
             val alarmInstances = AlarmInstance.getInstancesByState(
-                    cr, ClockContract.InstancesColumns.FIRED_STATE)
+                cr, ClockContract.InstancesColumns.FIRED_STATE
+            )
             if (alarmInstances.isEmpty()) {
                 val reason = mContext.getString(R.string.no_firing_alarms)
                 Controller.getController().notifyVoiceFailure(mActivity, reason)
@@ -237,8 +246,8 @@ class HandleApiCalls : Activity() {
 
             // Intent has no time or an invalid time, open the alarm creation UI.
             val createAlarm = Alarm.createIntent(this, DeskClock::class.java, Alarm.INVALID_ID)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(AlarmClockFragment.ALARM_CREATE_NEW_INTENT_EXTRA, true)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(AlarmClockFragment.ALARM_CREATE_NEW_INTENT_EXTRA, true)
 
             // Open DeskClock which is now positioned on the alarms tab.
             startActivity(createAlarm)
@@ -296,12 +305,16 @@ class HandleApiCalls : Activity() {
             val selectedTimer = getSelectedTimer(dataUri)
             if (selectedTimer != null) {
                 DataModel.dataModel.resetOrDeleteTimer(selectedTimer, R.string.label_intent)
-                Controller.getController().notifyVoiceSuccess(this,
-                        resources.getQuantityString(R.plurals.expired_timers_dismissed, 1))
+                Controller.getController().notifyVoiceSuccess(
+                    this,
+                    resources.getQuantityString(R.plurals.expired_timers_dismissed, 1)
+                )
                 LOGGER.i("Timer dismissed: $selectedTimer")
             } else {
-                Controller.getController().notifyVoiceFailure(this,
-                        getString(R.string.invalid_timer))
+                Controller.getController().notifyVoiceFailure(
+                    this,
+                    getString(R.string.invalid_timer)
+                )
                 LOGGER.e("Could not dismiss timer: invalid URI")
             }
         } else {
@@ -312,12 +325,15 @@ class HandleApiCalls : Activity() {
                 }
                 val numberOfTimers = expiredTimers.size
                 val timersDismissedMessage = resources.getQuantityString(
-                        R.plurals.expired_timers_dismissed, numberOfTimers, numberOfTimers)
+                    R.plurals.expired_timers_dismissed, numberOfTimers, numberOfTimers
+                )
                 Controller.getController().notifyVoiceSuccess(this, timersDismissedMessage)
                 LOGGER.i(timersDismissedMessage)
             } else {
-                Controller.getController().notifyVoiceFailure(this,
-                        getString(R.string.no_expired_timers))
+                Controller.getController().notifyVoiceFailure(
+                    this,
+                    getString(R.string.no_expired_timers)
+                )
                 LOGGER.e("Could not dismiss timer: no expired timers")
             }
         }
@@ -370,7 +386,7 @@ class HandleApiCalls : Activity() {
 
         // Verify that the timer length is between one second and one day.
         val lengthMillis =
-                DateUtils.SECOND_IN_MILLIS * intent.getIntExtra(AlarmClock.EXTRA_LENGTH, 0)
+            DateUtils.SECOND_IN_MILLIS * intent.getIntExtra(AlarmClock.EXTRA_LENGTH, 0)
         if (lengthMillis < Timer.MIN_LENGTH) {
             val voiceMessage = getString(R.string.invalid_timer_length)
             Controller.getController().notifyVoiceFailure(this, voiceMessage)
@@ -415,8 +431,10 @@ class HandleApiCalls : Activity() {
             UiDataModel.uiDataModel.selectedTab = UiDataModel.Tab.TIMERS
 
             // Open DeskClock which is now positioned on the timers tab.
-            startActivity(Intent(this, DeskClock::class.java)
-                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id))
+            startActivity(
+                Intent(this, DeskClock::class.java)
+                    .putExtra(TimerService.EXTRA_TIMER_ID, timer.id)
+            )
         }
     }
 
@@ -431,9 +449,11 @@ class HandleApiCalls : Activity() {
 
             // Open DeskClock which is now positioned on the alarms tab.
             val showAlarm =
-                    Alarm.createIntent(this, DeskClock::class.java, variableInstance.mAlarmId!!)
-                    .putExtra(AlarmClockFragment.SCROLL_TO_ALARM_INTENT_EXTRA,
-                            variableInstance.mAlarmId!!)
+                Alarm.createIntent(this, DeskClock::class.java, variableInstance.mAlarmId!!)
+                    .putExtra(
+                        AlarmClockFragment.SCROLL_TO_ALARM_INTENT_EXTRA,
+                        variableInstance.mAlarmId!!
+                    )
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(showAlarm)
         }
@@ -496,7 +516,8 @@ class HandleApiCalls : Activity() {
         fun dismissAlarm(alarm: Alarm, activity: Activity) {
             val context = activity.applicationContext
             val instance = AlarmInstance.getNextUpcomingInstanceByAlarmId(
-                    context.contentResolver, alarm.id)
+                context.contentResolver, alarm.id
+            )
             if (instance == null) {
                 val reason = context.getString(R.string.no_alarm_scheduled_for_this_time)
                 Controller.getController().notifyVoiceFailure(activity, reason)
@@ -515,7 +536,8 @@ class HandleApiCalls : Activity() {
             val time = DateFormat.getTimeFormat(context).format(alarmTime)
 
             if (instance.mAlarmState == ClockContract.InstancesColumns.FIRED_STATE ||
-                    instance.mAlarmState == ClockContract.InstancesColumns.SNOOZE_STATE) {
+                instance.mAlarmState == ClockContract.InstancesColumns.SNOOZE_STATE
+            ) {
                 // Always dismiss alarms that are fired or snoozed.
                 AlarmStateManager.deleteInstanceAndUpdateParent(context, instance)
             } else if (Utils.isAlarmWithin24Hours(instance)) {
@@ -524,7 +546,8 @@ class HandleApiCalls : Activity() {
             } else {
                 // Otherwise the alarm cannot be dismissed at this time.
                 val reason = context.getString(
-                        R.string.alarm_cant_be_dismissed_still_more_than_24_hours_away, time)
+                    R.string.alarm_cant_be_dismissed_still_more_than_24_hours_away, time
+                )
                 Controller.getController().notifyVoiceFailure(activity, reason)
                 LOGGER.i("Can't dismiss alarm more than 24 hours in advance")
             }
@@ -540,7 +563,8 @@ class HandleApiCalls : Activity() {
             Utils.enforceNotMainLooper()
 
             val time = DateFormat.getTimeFormat(context).format(
-                    alarmInstance.alarmTime.time)
+                alarmInstance.alarmTime.time
+            )
             val reason = context.getString(R.string.alarm_is_snoozed, time)
             AlarmStateManager.setSnoozeState(context, alarmInstance, true)
 

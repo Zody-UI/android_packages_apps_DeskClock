@@ -18,19 +18,8 @@ package com.android.deskclock.alarms
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_GENERIC
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.animation.TimeInterpolator
-import android.animation.ValueAnimator
-import android.content.BroadcastReceiver
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.ServiceConnection
+import android.animation.*
+import android.content.*
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.Rect
@@ -40,31 +29,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
 import android.widget.TextClock
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.animation.PathInterpolatorCompat
-
-import com.android.deskclock.AnimatorUtils
-import com.android.deskclock.BaseActivity
-import com.android.deskclock.LogUtils
+import com.android.deskclock.*
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.DataModel.AlarmVolumeButtonBehavior
 import com.android.deskclock.events.Events
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-import com.android.deskclock.R
-import com.android.deskclock.ThemeUtils
-import com.android.deskclock.Utils
 import com.android.deskclock.widget.CircleView
-
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -104,6 +82,7 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
     private var mVolumeBehavior: AlarmVolumeButtonBehavior? = null
     private var mCurrentHourColor = 0
     private var mReceiverRegistered = false
+
     /** Whether the AlarmService is currently bound  */
     private var mServiceBound = false
 
@@ -151,14 +130,18 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         if (Utils.isOOrLater) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                    or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON)
+            getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
         } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                    or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                    or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON)
+            getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                        or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
         }
 
         // Hide navigation bar to minimize accidental tap on Home key
@@ -203,10 +186,14 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         mAlarmAnimator = AnimatorUtils.getScaleAnimator(mAlarmButton, 1.0f, 0.0f)
         mSnoozeAnimator = getButtonAnimator(mSnoozeButton, Color.WHITE)
         mDismissAnimator = getButtonAnimator(mDismissButton, mCurrentHourColor)
-        mPulseAnimator = ObjectAnimator.ofPropertyValuesHolder(pulseView,
-                PropertyValuesHolder.ofFloat(CircleView.RADIUS, 0.0f, pulseView.radius),
-                PropertyValuesHolder.ofObject(CircleView.FILL_COLOR, AnimatorUtils.ARGB_EVALUATOR,
-                        ColorUtils.setAlphaComponent(pulseView.fillColor, 0)))
+        mPulseAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            pulseView,
+            PropertyValuesHolder.ofFloat(CircleView.RADIUS, 0.0f, pulseView.radius),
+            PropertyValuesHolder.ofObject(
+                CircleView.FILL_COLOR, AnimatorUtils.ARGB_EVALUATOR,
+                ColorUtils.setAlphaComponent(pulseView.fillColor, 0)
+            )
+        )
         mPulseAnimator.setDuration(PULSE_DURATION_MILLIS.toLong())
         mPulseAnimator.setInterpolator(PULSE_INTERPOLATOR)
         mPulseAnimator.setRepeatCount(ValueAnimator.INFINITE)
@@ -344,7 +331,8 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
 
         val actionIndex: Int = event.getActionIndex()
         if (mInitialPointerIndex == MotionEvent.INVALID_POINTER_ID ||
-                mInitialPointerIndex != event.getPointerId(actionIndex)) {
+            mInitialPointerIndex != event.getPointerId(actionIndex)
+        ) {
             // Ignore any pointers other than the initial one, bail early.
             return true
         }
@@ -362,13 +350,13 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         val dismissFraction: Float
         if (mContentView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             snoozeFraction =
-                    getFraction(alarmRight.toFloat(), mSnoozeButton.getLeft().toFloat(), x)
+                getFraction(alarmRight.toFloat(), mSnoozeButton.getLeft().toFloat(), x)
             dismissFraction =
-                    getFraction(alarmLeft.toFloat(), mDismissButton.getRight().toFloat(), x)
+                getFraction(alarmLeft.toFloat(), mDismissButton.getRight().toFloat(), x)
         } else {
             snoozeFraction = getFraction(alarmLeft.toFloat(), mSnoozeButton.getRight().toFloat(), x)
             dismissFraction =
-                    getFraction(alarmRight.toFloat(), mDismissButton.getLeft().toFloat(), x)
+                getFraction(alarmRight.toFloat(), mDismissButton.getLeft().toFloat(), x)
         }
         setAnimatedFractions(snoozeFraction, dismissFraction)
 
@@ -401,9 +389,11 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
     }
 
     private fun hideNavigationBar() {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        getWindow().getDecorView().setSystemUiVisibility(
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        )
     }
 
     /**
@@ -422,7 +412,7 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
 
             // Check if "Switch Access" is enabled.
             val enabledAccessibilityServices: List<AccessibilityServiceInfo> =
-                    mAccessibilityManager!!.getEnabledAccessibilityServiceList(FEEDBACK_GENERIC)
+                mAccessibilityManager!!.getEnabledAccessibilityServiceList(FEEDBACK_GENERIC)
             return !enabledAccessibilityServices.isEmpty()
         }
 
@@ -431,11 +421,13 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         val alarmRight: Int = mAlarmButton.getRight() - mAlarmButton.getPaddingRight()
         val translationX = (Math.max(mSnoozeButton.getLeft() - alarmRight, 0) +
                 Math.min(mSnoozeButton.getRight() - alarmLeft, 0)).toFloat()
-        getAlarmBounceAnimator(translationX, if (translationX < 0.0f) {
-            R.string.description_direction_left
-        } else {
-            R.string.description_direction_right
-        }).start()
+        getAlarmBounceAnimator(
+            translationX, if (translationX < 0.0f) {
+                R.string.description_direction_left
+            } else {
+                R.string.description_direction_right
+            }
+        ).start()
     }
 
     private fun hintDismiss() {
@@ -443,11 +435,13 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         val alarmRight: Int = mAlarmButton.getRight() - mAlarmButton.getPaddingRight()
         val translationX = (Math.max(mDismissButton.getLeft() - alarmRight, 0) +
                 Math.min(mDismissButton.getRight() - alarmLeft, 0)).toFloat()
-        getAlarmBounceAnimator(translationX, if (translationX < 0.0f) {
-            R.string.description_direction_left
-        } else {
-            R.string.description_direction_right
-        }).start()
+        getAlarmBounceAnimator(
+            translationX, if (translationX < 0.0f) {
+                R.string.description_direction_left
+            } else {
+                R.string.description_direction_right
+            }
+        ).start()
     }
 
     /**
@@ -470,17 +464,22 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         mAlarmHandled = true
         LOGGER.v("Snoozed: %s", mAlarmInstance)
 
-        val colorAccent = ThemeUtils.resolveColor(this, com.google.android.material.R.attr.colorAccent)
+        val colorAccent =
+            ThemeUtils.resolveColor(this, com.google.android.material.R.attr.colorAccent)
         setAnimatedFractions(1.0f /* snoozeFraction */, 0.0f /* dismissFraction */)
 
         val snoozeMinutes = DataModel.dataModel.snoozeLength
         val infoText: String = getResources().getQuantityString(
-                R.plurals.alarm_alert_snooze_duration, snoozeMinutes, snoozeMinutes)
+            R.plurals.alarm_alert_snooze_duration, snoozeMinutes, snoozeMinutes
+        )
         val accessibilityText: String = getResources().getQuantityString(
-                R.plurals.alarm_alert_snooze_set, snoozeMinutes, snoozeMinutes)
+            R.plurals.alarm_alert_snooze_set, snoozeMinutes, snoozeMinutes
+        )
 
-        getAlertAnimator(mSnoozeButton, R.string.alarm_alert_snoozed_text, infoText,
-                accessibilityText, colorAccent, colorAccent).start()
+        getAlertAnimator(
+            mSnoozeButton, R.string.alarm_alert_snoozed_text, infoText,
+            accessibilityText, colorAccent, colorAccent
+        ).start()
 
         AlarmStateManager.setSnoozeState(this, mAlarmInstance!!, false /* showToast */)
 
@@ -499,9 +498,11 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
 
         setAnimatedFractions(0.0f /* snoozeFraction */, 1.0f /* dismissFraction */)
 
-        getAlertAnimator(mDismissButton, R.string.alarm_alert_off_text, null /* infoText */,
-                getString(R.string.alarm_alert_off_text) /* accessibilityText */,
-                Color.WHITE, mCurrentHourColor).start()
+        getAlertAnimator(
+            mDismissButton, R.string.alarm_alert_off_text, null /* infoText */,
+            getString(R.string.alarm_alert_off_text) /* accessibilityText */,
+            Color.WHITE, mCurrentHourColor
+        ).start()
 
         AlarmStateManager.deleteInstanceAndUpdateParent(this, mAlarmInstance!!)
 
@@ -544,19 +545,27 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
     }
 
     private fun getButtonAnimator(button: ImageView?, tintColor: Int): ValueAnimator {
-        return ObjectAnimator.ofPropertyValuesHolder(button,
-                PropertyValuesHolder.ofFloat(View.SCALE_X, BUTTON_SCALE_DEFAULT, 1.0f),
-                PropertyValuesHolder.ofFloat(View.SCALE_Y, BUTTON_SCALE_DEFAULT, 1.0f),
-                PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 0, 255),
-                PropertyValuesHolder.ofInt(AnimatorUtils.DRAWABLE_ALPHA,
-                        BUTTON_DRAWABLE_ALPHA_DEFAULT, 255),
-                PropertyValuesHolder.ofObject(AnimatorUtils.DRAWABLE_TINT,
-                        AnimatorUtils.ARGB_EVALUATOR, Color.WHITE, tintColor))
+        return ObjectAnimator.ofPropertyValuesHolder(
+            button,
+            PropertyValuesHolder.ofFloat(View.SCALE_X, BUTTON_SCALE_DEFAULT, 1.0f),
+            PropertyValuesHolder.ofFloat(View.SCALE_Y, BUTTON_SCALE_DEFAULT, 1.0f),
+            PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 0, 255),
+            PropertyValuesHolder.ofInt(
+                AnimatorUtils.DRAWABLE_ALPHA,
+                BUTTON_DRAWABLE_ALPHA_DEFAULT, 255
+            ),
+            PropertyValuesHolder.ofObject(
+                AnimatorUtils.DRAWABLE_TINT,
+                AnimatorUtils.ARGB_EVALUATOR, Color.WHITE, tintColor
+            )
+        )
     }
 
     private fun getAlarmBounceAnimator(translationX: Float, hintResId: Int): ValueAnimator {
-        val bounceAnimator: ValueAnimator = ObjectAnimator.ofFloat(mAlarmButton,
-                View.TRANSLATION_X, mAlarmButton.getTranslationX(), translationX, 0.0f)
+        val bounceAnimator: ValueAnimator = ObjectAnimator.ofFloat(
+            mAlarmButton,
+            View.TRANSLATION_X, mAlarmButton.getTranslationX(), translationX, 0.0f
+        )
         bounceAnimator.setInterpolator(AnimatorUtils.DECELERATE_ACCELERATE_INTERPOLATOR)
         bounceAnimator.setDuration(ALARM_BOUNCE_DURATION_MILLIS.toLong())
         bounceAnimator.addListener(object : AnimatorListenerAdapter() {
@@ -594,15 +603,16 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         val endRadius = sqrt(xMax * xMax + yMax * yMax.toDouble()).toFloat()
 
         val revealView = CircleView(this)
-                .setCenterX(centerX.toFloat())
-                .setCenterY(centerY.toFloat())
-                .setFillColor(revealColor)
+            .setCenterX(centerX.toFloat())
+            .setCenterY(centerY.toFloat())
+            .setFillColor(revealColor)
         containerView.addView(revealView)
 
         // TODO: Fade out source icon over the reveal (like LOLLIPOP version).
 
         val revealAnimator: Animator = ObjectAnimator.ofFloat(
-                revealView, CircleView.RADIUS, startRadius, endRadius)
+            revealView, CircleView.RADIUS, startRadius, endRadius
+        )
         revealAnimator.setDuration(ALERT_REVEAL_DURATION_MILLIS.toLong())
         revealAnimator.setInterpolator(REVEAL_INTERPOLATOR)
         revealAnimator.addListener(object : AnimatorListenerAdapter() {
@@ -642,9 +652,9 @@ class AlarmActivity : BaseActivity(), View.OnClickListener, View.OnTouchListener
         private val LOGGER = LogUtils.Logger("AlarmActivity")
 
         private val PULSE_INTERPOLATOR: TimeInterpolator =
-                PathInterpolatorCompat.create(0.4f, 0.0f, 0.2f, 1.0f)
+            PathInterpolatorCompat.create(0.4f, 0.0f, 0.2f, 1.0f)
         private val REVEAL_INTERPOLATOR: TimeInterpolator =
-                PathInterpolatorCompat.create(0.0f, 0.0f, 0.2f, 1.0f)
+            PathInterpolatorCompat.create(0.0f, 0.0f, 0.2f, 1.0f)
 
         private const val PULSE_DURATION_MILLIS = 1000
         private const val ALARM_BOUNCE_DURATION_MILLIS = 500

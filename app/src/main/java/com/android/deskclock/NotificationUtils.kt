@@ -68,29 +68,29 @@ object NotificationUtils {
 
     init {
         CHANNEL_PROPS[ALARM_MISSED_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.alarm_missed_channel,
-                IMPORTANCE_HIGH
+            R.string.alarm_missed_channel,
+            IMPORTANCE_HIGH
         )
         CHANNEL_PROPS[ALARM_SNOOZE_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.alarm_snooze_channel,
-                IMPORTANCE_LOW
+            R.string.alarm_snooze_channel,
+            IMPORTANCE_LOW
         )
         CHANNEL_PROPS[ALARM_UPCOMING_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.alarm_upcoming_channel,
-                IMPORTANCE_LOW
+            R.string.alarm_upcoming_channel,
+            IMPORTANCE_LOW
         )
         CHANNEL_PROPS[FIRING_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.firing_alarms_timers_channel,
-                IMPORTANCE_HIGH,
-                ENABLE_LIGHTS
+            R.string.firing_alarms_timers_channel,
+            IMPORTANCE_HIGH,
+            ENABLE_LIGHTS
         )
         CHANNEL_PROPS[STOPWATCH_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.stopwatch_channel,
-                IMPORTANCE_LOW
+            R.string.stopwatch_channel,
+            IMPORTANCE_LOW
         )
         CHANNEL_PROPS[TIMER_MODEL_NOTIFICATION_CHANNEL_ID] = intArrayOf(
-                R.string.timer_channel,
-                IMPORTANCE_LOW
+            R.string.timer_channel,
+            IMPORTANCE_LOW
         )
     }
 

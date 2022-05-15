@@ -25,8 +25,8 @@ import android.widget.TextView
 import com.android.deskclock.ItemAdapter.ItemViewHolder
 import com.android.deskclock.R
 
-internal class AddCustomRingtoneViewHolder private constructor(itemView: View)
-    : ItemViewHolder<AddCustomRingtoneHolder>(itemView), View.OnClickListener {
+internal class AddCustomRingtoneViewHolder private constructor(itemView: View) :
+    ItemViewHolder<AddCustomRingtoneHolder>(itemView), View.OnClickListener {
 
     init {
         itemView.setOnClickListener(this)
@@ -44,11 +44,11 @@ internal class AddCustomRingtoneViewHolder private constructor(itemView: View)
         notifyItemClicked(CLICK_ADD_NEW)
     }
 
-    class Factory internal constructor(private val mInflater: LayoutInflater)
-        : ItemViewHolder.Factory {
+    class Factory internal constructor(private val mInflater: LayoutInflater) :
+        ItemViewHolder.Factory {
         override fun createViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<*> {
             val itemView =
-                    mInflater.inflate(R.layout.ringtone_item_sound, parent, false)
+                mInflater.inflate(R.layout.ringtone_item_sound, parent, false)
             return AddCustomRingtoneViewHolder(itemView)
         }
     }

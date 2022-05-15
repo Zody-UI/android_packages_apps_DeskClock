@@ -24,20 +24,12 @@ import android.provider.Settings
 import android.text.format.DateUtils
 import android.text.format.DateUtils.HOUR_IN_MILLIS
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
-
 import com.android.deskclock.R
-import com.android.deskclock.data.DataModel.AlarmVolumeButtonBehavior
-import com.android.deskclock.data.DataModel.CitySort
-import com.android.deskclock.data.DataModel.ClockStyle
+import com.android.deskclock.data.DataModel.*
 import com.android.deskclock.data.Weekdays.Order
 import com.android.deskclock.settings.ScreensaverSettingsActivity
 import com.android.deskclock.settings.SettingsActivity
-
-import java.util.Arrays
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
-
+import java.util.*
 import kotlin.math.abs
 
 /**
@@ -312,9 +304,11 @@ internal object SettingsDAO {
 
         // Verify the data is consistent.
         if (timeZoneIds.size != timeZoneNames.size) {
-            val message = String.format(Locale.US,
-                    "id count (%d) does not match name count (%d) for locale %s",
-                    timeZoneIds.size, timeZoneNames.size, locale)
+            val message = String.format(
+                Locale.US,
+                "id count (%d) does not match name count (%d) for locale %s",
+                timeZoneIds.size, timeZoneNames.size, locale
+            )
             throw IllegalStateException(message)
         }
 

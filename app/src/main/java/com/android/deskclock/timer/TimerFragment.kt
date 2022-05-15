@@ -35,20 +35,13 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.VisibleForTesting
 import androidx.viewpager.widget.ViewPager
-
+import com.android.deskclock.*
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.Timer
 import com.android.deskclock.data.TimerListener
 import com.android.deskclock.data.TimerStringFormatter
 import com.android.deskclock.events.Events
 import com.android.deskclock.uidata.UiDataModel
-import com.android.deskclock.AnimatorUtils
-import com.android.deskclock.DeskClock
-import com.android.deskclock.DeskClockFragment
-import com.android.deskclock.FabContainer
-import com.android.deskclock.R
-import com.android.deskclock.Utils
-
 import java.io.Serializable
 import kotlin.math.max
 import kotlin.math.min
@@ -94,10 +87,10 @@ class TimerFragment : DeskClockFragment(UiDataModel.Tab.TIMERS) {
         mCreateTimerView = view.findViewById<View>(R.id.timer_setup) as TimerSetupView
         mCreateTimerView.setFabContainer(this)
         mPageIndicators = arrayOf(
-                view.findViewById<View>(R.id.page_indicator0) as ImageView,
-                view.findViewById<View>(R.id.page_indicator1) as ImageView,
-                view.findViewById<View>(R.id.page_indicator2) as ImageView,
-                view.findViewById<View>(R.id.page_indicator3) as ImageView
+            view.findViewById<View>(R.id.page_indicator0) as ImageView,
+            view.findViewById<View>(R.id.page_indicator1) as ImageView,
+            view.findViewById<View>(R.id.page_indicator2) as ImageView,
+            view.findViewById<View>(R.id.page_indicator3) as ImageView
         )
 
         DataModel.dataModel.addTimerListener(mAdapter)
@@ -306,16 +299,22 @@ class TimerFragment : DeskClockFragment(UiDataModel.Tab.TIMERS) {
                     DataModel.dataModel.pauseTimer(timer)
                     Events.sendTimerEvent(R.string.action_stop, R.string.label_deskclock)
                     if (currentTime > 0) {
-                        mTimersView?.announceForAccessibility(TimerStringFormatter.formatString(
-                                context, R.string.timer_accessibility_stopped, currentTime, true))
+                        mTimersView?.announceForAccessibility(
+                            TimerStringFormatter.formatString(
+                                context, R.string.timer_accessibility_stopped, currentTime, true
+                            )
+                        )
                     }
                 }
                 Timer.State.PAUSED, Timer.State.RESET -> {
                     DataModel.dataModel.startTimer(timer)
                     Events.sendTimerEvent(R.string.action_start, R.string.label_deskclock)
                     if (currentTime > 0) {
-                        mTimersView?.announceForAccessibility(TimerStringFormatter.formatString(
-                                context, R.string.timer_accessibility_started, currentTime, true))
+                        mTimersView?.announceForAccessibility(
+                            TimerStringFormatter.formatString(
+                                context, R.string.timer_accessibility_started, currentTime, true
+                            )
+                        )
                     }
                 }
                 Timer.State.MISSED, Timer.State.EXPIRED -> {
@@ -507,8 +506,10 @@ class TimerFragment : DeskClockFragment(UiDataModel.Tab.TIMERS) {
                 toView.alpha = 0f
                 mCurrentView?.alpha = 1f
 
-                val translateCurrent: Animator = ObjectAnimator.ofFloat(mCurrentView,
-                        View.TRANSLATION_Y, translationDistance)
+                val translateCurrent: Animator = ObjectAnimator.ofFloat(
+                    mCurrentView,
+                    View.TRANSLATION_Y, translationDistance
+                )
                 val translateNew: Animator = ObjectAnimator.ofFloat(toView, View.TRANSLATION_Y, 0f)
                 val translationAnimatorSet = AnimatorSet()
                 translationAnimatorSet.playTogether(translateCurrent, translateNew)
@@ -663,7 +664,8 @@ class TimerFragment : DeskClockFragment(UiDataModel.Tab.TIMERS) {
             } else if (mCurrentView === mTimersView && index == mViewPager.getCurrentItem()) {
                 // Morph the fab from its old state to new state if necessary.
                 if (before.state != after.state &&
-                        !(before.isPaused && after.isReset)) {
+                    !(before.isPaused && after.isReset)
+                ) {
                     updateFab(FabContainer.FAB_MORPH)
                 }
             }

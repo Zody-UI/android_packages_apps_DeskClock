@@ -21,15 +21,11 @@ import android.text.format.DateUtils
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
-
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.widget.toast.SnackbarManager
 import com.android.deskclock.widget.toast.ToastManager
-
 import com.google.android.material.snackbar.Snackbar
-
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 /**
  * Static utility methods for Alarms.
@@ -110,7 +106,8 @@ object AlarmUtils {
     fun popAlarmSetSnackbar(snackbarAnchor: View, alarmTime: Long) {
         val alarmTimeDelta = alarmTime - System.currentTimeMillis()
         val text = formatElapsedTimeUntilAlarm(
-                snackbarAnchor.context, alarmTimeDelta)
+            snackbarAnchor.context, alarmTimeDelta
+        )
         SnackbarManager.show(Snackbar.make(snackbarAnchor, text, Snackbar.LENGTH_SHORT))
         snackbarAnchor.announceForAccessibility(text)
     }

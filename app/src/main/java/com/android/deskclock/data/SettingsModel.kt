@@ -19,11 +19,9 @@ package com.android.deskclock.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
-
 import com.android.deskclock.R
 import com.android.deskclock.Utils
-
-import java.util.TimeZone
+import java.util.*
 
 /**
  * All settings data is accessed via this model.

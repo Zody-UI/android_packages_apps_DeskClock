@@ -19,11 +19,8 @@ package com.android.deskclock.controller
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.VoiceInteractor
-import android.app.VoiceInteractor.AbortVoiceRequest
-import android.app.VoiceInteractor.CompleteVoiceRequest
-import android.app.VoiceInteractor.Prompt
+import android.app.VoiceInteractor.*
 import android.os.Build
-
 import com.android.deskclock.Utils
 
 @TargetApi(Build.VERSION_CODES.M)

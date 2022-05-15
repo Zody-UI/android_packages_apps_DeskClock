@@ -29,7 +29,7 @@ import com.android.deskclock.uidata.UiDataModel
 @TargetApi(Build.VERSION_CODES.N_MR1)
 class ShortcutEventTracker(context: Context) : EventTracker {
     private val mShortcutManager: ShortcutManager =
-            context.getSystemService(ShortcutManager::class.java)
+        context.getSystemService(ShortcutManager::class.java)
     private val shortcuts: MutableSet<String> = ArraySet(5)
 
     init {

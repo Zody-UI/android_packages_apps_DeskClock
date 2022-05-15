@@ -50,7 +50,8 @@ class ScreensaverSettingsActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    abstract class PrefsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
+    abstract class PrefsFragment : PreferenceFragmentCompat(),
+        Preference.OnPreferenceChangeListener {
 
         @TargetApi(Build.VERSION_CODES.N)
         override fun onCreate(savedInstanceState: Bundle?) {

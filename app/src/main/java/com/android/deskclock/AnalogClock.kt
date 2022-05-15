@@ -27,10 +27,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
-
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * This widget display an analog clock with two hands for hours and minutes.
@@ -68,7 +66,7 @@ class AnalogClock @JvmOverloads constructor(
 
     private var mTime = Calendar.getInstance()
     private val mDescFormat =
-            (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
+        (DateFormat.getTimeFormat(context) as SimpleDateFormat).toLocalizedPattern()
     private var mTimeZone: TimeZone? = null
     private var mEnableSeconds = true
 

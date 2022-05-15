@@ -37,8 +37,10 @@ class HandleShortcuts : Activity() {
 
                     // Open DeskClock positioned on the stopwatch tab.
                     UiDataModel.uiDataModel.selectedTab = UiDataModel.Tab.STOPWATCH
-                    startActivity(Intent(this, DeskClock::class.java)
-                            .setAction(StopwatchService.ACTION_PAUSE_STOPWATCH))
+                    startActivity(
+                        Intent(this, DeskClock::class.java)
+                            .setAction(StopwatchService.ACTION_PAUSE_STOPWATCH)
+                    )
                     setResult(RESULT_OK)
                 }
                 StopwatchService.ACTION_START_STOPWATCH -> {
@@ -46,8 +48,10 @@ class HandleShortcuts : Activity() {
 
                     // Open DeskClock positioned on the stopwatch tab.
                     UiDataModel.uiDataModel.selectedTab = UiDataModel.Tab.STOPWATCH
-                    startActivity(Intent(this, DeskClock::class.java)
-                            .setAction(StopwatchService.ACTION_START_STOPWATCH))
+                    startActivity(
+                        Intent(this, DeskClock::class.java)
+                            .setAction(StopwatchService.ACTION_START_STOPWATCH)
+                    )
                     setResult(RESULT_OK)
                 }
                 else -> throw IllegalArgumentException("Unsupported action: $action")

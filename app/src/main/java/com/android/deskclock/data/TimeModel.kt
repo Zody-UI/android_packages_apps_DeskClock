@@ -19,8 +19,7 @@ package com.android.deskclock.data
 import android.content.Context
 import android.os.SystemClock
 import android.text.format.DateFormat
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * All time data is accessed via this model. This model exists so that time can be mocked for

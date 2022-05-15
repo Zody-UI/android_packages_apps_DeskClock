@@ -19,13 +19,9 @@ package com.android.deskclock.stopwatch
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.View.MeasureSpec.AT_MOST
-import android.view.View.MeasureSpec.EXACTLY
-import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.View.MeasureSpec.*
 import android.view.ViewGroup
-
 import com.android.deskclock.R
-
 import kotlin.math.max
 
 /**

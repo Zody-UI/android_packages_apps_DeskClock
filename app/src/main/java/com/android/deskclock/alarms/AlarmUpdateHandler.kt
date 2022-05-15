@@ -21,17 +21,14 @@ import android.content.Context
 import android.os.AsyncTask
 import android.text.format.DateFormat
 import android.view.ViewGroup
-
 import com.android.deskclock.AlarmUtils
 import com.android.deskclock.R
 import com.android.deskclock.events.Events
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.widget.toast.SnackbarManager
-
 import com.google.android.material.snackbar.Snackbar
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * API for asynchronously mutating a single alarm.
@@ -55,33 +52,35 @@ class AlarmUpdateHandler(
      */
     fun asyncAddAlarm(alarm: Alarm?) {
         val updateTask: AsyncTask<Void, Void, AlarmInstance> =
-                object : AsyncTask<Void, Void, AlarmInstance>() {
-            override fun doInBackground(vararg parameters: Void): AlarmInstance? {
-                if (alarm != null) {
-                    Events.sendAlarmEvent(R.string.action_create, R.string.label_deskclock)
-                    val cr: ContentResolver = mAppContext.getContentResolver()
+            object : AsyncTask<Void, Void, AlarmInstance>() {
+                override fun doInBackground(vararg parameters: Void): AlarmInstance? {
+                    if (alarm != null) {
+                        Events.sendAlarmEvent(R.string.action_create, R.string.label_deskclock)
+                        val cr: ContentResolver = mAppContext.getContentResolver()
 
-                    // Add alarm to db
-                    val newAlarm = Alarm.addAlarm(cr, alarm)
+                        // Add alarm to db
+                        val newAlarm = Alarm.addAlarm(cr, alarm)
 
-                    // Be ready to scroll to this alarm on UI later.
-                    mScrollHandler?.setSmoothScrollStableId(newAlarm.id)
+                        // Be ready to scroll to this alarm on UI later.
+                        mScrollHandler?.setSmoothScrollStableId(newAlarm.id)
 
-                    // Create and add instance to db
-                    if (newAlarm.enabled) {
-                        return setupAlarmInstance(newAlarm)
+                        // Create and add instance to db
+                        if (newAlarm.enabled) {
+                            return setupAlarmInstance(newAlarm)
+                        }
+                    }
+                    return null
+                }
+
+                override fun onPostExecute(instance: AlarmInstance?) {
+                    if (instance != null) {
+                        AlarmUtils.popAlarmSetSnackbar(
+                            mSnackbarAnchor!!,
+                            instance.alarmTime.timeInMillis
+                        )
                     }
                 }
-                return null
             }
-
-            override fun onPostExecute(instance: AlarmInstance?) {
-                if (instance != null) {
-                    AlarmUtils.popAlarmSetSnackbar(mSnackbarAnchor!!,
-                            instance.alarmTime.timeInMillis)
-                }
-            }
-        }
         updateTask.execute()
     }
 
@@ -98,45 +97,46 @@ class AlarmUpdateHandler(
         minorUpdate: Boolean
     ) {
         val updateTask: AsyncTask<Void, Void, AlarmInstance> =
-                object : AsyncTask<Void, Void, AlarmInstance>() {
-            override fun doInBackground(vararg parameters: Void): AlarmInstance? {
-                val cr: ContentResolver = mAppContext.getContentResolver()
+            object : AsyncTask<Void, Void, AlarmInstance>() {
+                override fun doInBackground(vararg parameters: Void): AlarmInstance? {
+                    val cr: ContentResolver = mAppContext.getContentResolver()
 
-                // Update alarm
-                Alarm.updateAlarm(cr, alarm)
-                if (minorUpdate) {
-                    // just update the instance in the database and update notifications.
-                    val instanceList = AlarmInstance.getInstancesByAlarmId(cr, alarm.id)
-                    for (instance in instanceList) {
-                        // Make a copy of the existing instance
-                        val newInstance = AlarmInstance(instance)
-                        // Copy over minor change data to the instance; we don't know
-                        // exactly which minor field changed, so just copy them all.
-                        newInstance.mVibrate = alarm.vibrate
-                        newInstance.mRingtone = alarm.alert
-                        newInstance.mLabel = alarm.label
-                        // Since we copied the mId of the old instance and the mId is used
-                        // as the primary key in the AlarmInstance table, this will replace
-                        // the existing instance.
-                        AlarmInstance.updateInstance(cr, newInstance)
-                        // Update the notification for this instance.
-                        AlarmNotifications.updateNotification(mAppContext, newInstance)
+                    // Update alarm
+                    Alarm.updateAlarm(cr, alarm)
+                    if (minorUpdate) {
+                        // just update the instance in the database and update notifications.
+                        val instanceList = AlarmInstance.getInstancesByAlarmId(cr, alarm.id)
+                        for (instance in instanceList) {
+                            // Make a copy of the existing instance
+                            val newInstance = AlarmInstance(instance)
+                            // Copy over minor change data to the instance; we don't know
+                            // exactly which minor field changed, so just copy them all.
+                            newInstance.mVibrate = alarm.vibrate
+                            newInstance.mRingtone = alarm.alert
+                            newInstance.mLabel = alarm.label
+                            // Since we copied the mId of the old instance and the mId is used
+                            // as the primary key in the AlarmInstance table, this will replace
+                            // the existing instance.
+                            AlarmInstance.updateInstance(cr, newInstance)
+                            // Update the notification for this instance.
+                            AlarmNotifications.updateNotification(mAppContext, newInstance)
+                        }
+                        return null
                     }
-                    return null
-                }
-                // Otherwise, this is a major update and we're going to re-create the alarm
-                AlarmStateManager.deleteAllInstances(mAppContext, alarm.id)
+                    // Otherwise, this is a major update and we're going to re-create the alarm
+                    AlarmStateManager.deleteAllInstances(mAppContext, alarm.id)
 
-                return if (alarm.enabled) setupAlarmInstance(alarm) else null
-            }
+                    return if (alarm.enabled) setupAlarmInstance(alarm) else null
+                }
 
-            override fun onPostExecute(instance: AlarmInstance?) {
-                if (popToast && instance != null) {
-                    AlarmUtils.popAlarmSetSnackbar(
-                            mSnackbarAnchor!!, instance.alarmTime.timeInMillis)
+                override fun onPostExecute(instance: AlarmInstance?) {
+                    if (popToast && instance != null) {
+                        AlarmUtils.popAlarmSetSnackbar(
+                            mSnackbarAnchor!!, instance.alarmTime.timeInMillis
+                        )
+                    }
                 }
             }
-        }
         updateTask.execute()
     }
 
@@ -188,12 +188,14 @@ class AlarmUpdateHandler(
 
     private fun showUndoBar() {
         val deletedAlarm = mDeletedAlarm
-        val snackbar: Snackbar = Snackbar.make(mSnackbarAnchor!!,
-                mAppContext.getString(R.string.alarm_deleted), Snackbar.LENGTH_LONG)
-                .setAction(R.string.alarm_undo, { _ ->
-                    mDeletedAlarm = null
-                    asyncAddAlarm(deletedAlarm)
-                })
+        val snackbar: Snackbar = Snackbar.make(
+            mSnackbarAnchor!!,
+            mAppContext.getString(R.string.alarm_deleted), Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.alarm_undo, { _ ->
+                mDeletedAlarm = null
+                asyncAddAlarm(deletedAlarm)
+            })
         SnackbarManager.show(snackbar)
     }
 

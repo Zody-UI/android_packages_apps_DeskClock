@@ -16,23 +16,14 @@
 
 package com.android.deskclock.data
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
+import android.content.*
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-
 import com.android.deskclock.R
 import com.android.deskclock.Utils
-import com.android.deskclock.data.City.NameComparator
-import com.android.deskclock.data.City.NameIndexComparator
-import com.android.deskclock.data.City.UtcOffsetComparator
-import com.android.deskclock.data.City.UtcOffsetIndexComparator
+import com.android.deskclock.data.City.*
 import com.android.deskclock.data.DataModel.CitySort
 import com.android.deskclock.settings.SettingsActivity
-
-import java.util.Collections
+import java.util.*
 
 /**
  * All [City] data is accessed via this model.

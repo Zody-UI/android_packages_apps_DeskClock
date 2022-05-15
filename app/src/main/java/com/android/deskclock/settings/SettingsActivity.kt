@@ -23,14 +23,7 @@ import android.os.Vibrator
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.preference.ListPreference
-import androidx.preference.ListPreferenceDialogFragmentCompat
-import androidx.preference.Preference
-import androidx.preference.PreferenceDialogFragmentCompat
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
-
+import androidx.preference.*
 import com.android.deskclock.BaseActivity
 import com.android.deskclock.R
 import com.android.deskclock.Utils
@@ -51,14 +44,14 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.settings)
 
         mOptionsMenuManager.addMenuItemController(NavUpMenuItemController(this))
-                .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
+            .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
 
         // Create the prefs fragment in code to ensure it's created before PreferenceDialogFragment
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.main, PrefsFragment(), PREFS_FRAGMENT_TAG)
-                    .disallowAddToBackStack()
-                    .commit()
+                .replace(R.id.main, PrefsFragment(), PREFS_FRAGMENT_TAG)
+                .disallowAddToBackStack()
+                .commit()
         }
     }
 
@@ -84,9 +77,9 @@ class SettingsActivity : BaseActivity() {
     }
 
     class PrefsFragment :
-            PreferenceFragmentCompat(),
-            Preference.OnPreferenceChangeListener,
-            Preference.OnPreferenceClickListener {
+        PreferenceFragmentCompat(),
+        Preference.OnPreferenceChangeListener,
+        Preference.OnPreferenceClickListener {
 
         override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
             getPreferenceManager().setStorageDeviceProtected()
@@ -94,7 +87,7 @@ class SettingsActivity : BaseActivity() {
             val timerVibrate: Preference? = findPreference(KEY_TIMER_VIBRATE)
             timerVibrate?.let {
                 val hasVibrator: Boolean = (it.getContext()
-                        .getSystemService(VIBRATOR_SERVICE) as Vibrator).hasVibrator()
+                    .getSystemService(VIBRATOR_SERVICE) as Vibrator).hasVibrator()
                 it.setVisible(hasVibrator)
             }
             loadTimeZoneList()
@@ -229,7 +222,7 @@ class SettingsActivity : BaseActivity() {
 
             val autoHomeClockPref: Preference? = findPreference(KEY_AUTO_HOME_CLOCK)
             val autoHomeClockEnabled: Boolean =
-                    (autoHomeClockPref as TwoStatePreference).isChecked()
+                (autoHomeClockPref as TwoStatePreference).isChecked()
             autoHomeClockPref.setOnPreferenceChangeListener(this)
 
             val homeTimezonePref: ListPreference? = findPreference(KEY_HOME_TZ)
@@ -272,8 +265,12 @@ class SettingsActivity : BaseActivity() {
             if (i == -1) {
                 listPref.setSummary(R.string.auto_silence_never)
             } else {
-                listPref.setSummary(Utils.getNumberFormattedQuantityString(getActivity()!!,
-                        R.plurals.auto_silence_summary, i))
+                listPref.setSummary(
+                    Utils.getNumberFormattedQuantityString(
+                        getActivity()!!,
+                        R.plurals.auto_silence_summary, i
+                    )
+                )
             }
         }
     }

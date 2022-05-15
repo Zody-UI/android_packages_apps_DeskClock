@@ -47,7 +47,7 @@ class StopwatchService : Service() {
                 // Open DeskClock positioned on the stopwatch tab.
                 UiDataModel.uiDataModel.selectedTab = UiDataModel.Tab.STOPWATCH
                 val showStopwatch: Intent = Intent(this, DeskClock::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(showStopwatch)
             }
             ACTION_START_STOPWATCH -> {

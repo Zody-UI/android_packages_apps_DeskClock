@@ -34,13 +34,13 @@ import com.android.deskclock.widget.TextTime
 /**
  * Abstract ViewHolder for alarm time items.
  */
-abstract class AlarmItemViewHolder(itemView: View)
-    : ItemViewHolder<AlarmItemHolder>(itemView), OnAnimateChangeListener {
+abstract class AlarmItemViewHolder(itemView: View) : ItemViewHolder<AlarmItemHolder>(itemView),
+    OnAnimateChangeListener {
     val clock: TextTime = itemView.findViewById(R.id.digital_clock)
     val onOff: CompoundButton = itemView.findViewById(R.id.onoff) as CompoundButton
     val arrow: ImageView = itemView.findViewById(R.id.arrow) as ImageView
     val preemptiveDismissButton: TextView =
-            itemView.findViewById(R.id.preemptive_dismiss_button) as TextView
+        itemView.findViewById(R.id.preemptive_dismiss_button) as TextView
 
     init {
         preemptiveDismissButton.setOnClickListener { _ ->
@@ -59,8 +59,10 @@ abstract class AlarmItemViewHolder(itemView: View)
         bindOnOffSwitch(alarm)
         bindClock(alarm)
         val context: Context = itemView.getContext()
-        itemView.setContentDescription(clock.text.toString() + " " +
-                alarm.getLabelOrDefault(context))
+        itemView.setContentDescription(
+            clock.text.toString() + " " +
+                    alarm.getLabelOrDefault(context)
+        )
     }
 
     protected fun bindOnOffSwitch(alarm: Alarm) {
@@ -83,8 +85,10 @@ abstract class AlarmItemViewHolder(itemView: View)
         if (canBind) {
             preemptiveDismissButton.visibility = View.VISIBLE
             val dismissText: String = if (alarm.instanceState == InstancesColumns.SNOOZE_STATE) {
-                context.getString(R.string.alarm_alert_snooze_until,
-                        AlarmUtils.getAlarmText(context, alarmInstance!!, false))
+                context.getString(
+                    R.string.alarm_alert_snooze_until,
+                    AlarmUtils.getAlarmText(context, alarmInstance!!, false)
+                )
             } else {
                 context.getString(R.string.alarm_alert_dismiss_text)
             }
@@ -105,9 +109,9 @@ abstract class AlarmItemViewHolder(itemView: View)
         const val ANIM_LONG_DURATION_MULTIPLIER = 2f / 3f
         const val ANIM_SHORT_DURATION_MULTIPLIER = 1f / 4f
         const val ANIM_SHORT_DELAY_INCREMENT_MULTIPLIER =
-                1f - ANIM_LONG_DURATION_MULTIPLIER - ANIM_SHORT_DURATION_MULTIPLIER
+            1f - ANIM_LONG_DURATION_MULTIPLIER - ANIM_SHORT_DURATION_MULTIPLIER
         const val ANIM_LONG_DELAY_INCREMENT_MULTIPLIER =
-                1f - ANIM_STANDARD_DELAY_MULTIPLIER - ANIM_SHORT_DURATION_MULTIPLIER
+            1f - ANIM_STANDARD_DELAY_MULTIPLIER - ANIM_SHORT_DURATION_MULTIPLIER
         const val ANIMATE_REPEAT_DAYS = "ANIMATE_REPEAT_DAYS"
     }
 }

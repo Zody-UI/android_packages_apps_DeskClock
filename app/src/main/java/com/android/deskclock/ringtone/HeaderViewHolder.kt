@@ -24,17 +24,17 @@ import android.widget.TextView
 import com.android.deskclock.ItemAdapter.ItemViewHolder
 import com.android.deskclock.R
 
-internal class HeaderViewHolder private constructor(itemView: View)
-    : ItemViewHolder<HeaderHolder>(itemView) {
+internal class HeaderViewHolder private constructor(itemView: View) :
+    ItemViewHolder<HeaderHolder>(itemView) {
     private val mItemHeader: TextView =
-            itemView.findViewById<View>(R.id.ringtone_item_header) as TextView
+        itemView.findViewById<View>(R.id.ringtone_item_header) as TextView
 
     override fun onBindItemView(itemHolder: HeaderHolder) {
         mItemHeader.setText(itemHolder.textResId)
     }
 
-    class Factory internal constructor(private val mInflater: LayoutInflater)
-        : ItemViewHolder.Factory {
+    class Factory internal constructor(private val mInflater: LayoutInflater) :
+        ItemViewHolder.Factory {
         override fun createViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<*> {
             return HeaderViewHolder(mInflater.inflate(viewType, parent, false))
         }

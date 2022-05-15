@@ -17,16 +17,11 @@
 package com.android.deskclock.alarms
 
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.ContentResolver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Binder
 import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-
 import com.android.deskclock.AlarmAlertWakeLock
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
@@ -107,7 +102,8 @@ class AlarmService : Service() {
             val action: String? = intent.getAction()
             LogUtils.i("AlarmService received intent %s", action)
             if (mCurrentAlarm == null ||
-                    mCurrentAlarm!!.mAlarmState != InstancesColumns.FIRED_STATE) {
+                mCurrentAlarm!!.mAlarmState != InstancesColumns.FIRED_STATE
+            ) {
                 LogUtils.i("No valid firing alarm")
                 return
             }
@@ -176,8 +172,10 @@ class AlarmService : Service() {
             }
             STOP_ALARM_ACTION -> {
                 if (mCurrentAlarm != null && mCurrentAlarm!!.mId != instanceId) {
-                    LogUtils.e("Can't stop alarm for instance: %d because current alarm is: %d",
-                            instanceId, mCurrentAlarm!!.mId)
+                    LogUtils.e(
+                        "Can't stop alarm for instance: %d because current alarm is: %d",
+                        instanceId, mCurrentAlarm!!.mId
+                    )
                 } else {
                     stopCurrentAlarm()
                     stopSelf()
@@ -215,8 +213,12 @@ class AlarmService : Service() {
             }
 
             if (state != TelephonyManager.CALL_STATE_IDLE && state != mPhoneCallState) {
-                startService(AlarmStateManager.createStateChangeIntent(this@AlarmService,
-                        "AlarmService", mCurrentAlarm!!, InstancesColumns.MISSED_STATE))
+                startService(
+                    AlarmStateManager.createStateChangeIntent(
+                        this@AlarmService,
+                        "AlarmService", mCurrentAlarm!!, InstancesColumns.MISSED_STATE
+                    )
+                )
             }
         }
     }
@@ -254,8 +256,8 @@ class AlarmService : Service() {
         @JvmStatic
         fun stopAlarm(context: Context, instance: AlarmInstance) {
             val intent: Intent =
-                    AlarmInstance.createIntent(context, AlarmService::class.java, instance.mId)
-                            .setAction(STOP_ALARM_ACTION)
+                AlarmInstance.createIntent(context, AlarmService::class.java, instance.mId)
+                    .setAction(STOP_ALARM_ACTION)
 
             // We don't need a wake lock here, since we are trying to kill an alarm
             context.startService(intent)

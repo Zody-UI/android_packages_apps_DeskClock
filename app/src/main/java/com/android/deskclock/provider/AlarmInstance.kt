@@ -16,25 +16,18 @@
 
 package com.android.deskclock.provider
 
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.database.Cursor
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.BaseColumns._ID
-
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
 import com.android.deskclock.alarms.AlarmStateManager
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.provider.ClockContract.AlarmSettingColumns
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-
-import java.util.Calendar
-import java.util.LinkedList
+import java.util.*
 
 class AlarmInstance : InstancesColumns {
     // Public fields
@@ -260,17 +253,17 @@ class AlarmInstance : InstancesColumns {
         const val INVALID_ID: Long = -1
 
         private val QUERY_COLUMNS = arrayOf(
-                _ID,
-                InstancesColumns.YEAR,
-                InstancesColumns.MONTH,
-                InstancesColumns.DAY,
-                InstancesColumns.HOUR,
-                InstancesColumns.MINUTES,
-                AlarmSettingColumns.LABEL,
-                AlarmSettingColumns.VIBRATE,
-                AlarmSettingColumns.RINGTONE,
-                InstancesColumns.ALARM_ID,
-                InstancesColumns.ALARM_STATE
+            _ID,
+            InstancesColumns.YEAR,
+            InstancesColumns.MONTH,
+            InstancesColumns.DAY,
+            InstancesColumns.HOUR,
+            InstancesColumns.MINUTES,
+            AlarmSettingColumns.LABEL,
+            AlarmSettingColumns.VIBRATE,
+            AlarmSettingColumns.RINGTONE,
+            InstancesColumns.ALARM_ID,
+            InstancesColumns.ALARM_STATE
         )
 
         /**
@@ -348,7 +341,7 @@ class AlarmInstance : InstancesColumns {
         @JvmStatic
         fun getInstance(cr: ContentResolver, instanceId: Long): AlarmInstance? {
             val cursor: Cursor? =
-                    cr.query(getContentUri(instanceId), QUERY_COLUMNS, null, null, null)
+                cr.query(getContentUri(instanceId), QUERY_COLUMNS, null, null, null)
             cursor?.let {
                 if (cursor.moveToFirst()) {
                     return AlarmInstance(cursor, false /* joinedTable */)
@@ -416,9 +409,11 @@ class AlarmInstance : InstancesColumns {
             alarmInstanceId: Long,
             state: Int
         ): List<AlarmInstance> {
-            return getInstances(contentResolver,
-                    _ID.toString() + "=" + alarmInstanceId + " AND " +
-                            InstancesColumns.ALARM_STATE + "=" + state)
+            return getInstances(
+                contentResolver,
+                _ID.toString() + "=" + alarmInstanceId + " AND " +
+                        InstancesColumns.ALARM_STATE + "=" + state
+            )
         }
 
         /**
@@ -429,8 +424,10 @@ class AlarmInstance : InstancesColumns {
             contentResolver: ContentResolver,
             state: Int
         ): List<AlarmInstance> {
-            return getInstances(contentResolver,
-                    InstancesColumns.ALARM_STATE + "=" + state)
+            return getInstances(
+                contentResolver,
+                InstancesColumns.ALARM_STATE + "=" + state
+            )
         }
 
         /**
@@ -453,8 +450,10 @@ class AlarmInstance : InstancesColumns {
         ): MutableList<AlarmInstance> {
             val result: MutableList<AlarmInstance> = LinkedList()
             val cursor: Cursor? =
-                    cr.query(InstancesColumns.CONTENT_URI, QUERY_COLUMNS,
-                            selection, selectionArgs, null)
+                cr.query(
+                    InstancesColumns.CONTENT_URI, QUERY_COLUMNS,
+                    selection, selectionArgs, null
+                )
             cursor?.let {
                 if (cursor.moveToFirst()) {
                     do {
@@ -477,8 +476,10 @@ class AlarmInstance : InstancesColumns {
             val dupSelector = InstancesColumns.ALARM_ID + " = " + instance.mAlarmId
             for (otherInstances in getInstances(contentResolver, dupSelector)) {
                 if (otherInstances.alarmTime == instance.alarmTime) {
-                    LogUtils.i("Detected duplicate instance in DB. Updating " +
-                            otherInstances + " to " + instance)
+                    LogUtils.i(
+                        "Detected duplicate instance in DB. Updating " +
+                                otherInstances + " to " + instance
+                    )
                     // Copy over the new instance values and update the db
                     instance.mId = otherInstances.mId
                     updateInstance(contentResolver, instance)
@@ -497,7 +498,7 @@ class AlarmInstance : InstancesColumns {
             if (instance.mId == INVALID_ID) return false
             val values: ContentValues = createContentValues(instance)
             val rowsUpdated: Long =
-                    contentResolver.update(getContentUri(instance.mId), values, null, null).toLong()
+                contentResolver.update(getContentUri(instance.mId), values, null, null).toLong()
             return rowsUpdated == 1L
         }
 

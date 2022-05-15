@@ -50,8 +50,10 @@ object AlarmAlertWakeLock {
             return
         }
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        sCpuWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK
-                or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, TAG)
+        sCpuWakeLock = pm.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK
+                    or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE, TAG
+        )
         sCpuWakeLock!!.acquire()
     }
 

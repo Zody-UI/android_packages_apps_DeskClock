@@ -34,7 +34,7 @@ class SettingsMenuItemController(private val activity: Activity) : MenuItemContr
 
     override fun onCreateOptionsItem(menu: Menu) {
         menu.add(NONE, id, NONE, R.string.menu_item_settings)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
     }
 
     override fun onPrepareOptionsItem(item: MenuItem) {

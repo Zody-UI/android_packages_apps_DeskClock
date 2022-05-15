@@ -83,8 +83,8 @@ class TimerService : Service() {
                     // Open DeskClock which is now positioned on the timers tab and show the timer
                     // in question.
                     val showTimers = Intent(this, DeskClock::class.java)
-                            .putExtra(EXTRA_TIMER_ID, timerId)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra(EXTRA_TIMER_ID, timerId)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(showTimers)
                 }
                 ACTION_START_TIMER -> {
@@ -122,14 +122,19 @@ class TimerService : Service() {
 
         /** Shows the tab with timers; scrolls to a specific timer.  */
         const val ACTION_SHOW_TIMER = ACTION_PREFIX + "SHOW_TIMER"
+
         /** Pauses running timers; resets expired timers.  */
         const val ACTION_PAUSE_TIMER = ACTION_PREFIX + "PAUSE_TIMER"
+
         /** Starts the sole timer.  */
         const val ACTION_START_TIMER = ACTION_PREFIX + "START_TIMER"
+
         /** Resets the timer.  */
         const val ACTION_RESET_TIMER = ACTION_PREFIX + "RESET_TIMER"
+
         /** Adds an extra minute to the timer.  */
         const val ACTION_ADD_MINUTE_TIMER = ACTION_PREFIX + "ADD_MINUTE_TIMER"
+
         /** Extra for many actions specific to a given timer.  */
         const val EXTRA_TIMER_ID = "com.android.deskclock.extra.TIMER_ID"
 
@@ -143,34 +148,34 @@ class TimerService : Service() {
         fun createTimerExpiredIntent(context: Context, timer: Timer?): Intent {
             val timerId = timer?.id ?: -1
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_TIMER_EXPIRED)
-                    .putExtra(EXTRA_TIMER_ID, timerId)
+                .setAction(ACTION_TIMER_EXPIRED)
+                .putExtra(EXTRA_TIMER_ID, timerId)
         }
 
         fun createResetExpiredTimersIntent(context: Context): Intent {
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_RESET_EXPIRED_TIMERS)
+                .setAction(ACTION_RESET_EXPIRED_TIMERS)
         }
 
         fun createResetUnexpiredTimersIntent(context: Context): Intent {
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_RESET_UNEXPIRED_TIMERS)
+                .setAction(ACTION_RESET_UNEXPIRED_TIMERS)
         }
 
         fun createResetMissedTimersIntent(context: Context): Intent {
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_RESET_MISSED_TIMERS)
+                .setAction(ACTION_RESET_MISSED_TIMERS)
         }
 
         fun createAddMinuteTimerIntent(context: Context, timerId: Int): Intent {
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_ADD_MINUTE_TIMER)
-                    .putExtra(EXTRA_TIMER_ID, timerId)
+                .setAction(ACTION_ADD_MINUTE_TIMER)
+                .putExtra(EXTRA_TIMER_ID, timerId)
         }
 
         fun createUpdateNotificationIntent(context: Context): Intent {
             return Intent(context, TimerService::class.java)
-                    .setAction(ACTION_UPDATE_NOTIFICATION)
+                .setAction(ACTION_UPDATE_NOTIFICATION)
         }
     }
 }

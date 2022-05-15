@@ -22,11 +22,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.util.ArrayMap
 import android.util.SparseArray
-
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.Locale
+import java.util.*
 
 /**
  * All formatted strings that are cached for performance are accessed via this model.

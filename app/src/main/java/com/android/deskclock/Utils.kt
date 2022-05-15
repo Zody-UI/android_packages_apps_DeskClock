@@ -27,13 +27,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Typeface
+import android.graphics.*
 import android.net.Uri
 import android.os.Build
 import android.os.Looper
@@ -58,18 +52,12 @@ import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
-
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.uidata.UiDataModel
-
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -160,10 +148,10 @@ object Utils {
      */
     fun getResourceUri(context: Context, @AnyRes resourceId: Int): Uri {
         return Uri.Builder()
-                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                .authority(context.packageName)
-                .path(resourceId.toString())
-                .build()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(context.packageName)
+            .path(resourceId.toString())
+            .build()
     }
 
     /**
@@ -249,8 +237,9 @@ object Utils {
         val paint = Paint()
         paint.color = Color.WHITE
         paint.colorFilter = PorterDuffColorFilter(
-                if (dim) 0x40FFFFFF else -0x3f000001,
-                PorterDuff.Mode.MULTIPLY)
+            if (dim) 0x40FFFFFF else -0x3f000001,
+            PorterDuff.Mode.MULTIPLY
+        )
         clockView.setLayerType(View.LAYER_TYPE_HARDWARE, paint)
     }
 
@@ -382,8 +371,10 @@ object Utils {
      * @return format string for 12 hours mode time, not including seconds
      */
     fun get12ModeFormat(amPmRatio: Float, includeSeconds: Boolean): CharSequence {
-        var pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(),
-                if (includeSeconds) "hmsa" else "hma")
+        var pattern = DateFormat.getBestDateTimePattern(
+            Locale.getDefault(),
+            if (includeSeconds) "hmsa" else "hma"
+        )
         if (amPmRatio <= 0) {
             pattern = pattern.replace("a".toRegex(), "").trim { it <= ' ' }
         }
@@ -397,19 +388,27 @@ object Utils {
         }
 
         val sp: Spannable = SpannableString(pattern)
-        sp.setSpan(RelativeSizeSpan(amPmRatio), amPmPos, amPmPos + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        sp.setSpan(StyleSpan(Typeface.NORMAL), amPmPos, amPmPos + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        sp.setSpan(TypefaceSpan("sans-serif"), amPmPos, amPmPos + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        sp.setSpan(
+            RelativeSizeSpan(amPmRatio), amPmPos, amPmPos + 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        sp.setSpan(
+            StyleSpan(Typeface.NORMAL), amPmPos, amPmPos + 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        sp.setSpan(
+            TypefaceSpan("sans-serif"), amPmPos, amPmPos + 1,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         return sp
     }
 
     fun get24ModeFormat(includeSeconds: Boolean): CharSequence {
-        return DateFormat.getBestDateTimePattern(Locale.getDefault(),
-                if (includeSeconds) "Hms" else "Hm")
+        return DateFormat.getBestDateTimePattern(
+            Locale.getDefault(),
+            if (includeSeconds) "Hms" else "Hm"
+        )
     }
 
     /**
@@ -544,33 +543,43 @@ object Utils {
         val timeString: String
         timeString = if (displayMinutes && hoursDifferent != 0) {
             // Both minutes and hours
-            val hoursShortQuantityString = getNumberFormattedQuantityString(context,
-                    R.plurals.hours_short, abs(hoursDifferent))
-            val minsShortQuantityString = getNumberFormattedQuantityString(context,
-                    R.plurals.minutes_short, abs(minutesDifferent))
+            val hoursShortQuantityString = getNumberFormattedQuantityString(
+                context,
+                R.plurals.hours_short, abs(hoursDifferent)
+            )
+            val minsShortQuantityString = getNumberFormattedQuantityString(
+                context,
+                R.plurals.minutes_short, abs(minutesDifferent)
+            )
             @StringRes val stringType = if (isAhead) {
                 R.string.world_hours_minutes_ahead
             } else {
                 R.string.world_hours_minutes_behind
             }
-            context.getString(stringType, hoursShortQuantityString,
-                    minsShortQuantityString)
+            context.getString(
+                stringType, hoursShortQuantityString,
+                minsShortQuantityString
+            )
         } else {
             // Minutes alone or hours alone
             val hoursQuantityString = getNumberFormattedQuantityString(
-                    context, R.plurals.hours, abs(hoursDifferent))
+                context, R.plurals.hours, abs(hoursDifferent)
+            )
             val minutesQuantityString = getNumberFormattedQuantityString(
-                    context, R.plurals.minutes, abs(minutesDifferent))
+                context, R.plurals.minutes, abs(minutesDifferent)
+            )
             @StringRes val stringType = if (isAhead) {
                 R.string.world_time_ahead
             } else {
                 R.string.world_time_behind
             }
-            context.getString(stringType, if (displayMinutes) {
-                minutesQuantityString
-            } else {
-                hoursQuantityString
-            })
+            context.getString(
+                stringType, if (displayMinutes) {
+                    minutesQuantityString
+                } else {
+                    hoursQuantityString
+                }
+            )
         }
         return timeString
     }
@@ -608,8 +617,11 @@ object Utils {
             if (mIsAlwaysAccessibilityVisible) {
                 info.setVisibleToUser(true)
             }
-            info.addAction(AccessibilityActionCompat(
-                    AccessibilityActionCompat.ACTION_CLICK.getId(), mLabel))
+            info.addAction(
+                AccessibilityActionCompat(
+                    AccessibilityActionCompat.ACTION_CLICK.getId(), mLabel
+                )
+            )
         }
     }
 }

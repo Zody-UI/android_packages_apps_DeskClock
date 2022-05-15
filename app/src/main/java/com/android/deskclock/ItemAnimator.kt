@@ -16,15 +16,10 @@
 
 package com.android.deskclock
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
+import android.animation.*
 import android.view.View
 import androidx.collection.ArrayMap
-import androidx.recyclerview.widget.RecyclerView.State
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView.*
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator
 import androidx.recyclerview.widget.SimpleItemAnimator
 
@@ -67,7 +62,7 @@ class ItemAnimator : SimpleItemAnimator() {
         holder.itemView.setAlpha(0f)
 
         val addAnimator: Animator = ObjectAnimator.ofFloat(holder.itemView, View.ALPHA, 1f)
-                .setDuration(getAddDuration())
+            .setDuration(getAddDuration())
         addAnimator.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animator: Animator) {
                 dispatchAddStarting(holder)
@@ -157,8 +152,10 @@ class ItemAnimator : SimpleItemAnimator() {
 
         if (oldHolder === newHolder) {
             val animator = (newHolder as OnAnimateChangeListener)
-                    .onAnimateChange(payloads, preInfo.left, preInfo.top, preInfo.right,
-                            preInfo.bottom, changeDuration)
+                .onAnimateChange(
+                    payloads, preInfo.left, preInfo.top, preInfo.right,
+                    preInfo.bottom, changeDuration
+                )
             if (animator == null) {
                 dispatchChangeFinished(newHolder, false)
                 return false
@@ -178,7 +175,8 @@ class ItemAnimator : SimpleItemAnimator() {
             mAnimators[newHolder] = animator
             return true
         } else if (oldHolder !is OnAnimateChangeListener ||
-                newHolder !is OnAnimateChangeListener) {
+            newHolder !is OnAnimateChangeListener
+        ) {
             // Both holders must implement OnAnimateChangeListener in order to animate.
             dispatchChangeFinished(oldHolder, true)
             dispatchChangeFinished(newHolder, true)
@@ -186,7 +184,7 @@ class ItemAnimator : SimpleItemAnimator() {
         }
 
         val oldChangeAnimator = (oldHolder as OnAnimateChangeListener)
-                .onAnimateChange(oldHolder, newHolder, changeDuration)
+            .onAnimateChange(oldHolder, newHolder, changeDuration)
         if (oldChangeAnimator != null) {
             oldChangeAnimator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animator: Animator) {
@@ -206,7 +204,7 @@ class ItemAnimator : SimpleItemAnimator() {
         }
 
         val newChangeAnimator = (newHolder as OnAnimateChangeListener)
-                .onAnimateChange(oldHolder, newHolder, changeDuration)
+            .onAnimateChange(oldHolder, newHolder, changeDuration)
         if (newChangeAnimator != null) {
             newChangeAnimator.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animator: Animator) {
@@ -311,7 +309,7 @@ class ItemAnimator : SimpleItemAnimator() {
         payloads: MutableList<Any>
     ): ItemAnimator.ItemHolderInfo {
         val itemHolderInfo: ItemHolderInfo =
-                super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
+            super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads)
         if (itemHolderInfo is PayloadItemHolderInfo) {
             itemHolderInfo.payloads = payloads
         }

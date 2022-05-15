@@ -42,12 +42,12 @@ class EmptyViewController(
     init {
         mEmptyViewTransition = if (USE_TRANSITION_FRAMEWORK) {
             TransitionSet()
-                    .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-                    .addTarget(mContentView)
-                    .addTarget(mEmptyView)
-                    .addTransition(Fade(Fade.OUT))
-                    .addTransition(Fade(Fade.IN))
-                    .setDuration(ANIMATION_DURATION.toLong())
+                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+                .addTarget(mContentView)
+                .addTarget(mEmptyView)
+                .addTransition(Fade(Fade.OUT))
+                .addTransition(Fade(Fade.IN))
+                .setDuration(ANIMATION_DURATION.toLong())
         } else {
             null
         }

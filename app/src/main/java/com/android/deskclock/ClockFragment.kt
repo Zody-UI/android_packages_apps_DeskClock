@@ -26,11 +26,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.text.format.DateUtils
-import android.view.GestureDetector
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.Button
 import android.widget.ImageView
@@ -38,16 +34,13 @@ import android.widget.TextClock
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.android.deskclock.data.City
 import com.android.deskclock.data.CityListener
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.events.Events
 import com.android.deskclock.uidata.UiDataModel
 import com.android.deskclock.worldclock.CitySelectionActivity
-
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * Fragment that shows the clock (analog or digital), the next alarm info and the world clock.
@@ -89,8 +82,10 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
         mDateFormat = getString(R.string.abbrev_wday_month_day_no_year)
         mDateFormatForAccessibility = getString(R.string.full_wday_month_day_no_year)
 
-        mCityAdapter = SelectedCitiesAdapter(requireActivity(), mDateFormat,
-                mDateFormatForAccessibility)
+        mCityAdapter = SelectedCitiesAdapter(
+            requireActivity(), mDateFormat,
+            mDateFormatForAccessibility
+        )
 
         mCityList = fragmentView.findViewById<View>(R.id.cities) as RecyclerView
         mCityList.setLayoutManager(LinearLayoutManager(requireActivity()))
@@ -146,11 +141,13 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
         val view = view
         if (view?.findViewById<View?>(R.id.main_clock_left_pane) != null) {
             // Center the main clock frame by hiding the world clocks when none are selected.
-            mCityList.setVisibility(if (mCityAdapter.getItemCount() == 0) {
-                View.GONE
-            } else {
-                View.VISIBLE
-            })
+            mCityList.setVisibility(
+                if (mCityAdapter.getItemCount() == 0) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+            )
         }
 
         refreshAlarm()
@@ -211,9 +208,11 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
      */
     private inner class StartScreenSaverListener : View.OnLongClickListener {
         override fun onLongClick(view: View): Boolean {
-            startActivity(Intent(requireActivity(), ScreensaverActivity::class.java)
+            startActivity(
+                Intent(requireActivity(), ScreensaverActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock))
+                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_deskclock)
+            )
             return true
         }
     }
@@ -341,8 +340,10 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
                     }
                     (holder as CityViewHolder).bind(mContext, city, position, mIsPortrait)
                 }
-                MAIN_CLOCK -> (holder as MainClockViewHolder).bind(mContext, mDateFormat,
-                        mDateFormatForAccessibility, getItemCount() > 1)
+                MAIN_CLOCK -> (holder as MainClockViewHolder).bind(
+                    mContext, mDateFormat,
+                    mDateFormatForAccessibility, getItemCount() > 1
+                )
                 else -> throw IllegalArgumentException("Unexpected view type: $viewType")
             }
         }
@@ -409,7 +410,7 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
                 val localCal = Calendar.getInstance(TimeZone.getDefault())
                 val cityCal: Calendar = Calendar.getInstance(city.timeZone)
                 val displayDayOfWeek =
-                        localCal[Calendar.DAY_OF_WEEK] != cityCal[Calendar.DAY_OF_WEEK]
+                    localCal[Calendar.DAY_OF_WEEK] != cityCal[Calendar.DAY_OF_WEEK]
 
                 // Compare offset from UTC time on today's date (daylight savings time, etc.)
                 val currentTimeZone = TimeZone.getDefault()
@@ -429,13 +430,16 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
                     val displayDifference = hoursDifferent != 0 || displayMinutes
                     mHoursAhead.visibility = if (displayDifference) View.VISIBLE else View.GONE
                     val timeString = Utils.createHoursDifferentString(
-                            context, displayMinutes, isAhead, hoursDifferent, minutesDifferent)
+                        context, displayMinutes, isAhead, hoursDifferent, minutesDifferent
+                    )
                     mHoursAhead.text = if (displayDayOfWeek) {
-                        context.getString(if (isAhead) {
-                            R.string.world_hours_tomorrow
-                        } else {
-                            R.string.world_hours_yesterday
-                        }, timeString)
+                        context.getString(
+                            if (isAhead) {
+                                R.string.world_hours_tomorrow
+                            } else {
+                                R.string.world_hours_yesterday
+                            }, timeString
+                        )
                     } else {
                         timeString
                     }
@@ -443,11 +447,13 @@ class ClockFragment : DeskClockFragment(UiDataModel.Tab.CLOCKS) {
                     // Only tomorrow/yesterday should be shown in landscape view.
                     mHoursAhead.visibility = if (displayDayOfWeek) View.VISIBLE else View.GONE
                     if (displayDayOfWeek) {
-                        mHoursAhead.text = context.getString(if (isAhead) {
-                            R.string.world_tomorrow
-                        } else {
-                            R.string.world_yesterday
-                        })
+                        mHoursAhead.text = context.getString(
+                            if (isAhead) {
+                                R.string.world_tomorrow
+                            } else {
+                                R.string.world_yesterday
+                            }
+                        )
                     }
                 }
             }

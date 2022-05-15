@@ -17,12 +17,7 @@
 package com.android.deskclock.provider
 
 import android.annotation.TargetApi
-import android.content.ContentProvider
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.UriMatcher
+import android.content.*
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteQueryBuilder
@@ -31,7 +26,6 @@ import android.os.Build
 import android.provider.BaseColumns
 import android.text.TextUtils
 import android.util.ArrayMap
-
 import com.android.deskclock.LogUtils
 import com.android.deskclock.Utils
 import com.android.deskclock.provider.ClockContract.AlarmSettingColumns
@@ -52,10 +46,10 @@ class ClockProvider : ContentProvider() {
         private const val ALARMS_WITH_INSTANCES = 5
 
         private val ALARM_JOIN_INSTANCE_TABLE_STATEMENT =
-                ALARMS_TABLE_NAME + " LEFT JOIN " +
-                        INSTANCES_TABLE_NAME + " ON (" +
-                        ALARMS_TABLE_NAME + "." +
-                        BaseColumns._ID + " = " + InstancesColumns.ALARM_ID + ")"
+            ALARMS_TABLE_NAME + " LEFT JOIN " +
+                    INSTANCES_TABLE_NAME + " ON (" +
+                    ALARMS_TABLE_NAME + "." +
+                    BaseColumns._ID + " = " + InstancesColumns.ALARM_ID + ")"
 
         private val ALARM_JOIN_INSTANCE_WHERE_STATEMENT = INSTANCES_TABLE_NAME +
                 "." + BaseColumns._ID + " IS NULL OR " +
@@ -77,51 +71,53 @@ class ClockProvider : ContentProvider() {
 
         init {
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + BaseColumns._ID] =
-                    ALARMS_TABLE_NAME + "." + BaseColumns._ID
+                ALARMS_TABLE_NAME + "." + BaseColumns._ID
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmsColumns.HOUR] =
-                    ALARMS_TABLE_NAME + "." + AlarmsColumns.HOUR
+                ALARMS_TABLE_NAME + "." + AlarmsColumns.HOUR
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmsColumns.MINUTES] =
-                    ALARMS_TABLE_NAME + "." + AlarmsColumns.MINUTES
+                ALARMS_TABLE_NAME + "." + AlarmsColumns.MINUTES
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmsColumns.DAYS_OF_WEEK] =
-                    ALARMS_TABLE_NAME + "." + AlarmsColumns.DAYS_OF_WEEK
+                ALARMS_TABLE_NAME + "." + AlarmsColumns.DAYS_OF_WEEK
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmsColumns.ENABLED] =
-                    ALARMS_TABLE_NAME + "." + AlarmsColumns.ENABLED
+                ALARMS_TABLE_NAME + "." + AlarmsColumns.ENABLED
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE] =
-                    ALARMS_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
+                ALARMS_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmSettingColumns.LABEL] =
-                    ALARMS_TABLE_NAME + "." + AlarmSettingColumns.LABEL
+                ALARMS_TABLE_NAME + "." + AlarmSettingColumns.LABEL
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." + AlarmSettingColumns.RINGTONE] =
-                    ALARMS_TABLE_NAME + "." + AlarmSettingColumns.RINGTONE
+                ALARMS_TABLE_NAME + "." + AlarmSettingColumns.RINGTONE
             sAlarmsWithInstancesProjection[ALARMS_TABLE_NAME + "." +
                     AlarmsColumns.DELETE_AFTER_USE] =
-                    ALARMS_TABLE_NAME + "." + AlarmsColumns.DELETE_AFTER_USE
+                ALARMS_TABLE_NAME + "." + AlarmsColumns.DELETE_AFTER_USE
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." +
                     InstancesColumns.ALARM_STATE] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.ALARM_STATE
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.ALARM_STATE
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + BaseColumns._ID] =
-                    INSTANCES_TABLE_NAME + "." + BaseColumns._ID
+                INSTANCES_TABLE_NAME + "." + BaseColumns._ID
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + InstancesColumns.YEAR] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.YEAR
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.YEAR
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + InstancesColumns.MONTH] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.MONTH
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.MONTH
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + InstancesColumns.DAY] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.DAY
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.DAY
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + InstancesColumns.HOUR] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.HOUR
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.HOUR
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + InstancesColumns.MINUTES] =
-                    INSTANCES_TABLE_NAME + "." + InstancesColumns.MINUTES
+                INSTANCES_TABLE_NAME + "." + InstancesColumns.MINUTES
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.LABEL] =
-                    INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.LABEL
+                INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.LABEL
             sAlarmsWithInstancesProjection[INSTANCES_TABLE_NAME + "." +
                     AlarmSettingColumns.VIBRATE] =
-                    INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
+                INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
 
             sURIMatcher.addURI(ClockContract.AUTHORITY, "alarms", ALARMS)
             sURIMatcher.addURI(ClockContract.AUTHORITY, "alarms/#", ALARMS_ID)
             sURIMatcher.addURI(ClockContract.AUTHORITY, "instances", INSTANCES)
             sURIMatcher.addURI(ClockContract.AUTHORITY, "instances/#", INSTANCES_ID)
-            sURIMatcher.addURI(ClockContract.AUTHORITY,
-                    "alarms_with_instances", ALARMS_WITH_INSTANCES)
+            sURIMatcher.addURI(
+                ClockContract.AUTHORITY,
+                "alarms_with_instances", ALARMS_WITH_INSTANCES
+            )
         }
     }
 
@@ -135,8 +131,10 @@ class ClockProvider : ContentProvider() {
             // storage area, which is where our data lives from now on.
             storageContext = context.createDeviceProtectedStorageContext()
             if (!storageContext.moveDatabaseFrom(context, ClockDatabaseHelper.DATABASE_NAME)) {
-                LogUtils.wtf("Failed to migrate database: %s",
-                        ClockDatabaseHelper.DATABASE_NAME)
+                LogUtils.wtf(
+                    "Failed to migrate database: %s",
+                    ClockDatabaseHelper.DATABASE_NAME
+                )
             }
         } else {
             storageContext = context
@@ -210,15 +208,19 @@ class ClockProvider : ContentProvider() {
         when (sURIMatcher.match(uri)) {
             ALARMS_ID -> {
                 alarmId = uri.getLastPathSegment()
-                count = db.update(ALARMS_TABLE_NAME, values,
-                        BaseColumns._ID.toString() + "=" + alarmId,
-                        null)
+                count = db.update(
+                    ALARMS_TABLE_NAME, values,
+                    BaseColumns._ID.toString() + "=" + alarmId,
+                    null
+                )
             }
             INSTANCES_ID -> {
                 alarmId = uri.getLastPathSegment()
-                count = db.update(INSTANCES_TABLE_NAME, values,
-                        BaseColumns._ID.toString() + "=" + alarmId,
-                        null)
+                count = db.update(
+                    INSTANCES_TABLE_NAME, values,
+                    BaseColumns._ID.toString() + "=" + alarmId,
+                    null
+                )
             }
             else -> {
                 throw UnsupportedOperationException("Cannot update URI: $uri")
@@ -249,7 +251,7 @@ class ClockProvider : ContentProvider() {
         val db: SQLiteDatabase = mOpenHelper.getWritableDatabase()
         when (sURIMatcher.match(uri)) {
             ALARMS -> count =
-                    db.delete(ALARMS_TABLE_NAME, whereString, whereArgs)
+                db.delete(ALARMS_TABLE_NAME, whereString, whereArgs)
             ALARMS_ID -> {
                 primaryKey = uri.getLastPathSegment()
                 whereString = if (TextUtils.isEmpty(whereString)) {
@@ -260,7 +262,7 @@ class ClockProvider : ContentProvider() {
                 count = db.delete(ALARMS_TABLE_NAME, whereString, whereArgs)
             }
             INSTANCES -> count =
-                    db.delete(INSTANCES_TABLE_NAME, whereString, whereArgs)
+                db.delete(INSTANCES_TABLE_NAME, whereString, whereArgs)
             INSTANCES_ID -> {
                 primaryKey = uri.getLastPathSegment()
                 whereString = if (TextUtils.isEmpty(whereString)) {

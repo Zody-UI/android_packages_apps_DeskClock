@@ -22,17 +22,12 @@ import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
+import android.content.*
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.net.Uri
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
-
 import com.android.deskclock.AlarmAlertWakeLock
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
@@ -180,8 +175,10 @@ internal class TimerModel(
     fun addTimer(length: Long, label: String?, deleteAfterUse: Boolean): Timer {
         // Create the timer instance.
         var timer =
-                Timer(-1, Timer.State.RESET, length, length, Timer.UNUSED, Timer.UNUSED, length,
-                label, deleteAfterUse)
+            Timer(
+                -1, Timer.State.RESET, length, length, Timer.UNUSED, Timer.UNUSED, length,
+                label, deleteAfterUse
+            )
 
         // Add the timer to permanent storage.
         timer = TimerDAO.addTimer(mPrefs, timer)
@@ -575,8 +572,9 @@ internal class TimerModel(
         @StringRes eventLabelId: Int
     ): Timer? {
         if (allowDelete &&
-                (timer.isExpired || timer.isMissed) &&
-                timer.deleteAfterUse) {
+            (timer.isExpired || timer.isMissed) &&
+            timer.deleteAfterUse
+        ) {
             doRemoveTimer(timer)
             if (eventLabelId != 0) {
                 Events.sendTimerEvent(R.string.action_delete, eventLabelId)
@@ -633,16 +631,20 @@ internal class TimerModel(
         val intent: Intent = TimerService.createTimerExpiredIntent(mContext, nextExpiringTimer)
         if (nextExpiringTimer == null) {
             // Cancel the existing timer expiration callback.
-            val pi: PendingIntent? = PendingIntent.getService(mContext,
-                    0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_NO_CREATE)
+            val pi: PendingIntent? = PendingIntent.getService(
+                mContext,
+                0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_NO_CREATE
+            )
             if (pi != null) {
                 mAlarmManager.cancel(pi)
                 pi.cancel()
             }
         } else {
             // Update the existing timer expiration callback.
-            val pi: PendingIntent = PendingIntent.getService(mContext,
-                    0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT)
+            val pi: PendingIntent = PendingIntent.getService(
+                mContext,
+                0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+            )
             schedulePendingIntent(mAlarmManager, nextExpiringTimer.expirationTime, pi)
         }
     }
@@ -665,14 +667,16 @@ internal class TimerModel(
 
         // If the timer is the first to expire, start ringing.
         if (afterState == Timer.State.EXPIRED && mRingingIds.add(after.id) &&
-                mRingingIds.size == 1) {
+            mRingingIds.size == 1
+        ) {
             AlarmAlertWakeLock.acquireScreenCpuWakeLock(mContext)
             TimerKlaxon.start(mContext)
         }
 
         // If the expired timer was the last to reset, stop ringing.
         if (beforeState == Timer.State.EXPIRED && mRingingIds.remove(before.id) &&
-                mRingingIds.isEmpty()) {
+            mRingingIds.isEmpty()
+        ) {
             TimerKlaxon.stop(mContext)
             AlarmAlertWakeLock.releaseCpuLock()
         }
@@ -708,7 +712,7 @@ internal class TimerModel(
 
         // Otherwise build and post a notification reflecting the latest unexpired timers.
         val notification: Notification =
-                mNotificationBuilder.build(mContext, mNotificationModel, unexpired)
+            mNotificationBuilder.build(mContext, mNotificationModel, unexpired)
         val notificationId = mNotificationModel.unexpiredTimerNotificationId
         mNotificationBuilder.buildChannel(mContext, mNotificationManager)
         mNotificationManager.notify(notificationId, notification)
@@ -732,8 +736,10 @@ internal class TimerModel(
             return
         }
 
-        val notification: Notification = mNotificationBuilder.buildMissed(mContext,
-                mNotificationModel, missed)
+        val notification: Notification = mNotificationBuilder.buildMissed(
+            mContext,
+            mNotificationModel, missed
+        )
         val notificationId = mNotificationModel.missedTimerNotificationId
         mNotificationManager.notify(notificationId, notification)
     }

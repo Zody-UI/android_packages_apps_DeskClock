@@ -16,12 +16,7 @@
 
 package com.android.deskclock
 
-import android.animation.Animator
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.animation.TypeEvaluator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.graphics.Rect
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
@@ -32,36 +27,35 @@ import android.view.animation.Interpolator
 import android.widget.ImageView
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-
 import kotlin.math.roundToLong
 
 object AnimatorUtils {
     @JvmField
     val DECELERATE_ACCELERATE_INTERPOLATOR =
-            Interpolator { x -> 0.5f + 4.0f * (x - 0.5f) * (x - 0.5f) * (x - 0.5f) }
+        Interpolator { x -> 0.5f + 4.0f * (x - 0.5f) * (x - 0.5f) * (x - 0.5f) }
 
     @JvmField
     val INTERPOLATOR_FAST_OUT_SLOW_IN: Interpolator = FastOutSlowInInterpolator()
 
     @JvmField
     val BACKGROUND_ALPHA: Property<View, Int> =
-            object : Property<View, Int>(Int::class.java, "background.alpha") {
-        override fun get(view: View): Int {
-            var background = view.background
-            if (background is LayerDrawable &&
-                    background.numberOfLayers > 0) {
-                background = background.getDrawable(0)
+        object : Property<View, Int>(Int::class.java, "background.alpha") {
+            override fun get(view: View): Int {
+                var background = view.background
+                if (background is LayerDrawable &&
+                    background.numberOfLayers > 0
+                ) {
+                    background = background.getDrawable(0)
+                }
+                return background.alpha
             }
-            return background.alpha
-        }
 
-        override fun set(view: View, value: Int) {
-            setBackgroundAlpha(view, value)
+            override fun set(view: View, value: Int) {
+                setBackgroundAlpha(view, value)
+            }
         }
-    }
 
     /**
      * Sets the alpha of the top layer's drawable (of the background) only, if the background is a
@@ -75,7 +69,8 @@ object AnimatorUtils {
     fun setBackgroundAlpha(view: View, value: Int?) {
         var background = view.background
         if (background is LayerDrawable &&
-                background.numberOfLayers > 0) {
+            background.numberOfLayers > 0
+        ) {
             background = background.getDrawable(0)
         }
         background.alpha = value!!
@@ -83,34 +78,34 @@ object AnimatorUtils {
 
     @JvmField
     val DRAWABLE_ALPHA: Property<ImageView, Int> =
-            object : Property<ImageView, Int>(Int::class.java, "drawable.alpha") {
-        override fun get(view: ImageView): Int {
-            return view.drawable.alpha
-        }
+        object : Property<ImageView, Int>(Int::class.java, "drawable.alpha") {
+            override fun get(view: ImageView): Int {
+                return view.drawable.alpha
+            }
 
-        override fun set(view: ImageView, value: Int) {
-            view.drawable.alpha = value
+            override fun set(view: ImageView, value: Int) {
+                view.drawable.alpha = value
+            }
         }
-    }
 
     @JvmField
     val DRAWABLE_TINT: Property<ImageView, Int> =
-            object : Property<ImageView, Int>(Int::class.java, "drawable.tint") {
-        override fun get(view: ImageView): Int? {
-            return null
-        }
-
-        override fun set(view: ImageView, value: Int) {
-            // Ensure the drawable is wrapped using DrawableCompat.
-            val drawable = view.drawable
-            val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable)
-            if (wrappedDrawable !== drawable) {
-                view.setImageDrawable(wrappedDrawable)
+        object : Property<ImageView, Int>(Int::class.java, "drawable.tint") {
+            override fun get(view: ImageView): Int? {
+                return null
             }
-            // Set the new tint value via DrawableCompat.
-            DrawableCompat.setTint(wrappedDrawable, value)
+
+            override fun set(view: ImageView, value: Int) {
+                // Ensure the drawable is wrapped using DrawableCompat.
+                val drawable = view.drawable
+                val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable)
+                if (wrappedDrawable !== drawable) {
+                    view.setImageDrawable(wrappedDrawable)
+                }
+                // Set the new tint value via DrawableCompat.
+                DrawableCompat.setTint(wrappedDrawable, value)
+            }
         }
-    }
 
     @JvmField
     val ARGB_EVALUATOR: TypeEvaluator<Int> = ArgbEvaluator() as TypeEvaluator<Int>
@@ -132,7 +127,7 @@ object AnimatorUtils {
             try {
                 if (sAnimateValue == null) {
                     sAnimateValue = ValueAnimator::class.java
-                            .getDeclaredMethod("animateValue", Float::class.javaPrimitiveType)
+                        .getDeclaredMethod("animateValue", Float::class.javaPrimitiveType)
                     sAnimateValue!!.isAccessible = true
                 }
 
@@ -174,9 +169,11 @@ object AnimatorUtils {
 
     @JvmStatic
     fun getScaleAnimator(view: View?, vararg values: Float): ValueAnimator {
-        return ObjectAnimator.ofPropertyValuesHolder(view,
-                PropertyValuesHolder.ofFloat(View.SCALE_X, *values),
-                PropertyValuesHolder.ofFloat(View.SCALE_Y, *values))
+        return ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            PropertyValuesHolder.ofFloat(View.SCALE_X, *values),
+            PropertyValuesHolder.ofFloat(View.SCALE_Y, *values)
+        )
     }
 
     @JvmStatic
@@ -254,8 +251,10 @@ object AnimatorUtils {
         val endRight = to.right - toInsets.right + targetInsets.right
         val endBottom = to.bottom - toInsets.bottom + targetInsets.bottom
 
-        return getBoundsAnimator(target, startLeft, startTop, startRight, startBottom, endLeft,
-                endTop, endRight, endBottom)
+        return getBoundsAnimator(
+            target, startLeft, startTop, startRight, startBottom, endLeft,
+            endTop, endRight, endBottom
+        )
     }
 
     /**
@@ -278,11 +277,13 @@ object AnimatorUtils {
         view.right = fromRight
         view.bottom = fromBottom
 
-        return ObjectAnimator.ofPropertyValuesHolder(view,
-                PropertyValuesHolder.ofInt(VIEW_LEFT, toLeft),
-                PropertyValuesHolder.ofInt(VIEW_TOP, toTop),
-                PropertyValuesHolder.ofInt(VIEW_RIGHT, toRight),
-                PropertyValuesHolder.ofInt(VIEW_BOTTOM, toBottom))
+        return ObjectAnimator.ofPropertyValuesHolder(
+            view,
+            PropertyValuesHolder.ofInt(VIEW_LEFT, toLeft),
+            PropertyValuesHolder.ofInt(VIEW_TOP, toTop),
+            PropertyValuesHolder.ofInt(VIEW_RIGHT, toRight),
+            PropertyValuesHolder.ofInt(VIEW_BOTTOM, toBottom)
+        )
     }
 
     @JvmStatic

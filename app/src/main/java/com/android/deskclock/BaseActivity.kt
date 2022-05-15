@@ -16,15 +16,7 @@
 
 package com.android.deskclock
 
-import android.R
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.View
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 
 /**

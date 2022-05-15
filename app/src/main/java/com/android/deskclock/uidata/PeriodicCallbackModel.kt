@@ -24,12 +24,10 @@ import android.os.Handler
 import android.os.Looper
 import android.text.format.DateUtils
 import androidx.annotation.VisibleForTesting
-
 import com.android.deskclock.LogUtils
 import com.android.deskclock.Utils
-
+import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.Calendar
 
 /**
  * All callbacks to be delivered at requested times on the main thread if the application is in the

@@ -111,8 +111,10 @@ class Screensaver : DreamService() {
 
         // Setup handlers for time reference changes and date updates.
         if (Utils.isLOrLater) {
-            registerReceiver(mAlarmChangedReceiver,
-                    IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
+            registerReceiver(
+                mAlarmChangedReceiver,
+                IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED)
+            )
         }
 
         mSettingsContentObserver?.let {

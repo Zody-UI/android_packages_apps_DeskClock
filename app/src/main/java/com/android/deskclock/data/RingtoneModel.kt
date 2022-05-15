@@ -17,13 +17,7 @@
 package com.android.deskclock.data
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.ContentResolver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
-import android.content.UriPermission
+import android.content.*
 import android.database.ContentObserver
 import android.database.Cursor
 import android.media.AudioManager.STREAM_ALARM
@@ -36,7 +30,6 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.ArrayMap
 import android.util.ArraySet
-
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
 import com.android.deskclock.provider.ClockContract.AlarmSettingColumns
@@ -110,7 +103,7 @@ internal class RingtoneModel(private val mContext: Context, private val mPrefs: 
         }
 
         val uriPermissions: List<UriPermission> =
-                mContext.getContentResolver().getPersistedUriPermissions()
+            mContext.getContentResolver().getPersistedUriPermissions()
         val permissions: MutableSet<Uri?> = ArraySet(uriPermissions.size)
         for (uriPermission in uriPermissions) {
             permissions.add(uriPermission.getUri())

@@ -16,11 +16,7 @@
 
 package com.android.deskclock.provider
 
-import android.content.ContentResolver
-import android.content.ContentUris
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.database.Cursor
 import android.media.RingtoneManager
 import android.net.Uri
@@ -28,16 +24,13 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.provider.BaseColumns
 import androidx.loader.content.CursorLoader
-
 import com.android.deskclock.R
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.Weekdays
 import com.android.deskclock.provider.ClockContract.AlarmSettingColumns
 import com.android.deskclock.provider.ClockContract.AlarmsColumns
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-
-import java.util.Calendar
-import java.util.LinkedList
+import java.util.*
 
 class Alarm : Parcelable, AlarmsColumns {
     // Public fields
@@ -258,36 +251,36 @@ class Alarm : Parcelable, AlarmsColumns {
                 ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + BaseColumns._ID + " DESC"
 
         private val QUERY_COLUMNS = arrayOf(
-                BaseColumns._ID,
-                AlarmsColumns.HOUR,
-                AlarmsColumns.MINUTES,
-                AlarmsColumns.DAYS_OF_WEEK,
-                AlarmsColumns.ENABLED,
-                AlarmSettingColumns.VIBRATE,
-                AlarmSettingColumns.LABEL,
-                AlarmSettingColumns.RINGTONE,
-                AlarmsColumns.DELETE_AFTER_USE
+            BaseColumns._ID,
+            AlarmsColumns.HOUR,
+            AlarmsColumns.MINUTES,
+            AlarmsColumns.DAYS_OF_WEEK,
+            AlarmsColumns.ENABLED,
+            AlarmSettingColumns.VIBRATE,
+            AlarmSettingColumns.LABEL,
+            AlarmSettingColumns.RINGTONE,
+            AlarmsColumns.DELETE_AFTER_USE
         )
 
         private val QUERY_ALARMS_WITH_INSTANCES_COLUMNS = arrayOf(
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + BaseColumns._ID,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.HOUR,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.MINUTES,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.DAYS_OF_WEEK,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.ENABLED,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.LABEL,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.RINGTONE,
-                ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.DELETE_AFTER_USE,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.ALARM_STATE,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + BaseColumns._ID,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.YEAR,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.MONTH,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.DAY,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.HOUR,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.MINUTES,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.LABEL,
-                ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + BaseColumns._ID,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.HOUR,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.MINUTES,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.DAYS_OF_WEEK,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.ENABLED,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.LABEL,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmSettingColumns.RINGTONE,
+            ClockDatabaseHelper.ALARMS_TABLE_NAME + "." + AlarmsColumns.DELETE_AFTER_USE,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.ALARM_STATE,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + BaseColumns._ID,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.YEAR,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.MONTH,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.DAY,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.HOUR,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + InstancesColumns.MINUTES,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.LABEL,
+            ClockDatabaseHelper.INSTANCES_TABLE_NAME + "." + AlarmSettingColumns.VIBRATE
         )
 
         /**
@@ -360,8 +353,10 @@ class Alarm : Parcelable, AlarmsColumns {
          */
         @JvmStatic
         fun getAlarmsCursorLoader(context: Context): CursorLoader {
-            return object : CursorLoader(context, AlarmsColumns.ALARMS_WITH_INSTANCES_URI,
-                    QUERY_ALARMS_WITH_INSTANCES_COLUMNS, null, null, DEFAULT_SORT_ORDER) {
+            return object : CursorLoader(
+                context, AlarmsColumns.ALARMS_WITH_INSTANCES_URI,
+                QUERY_ALARMS_WITH_INSTANCES_COLUMNS, null, null, DEFAULT_SORT_ORDER
+            ) {
 
                 override fun onContentChanged() {
                     // There is a bug in Loader which can result in stale data if a loader is stopped
@@ -425,8 +420,10 @@ class Alarm : Parcelable, AlarmsColumns {
         ): List<Alarm> {
             val result: MutableList<Alarm> = LinkedList()
             val cursor: Cursor? =
-                    cr.query(AlarmsColumns.CONTENT_URI, QUERY_COLUMNS,
-                            selection, selectionArgs, null)
+                cr.query(
+                    AlarmsColumns.CONTENT_URI, QUERY_COLUMNS,
+                    selection, selectionArgs, null
+                )
             cursor?.let {
                 if (cursor.moveToFirst()) {
                     do {
@@ -462,7 +459,7 @@ class Alarm : Parcelable, AlarmsColumns {
             if (alarm.id == INVALID_ID) return false
             val values: ContentValues = createContentValues(alarm)
             val rowsUpdated: Long =
-                    contentResolver.update(getContentUri(alarm.id), values, null, null).toLong()
+                contentResolver.update(getContentUri(alarm.id), values, null, null).toLong()
             return rowsUpdated == 1L
         }
 

@@ -22,12 +22,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ListView
-
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.widget.selector.AlarmSelection
 import com.android.deskclock.widget.selector.AlarmSelectionAdapter
-
-import java.util.Locale
+import java.util.*
 
 class AlarmSelectionActivity : ListActivity() {
     private val mSelections: MutableList<AlarmSelection> = ArrayList()

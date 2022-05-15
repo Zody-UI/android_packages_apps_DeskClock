@@ -104,14 +104,14 @@ class MoveScreensaverRunnable(
             hide.duration = FADE_TIME
             hide.interpolator = mAcceleration
             hide.play(AnimatorUtils.getAlphaAnimator(mSaverView, 1f, 0f))
-                    .with(AnimatorUtils.getScaleAnimator(mSaverView, 1f, 0.85f))
+                .with(AnimatorUtils.getScaleAnimator(mSaverView, 1f, 0.85f))
 
             // Fade in and grow the saver view after altering its position.
             val show = AnimatorSet()
             show.duration = FADE_TIME
             show.interpolator = mDeceleration
             show.play(AnimatorUtils.getAlphaAnimator(mSaverView, 0f, 1f))
-                    .with(AnimatorUtils.getScaleAnimator(mSaverView, 0.85f, 1f))
+                .with(AnimatorUtils.getScaleAnimator(mSaverView, 0.85f, 1f))
             show.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator) {
                     mSaverView.x = newX

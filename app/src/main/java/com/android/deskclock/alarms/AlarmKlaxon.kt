@@ -74,10 +74,12 @@ internal object AlarmKlaxon {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun vibrateLOrLater(vibrator: Vibrator) {
-        vibrator.vibrate(VIBRATE_PATTERN, 0, AudioAttributes.Builder()
+        vibrator.vibrate(
+            VIBRATE_PATTERN, 0, AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build())
+                .build()
+        )
     }
 
     private fun getVibrator(context: Context): Vibrator {

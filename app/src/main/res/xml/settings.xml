@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,11 +11,9 @@
      limitations under the License.
 -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings">
-    <PreferenceCategory
-        android:title="@string/clock_settings">
+    <PreferenceCategory android:title="@string/clock_settings">
         <com.android.deskclock.settings.SimpleMenuPreference
             android:defaultValue="@string/default_clock_style"
             android:dialogTitle="@string/clock_style"
@@ -47,8 +44,7 @@
             android:title="@string/open_date_settings" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/alarm_settings">
+    <PreferenceCategory android:title="@string/alarm_settings">
         <ListPreference
             android:defaultValue="10"
             android:dialogTitle="@string/auto_silence_title"
@@ -94,8 +90,7 @@
             android:title="@string/week_start_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/timer_settings">
+    <PreferenceCategory android:title="@string/timer_settings">
         <Preference
             android:key="timer_ringtone"
             android:title="@string/timer_sound" />

@@ -40,7 +40,7 @@ internal class FragmentTabPagerAdapter(private val mDeskClock: DeskClock) : Page
 
     /** A fragment cache that can be accessed before [.instantiateItem] is called.  */
     private val mFragmentCache: MutableMap<UiDataModel.Tab, DeskClockFragment?> =
-            ArrayMap(getCount())
+        ArrayMap(getCount())
 
     /** The active fragment transaction if one exists.  */
     private var mCurrentTransaction: FragmentTransaction? = null

@@ -27,13 +27,7 @@ import android.os.Build
 import android.os.UserManager
 import android.provider.AlarmClock
 import androidx.annotation.StringRes
-
-import com.android.deskclock.DeskClock
-import com.android.deskclock.HandleApiCalls
-import com.android.deskclock.HandleShortcuts
-import com.android.deskclock.LogUtils
-import com.android.deskclock.R
-import com.android.deskclock.ScreensaverActivity
+import com.android.deskclock.*
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.Lap
 import com.android.deskclock.data.Stopwatch
@@ -72,36 +66,36 @@ internal class ShortcutController(val context: Context) {
 
     private fun createNewAlarmShortcut(): ShortcutInfo {
         val intent: Intent = Intent(AlarmClock.ACTION_SET_ALARM)
-                .setClass(context, HandleApiCalls::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
+            .setClass(context, HandleApiCalls::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
         val setAlarmShortcut = UiDataModel.uiDataModel
-                .getShortcutId(R.string.category_alarm, R.string.action_create)
+            .getShortcutId(R.string.category_alarm, R.string.action_create)
         return ShortcutInfo.Builder(context, setAlarmShortcut)
-                .setIcon(Icon.createWithResource(context, R.drawable.shortcut_new_alarm))
-                .setActivity(mComponentName)
-                .setShortLabel(context.getString(R.string.shortcut_new_alarm_short))
-                .setLongLabel(context.getString(R.string.shortcut_new_alarm_long))
-                .setIntent(intent)
-                .setRank(0)
-                .build()
+            .setIcon(Icon.createWithResource(context, R.drawable.shortcut_new_alarm))
+            .setActivity(mComponentName)
+            .setShortLabel(context.getString(R.string.shortcut_new_alarm_short))
+            .setLongLabel(context.getString(R.string.shortcut_new_alarm_long))
+            .setIntent(intent)
+            .setRank(0)
+            .build()
     }
 
     private fun createNewTimerShortcut(): ShortcutInfo {
         val intent: Intent = Intent(AlarmClock.ACTION_SET_TIMER)
-                .setClass(context, HandleApiCalls::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
+            .setClass(context, HandleApiCalls::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
         val setTimerShortcut = UiDataModel.uiDataModel
-                .getShortcutId(R.string.category_timer, R.string.action_create)
+            .getShortcutId(R.string.category_timer, R.string.action_create)
         return ShortcutInfo.Builder(context, setTimerShortcut)
-                .setIcon(Icon.createWithResource(context, R.drawable.shortcut_new_timer))
-                .setActivity(mComponentName)
-                .setShortLabel(context.getString(R.string.shortcut_new_timer_short))
-                .setLongLabel(context.getString(R.string.shortcut_new_timer_long))
-                .setIntent(intent)
-                .setRank(1)
-                .build()
+            .setIcon(Icon.createWithResource(context, R.drawable.shortcut_new_timer))
+            .setActivity(mComponentName)
+            .setShortLabel(context.getString(R.string.shortcut_new_timer_short))
+            .setLongLabel(context.getString(R.string.shortcut_new_timer_long))
+            .setIntent(intent)
+            .setRank(1)
+            .build()
     }
 
     private fun createStopwatchShortcut(): ShortcutInfo {
@@ -111,45 +105,45 @@ internal class ShortcutController(val context: Context) {
             R.string.action_start
         }
         val shortcutId = UiDataModel.uiDataModel
-                .getShortcutId(R.string.category_stopwatch, action)
+            .getShortcutId(R.string.category_stopwatch, action)
         val shortcut: ShortcutInfo.Builder = ShortcutInfo.Builder(context, shortcutId)
-                .setIcon(Icon.createWithResource(context, R.drawable.shortcut_stopwatch))
-                .setActivity(mComponentName)
-                .setRank(2)
+            .setIcon(Icon.createWithResource(context, R.drawable.shortcut_stopwatch))
+            .setActivity(mComponentName)
+            .setRank(2)
         val intent: Intent
         if (DataModel.dataModel.stopwatch.isRunning) {
             intent = Intent(StopwatchService.ACTION_PAUSE_STOPWATCH)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
+                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
             shortcut.setShortLabel(context.getString(R.string.shortcut_pause_stopwatch_short))
-                    .setLongLabel(context.getString(R.string.shortcut_pause_stopwatch_long))
+                .setLongLabel(context.getString(R.string.shortcut_pause_stopwatch_long))
         } else {
             intent = Intent(StopwatchService.ACTION_START_STOPWATCH)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
+                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
             shortcut.setShortLabel(context.getString(R.string.shortcut_start_stopwatch_short))
-                    .setLongLabel(context.getString(R.string.shortcut_start_stopwatch_long))
+                .setLongLabel(context.getString(R.string.shortcut_start_stopwatch_long))
         }
         intent.setClass(context, HandleShortcuts::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return shortcut
-                .setIntent(intent)
-                .build()
+            .setIntent(intent)
+            .build()
     }
 
     private fun createScreensaverShortcut(): ShortcutInfo {
         val intent: Intent = Intent(Intent.ACTION_MAIN)
-                .setClass(context, ScreensaverActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
+            .setClass(context, ScreensaverActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Events.EXTRA_EVENT_LABEL, R.string.label_shortcut)
         val screensaverShortcut = UiDataModel.uiDataModel
-                .getShortcutId(R.string.category_screensaver, R.string.action_show)
+            .getShortcutId(R.string.category_screensaver, R.string.action_show)
         return ShortcutInfo.Builder(context, screensaverShortcut)
-                .setIcon(Icon.createWithResource(context, R.drawable.shortcut_screensaver))
-                .setActivity(mComponentName)
-                .setShortLabel(context.getString(R.string.shortcut_start_screensaver_short))
-                .setLongLabel(context.getString(R.string.shortcut_start_screensaver_long))
-                .setIntent(intent)
-                .setRank(3)
-                .build()
+            .setIcon(Icon.createWithResource(context, R.drawable.shortcut_screensaver))
+            .setActivity(mComponentName)
+            .setShortLabel(context.getString(R.string.shortcut_start_screensaver_short))
+            .setLongLabel(context.getString(R.string.shortcut_start_screensaver_long))
+            .setIntent(intent)
+            .setRank(3)
+            .build()
     }
 
     private inner class StopwatchWatcher : StopwatchListener {

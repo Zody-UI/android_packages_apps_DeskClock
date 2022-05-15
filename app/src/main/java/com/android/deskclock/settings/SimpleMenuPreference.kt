@@ -69,7 +69,7 @@ class SimpleMenuPreference(
     }
 
     private class SimpleMenuAdapter internal constructor(context: Context, resource: Int) :
-            ArrayAdapter<CharSequence?>(context, resource) {
+        ArrayAdapter<CharSequence?>(context, resource) {
 
         /** The original position of the last selected element  */
         var lastSelectedOriginalPosition = 0

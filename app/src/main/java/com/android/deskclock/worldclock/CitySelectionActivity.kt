@@ -18,40 +18,20 @@ package com.android.deskclock.worldclock
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.widget.SearchView
 import android.text.TextUtils
 import android.text.format.DateFormat
 import android.util.ArraySet
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.ListView
-import android.widget.SectionIndexer
-import android.widget.TextView
-
+import android.view.*
+import android.widget.*
+import androidx.appcompat.widget.SearchView
 import com.android.deskclock.BaseActivity
 import com.android.deskclock.R
 import com.android.deskclock.Utils
-import com.android.deskclock.actionbarmenu.MenuItemController
-import com.android.deskclock.actionbarmenu.MenuItemControllerFactory
-import com.android.deskclock.actionbarmenu.NavUpMenuItemController
-import com.android.deskclock.actionbarmenu.OptionsMenuManager
-import com.android.deskclock.actionbarmenu.SearchMenuItemController
-import com.android.deskclock.actionbarmenu.SettingsMenuItemController
+import com.android.deskclock.actionbarmenu.*
 import com.android.deskclock.data.City
 import com.android.deskclock.data.DataModel
-
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.Comparator
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 /**
  * This activity allows the user to alter the cities selected for display.
@@ -91,24 +71,25 @@ class CitySelectionActivity : BaseActivity() {
 
         setContentView(R.layout.cities_activity)
         mSearchMenuItemController = SearchMenuItemController(
-                getSupportActionBar()!!.getThemedContext(),
-                object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return false
-                    }
+            getSupportActionBar()!!.getThemedContext(),
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-                    override fun onQueryTextChange(query: String): Boolean {
-                        mCitiesAdapter.filter(query)
-                        updateFastScrolling()
-                        return true
-                    }
-                }, savedInstanceState)
+                override fun onQueryTextChange(query: String): Boolean {
+                    mCitiesAdapter.filter(query)
+                    updateFastScrolling()
+                    return true
+                }
+            }, savedInstanceState
+        )
         mCitiesAdapter = CityAdapter(this, mSearchMenuItemController)
         mOptionsMenuManager.addMenuItemController(NavUpMenuItemController(this))
-                .addMenuItemController(mSearchMenuItemController)
-                .addMenuItemController(SortOrderMenuItemController())
-                .addMenuItemController(SettingsMenuItemController(this))
-                .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
+            .addMenuItemController(mSearchMenuItemController)
+            .addMenuItemController(SortOrderMenuItemController())
+            .addMenuItemController(SettingsMenuItemController(this))
+            .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
         mCitiesList = findViewById(R.id.cities_list) as ListView
         mCitiesList.adapter = mCitiesAdapter
 
@@ -190,7 +171,7 @@ class CitySelectionActivity : BaseActivity() {
         /** Menu item controller for search. Search query is maintained here. */
         private val mSearchMenuItemController: SearchMenuItemController
     ) : BaseAdapter(), View.OnClickListener,
-            CompoundButton.OnCheckedChangeListener, SectionIndexer {
+        CompoundButton.OnCheckedChangeListener, SectionIndexer {
         private val mInflater: LayoutInflater = LayoutInflater.from(mContext)
 
         /**
@@ -282,11 +263,11 @@ class CitySelectionActivity : BaseActivity() {
             when (itemViewType) {
                 VIEW_TYPE_SELECTED_CITIES_HEADER -> {
                     return variableView
-                            ?: mInflater.inflate(R.layout.city_list_header, parent, false)
+                        ?: mInflater.inflate(R.layout.city_list_header, parent, false)
                 }
                 VIEW_TYPE_CITY -> {
                     val city = getItem(position)
-                            ?: throw IllegalStateException("The desired city does not exist")
+                        ?: throw IllegalStateException("The desired city does not exist")
                     val timeZone: TimeZone = city.timeZone
 
                     // Inflate a new view if necessary.
@@ -348,12 +329,20 @@ class CitySelectionActivity : BaseActivity() {
             val city = b.tag as City
             if (checked) {
                 mUserSelectedCities.add(city)
-                b.announceForAccessibility(mContext.getString(R.string.city_checked,
-                        city.name))
+                b.announceForAccessibility(
+                    mContext.getString(
+                        R.string.city_checked,
+                        city.name
+                    )
+                )
             } else {
                 mUserSelectedCities.remove(city)
-                b.announceForAccessibility(mContext.getString(R.string.city_unchecked,
-                        city.name))
+                b.announceForAccessibility(
+                    mContext.getString(
+                        R.string.city_unchecked,
+                        city.name
+                    )
+                )
             }
         }
 
@@ -379,7 +368,7 @@ class CitySelectionActivity : BaseActivity() {
                     // Add a section if this position should show the section index.
                     if (getShowIndex(position)) {
                         val city = getItem(position)
-                                ?: throw IllegalStateException("The desired city does not exist")
+                            ?: throw IllegalStateException("The desired city does not exist")
                         when (citySort) {
                             DataModel.CitySort.NAME -> sections.add(city.indexString.orEmpty())
                             DataModel.CitySort.UTC_OFFSET -> {
@@ -554,17 +543,21 @@ class CitySelectionActivity : BaseActivity() {
             get() = SORT_MENU_RES_ID
 
         override fun onCreateOptionsItem(menu: Menu) {
-            menu.add(Menu.NONE, R.id.menu_item_sort, Menu.NONE,
-                    R.string.menu_item_sort_by_gmt_offset)
-                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            menu.add(
+                Menu.NONE, R.id.menu_item_sort, Menu.NONE,
+                R.string.menu_item_sort_by_gmt_offset
+            )
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
         }
 
         override fun onPrepareOptionsItem(item: MenuItem) {
-            item.setTitle(if (DataModel.dataModel.citySort == DataModel.CitySort.NAME) {
-                R.string.menu_item_sort_by_gmt_offset
-            } else {
-                R.string.menu_item_sort_by_name
-            })
+            item.setTitle(
+                if (DataModel.dataModel.citySort == DataModel.CitySort.NAME) {
+                    R.string.menu_item_sort_by_gmt_offset
+                } else {
+                    R.string.menu_item_sort_by_name
+                }
+            )
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {

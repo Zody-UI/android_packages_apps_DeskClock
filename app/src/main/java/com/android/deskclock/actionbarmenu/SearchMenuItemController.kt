@@ -68,8 +68,8 @@ class SearchMenuItemController(
         searchView.setOnQueryTextListener(queryListener)
 
         menu.add(NONE, id, FIRST, android.R.string.search_go)
-                .setActionView(searchView)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            .setActionView(searchView)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
 
         if (mSearchMode) {
             searchView.requestFocus()

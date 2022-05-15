@@ -70,7 +70,8 @@ class EllipsizeLayout @JvmOverloads constructor(
      */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (orientation == HORIZONTAL &&
-                MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
+            MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY
+        ) {
             var totalLength = 0
             // If any of the constraints of this class are exceeded, outOfSpec becomes true
             // and the no alterations are made to the ellipsize-text-view.
@@ -79,8 +80,10 @@ class EllipsizeLayout @JvmOverloads constructor(
             val count = childCount
             val parentWidth = MeasureSpec.getSize(widthMeasureSpec)
             val queryWidthMeasureSpec =
-                    MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec),
-                            MeasureSpec.UNSPECIFIED)
+                MeasureSpec.makeMeasureSpec(
+                    MeasureSpec.getSize(widthMeasureSpec),
+                    MeasureSpec.UNSPECIFIED
+                )
 
             var ii = 0
             while (ii < count && !outOfSpec) {

@@ -30,14 +30,8 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM
 import android.os.Bundle
 import android.transition.TransitionManager
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
+import android.view.View.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -46,24 +40,15 @@ import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-
-import com.android.deskclock.AnimatorUtils
-import com.android.deskclock.DeskClockFragment
-import com.android.deskclock.FabContainer
+import com.android.deskclock.*
 import com.android.deskclock.FabContainer.UpdateFabFlag
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.data.Lap
 import com.android.deskclock.data.Stopwatch
 import com.android.deskclock.data.StopwatchListener
 import com.android.deskclock.events.Events
-import com.android.deskclock.LogUtils
-import com.android.deskclock.R
-import com.android.deskclock.StopwatchTextController
-import com.android.deskclock.ThemeUtils
-import com.android.deskclock.Utils
 import com.android.deskclock.uidata.TabListener
 import com.android.deskclock.uidata.UiDataModel
-
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -154,10 +139,10 @@ class StopwatchFragment : DeskClockFragment(UiDataModel.Tab.STOPWATCH) {
         val colorAccent = ThemeUtils.resolveColor(c, com.google.android.material.R.attr.colorAccent)
         val textColorPrimary = ThemeUtils.resolveColor(c, android.R.attr.textColorPrimary)
         val timeTextColor =
-                ColorStateList(
-                        arrayOf(intArrayOf(-state_activated, -state_pressed), intArrayOf()),
-                        intArrayOf(textColorPrimary, colorAccent)
-                )
+            ColorStateList(
+                arrayOf(intArrayOf(-state_activated, -state_pressed), intArrayOf()),
+                intArrayOf(textColorPrimary, colorAccent)
+            )
         mMainTimeText.setTextColor(timeTextColor)
         mHundredthsTimeText.setTextColor(timeTextColor)
 
@@ -343,14 +328,16 @@ class StopwatchFragment : DeskClockFragment(UiDataModel.Tab.STOPWATCH) {
 
         @SuppressLint("InlinedApi")
         val shareIntent: Intent = Intent(Intent.ACTION_SEND)
-                .addFlags(if (Utils.isLOrLater) {
+            .addFlags(
+                if (Utils.isLOrLater) {
                     Intent.FLAG_ACTIVITY_NEW_DOCUMENT
                 } else {
                     Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET
-                })
-                .putExtra(Intent.EXTRA_SUBJECT, subject)
-                .putExtra(Intent.EXTRA_TEXT, text)
-                .setType("text/plain")
+                }
+            )
+            .putExtra(Intent.EXTRA_SUBJECT, subject)
+            .putExtra(Intent.EXTRA_TEXT, text)
+            .setType("text/plain")
 
         val context: Context = requireActivity()
         val title: String = context.getString(R.string.sw_share_button)
@@ -617,7 +604,7 @@ class StopwatchFragment : DeskClockFragment(UiDataModel.Tab.STOPWATCH) {
      * the recyclerview or when the size/position of elements within the recyclerview changes.
      */
     private inner class ScrollPositionWatcher :
-            RecyclerView.OnScrollListener(), View.OnLayoutChangeListener {
+        RecyclerView.OnScrollListener(), View.OnLayoutChangeListener {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             setTabScrolledToTop(Utils.isScrolledToTop(mLapsList))
@@ -642,8 +629,8 @@ class StopwatchFragment : DeskClockFragment(UiDataModel.Tab.STOPWATCH) {
      * Draws a tinting gradient over the bottom of the stopwatch laps list. This reduces the
      * contrast between floating buttons and the laps list content.
      */
-    private class GradientItemDecoration internal constructor(context: Context)
-        : RecyclerView.ItemDecoration() {
+    private class GradientItemDecoration internal constructor(context: Context) :
+        RecyclerView.ItemDecoration() {
 
         /**
          * A reusable array of control point colors that define the gradient. It is based on the
@@ -697,27 +684,28 @@ class StopwatchFragment : DeskClockFragment(UiDataModel.Tab.STOPWATCH) {
             // 25% -  90% of gradient length -> opacity changes from 50% to 100%
             // 90% - 100% of gradient length -> opacity remains at 100%
             private val ALPHAS = intArrayOf(
-                    0x00, // 0%
-                    0x1A, // 10%
-                    0x33, // 20%
-                    0x4D, // 30%
-                    0x66, // 40%
-                    0x80, // 50%
-                    0x89, // 53.8%
-                    0x93, // 57.6%
-                    0x9D, // 61.5%
-                    0xA7, // 65.3%
-                    0xB1, // 69.2%
-                    0xBA, // 73.0%
-                    0xC4, // 76.9%
-                    0xCE, // 80.7%
-                    0xD8, // 84.6%
-                    0xE2, // 88.4%
-                    0xEB, // 92.3%
-                    0xF5, // 96.1%
-                    0xFF, // 100%
-                    0xFF, // 100%
-                    0xFF)
+                0x00, // 0%
+                0x1A, // 10%
+                0x33, // 20%
+                0x4D, // 30%
+                0x66, // 40%
+                0x80, // 50%
+                0x89, // 53.8%
+                0x93, // 57.6%
+                0x9D, // 61.5%
+                0xA7, // 65.3%
+                0xB1, // 69.2%
+                0xBA, // 73.0%
+                0xC4, // 76.9%
+                0xCE, // 80.7%
+                0xD8, // 84.6%
+                0xE2, // 88.4%
+                0xEB, // 92.3%
+                0xF5, // 96.1%
+                0xFF, // 100%
+                0xFF, // 100%
+                0xFF
+            )
         }
     }
 

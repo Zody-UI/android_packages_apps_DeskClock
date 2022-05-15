@@ -23,12 +23,9 @@ import android.content.res.TypedArray
 import android.text.TextUtils
 import android.util.ArrayMap
 import androidx.annotation.VisibleForTesting
-
 import com.android.deskclock.R
-
-import java.util.Locale
+import java.util.*
 import java.util.regex.Pattern
-import java.util.TimeZone
 
 /**
  * This class encapsulates the transfer of data between [City] domain objects and their
@@ -91,8 +88,10 @@ internal object CityDAO {
                 // Attempt to locate the resource id defining the city as a string.
                 val cityResourceId: Int = cityStrings.getResourceId(i, 0)
                 if (cityResourceId == 0) {
-                    val message = String.format(Locale.ENGLISH,
-                            "Unable to locate city resource id for index %d", i)
+                    val message = String.format(
+                        Locale.ENGLISH,
+                        "Unable to locate city resource id for index %d", i
+                    )
                     throw IllegalStateException(message)
                 }
 
@@ -107,7 +106,8 @@ internal object CityDAO {
                 val cityParts = cityString.split("[|]".toRegex()).toTypedArray()
                 if (cityParts.size != 2) {
                     val message = String.format(
-                            "Error parsing malformed city %s", cityString)
+                        "Error parsing malformed city %s", cityString
+                    )
                     throw IllegalStateException(message)
                 }
 

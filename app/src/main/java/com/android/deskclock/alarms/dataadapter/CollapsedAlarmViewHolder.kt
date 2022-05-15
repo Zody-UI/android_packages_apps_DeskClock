@@ -27,15 +27,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-
 import com.android.deskclock.AnimatorUtils
 import com.android.deskclock.ItemAdapter.ItemViewHolder
 import com.android.deskclock.R
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.events.Events
 import com.android.deskclock.provider.Alarm
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * A ViewHolder containing views for an alarm item in collapsed stated.
@@ -44,7 +42,7 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
     private val alarmLabel: TextView = itemView.findViewById(R.id.label) as TextView
     val daysOfWeek: TextView = itemView.findViewById(R.id.days_of_week) as TextView
     private val upcomingInstanceLabel: TextView =
-            itemView.findViewById(R.id.upcoming_instance_label) as TextView
+        itemView.findViewById(R.id.upcoming_instance_label) as TextView
     private val hairLine: View = itemView.findViewById(R.id.hairline)
 
     init {
@@ -86,8 +84,10 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
         if (!alarm.label.isNullOrEmpty()) {
             alarmLabel.text = alarm.label
             alarmLabel.visibility = View.VISIBLE
-            alarmLabel.setContentDescription(context.getString(R.string.label_description)
-                    .toString() + " " + alarm.label)
+            alarmLabel.setContentDescription(
+                context.getString(R.string.label_description)
+                    .toString() + " " + alarm.label
+            )
         } else {
             alarmLabel.visibility = View.GONE
         }
@@ -140,7 +140,8 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
         duration: Long
     ): Animator? {
         if (oldHolder !is AlarmItemViewHolder ||
-                newHolder !is AlarmItemViewHolder) {
+            newHolder !is AlarmItemViewHolder
+        ) {
             return null
         }
 
@@ -172,17 +173,18 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
 
         val alphaAnimatorSet = AnimatorSet()
         alphaAnimatorSet.playTogether(
-                ObjectAnimator.ofFloat(alarmLabel, View.ALPHA, 0f),
-                ObjectAnimator.ofFloat(daysOfWeek, View.ALPHA, 0f),
-                ObjectAnimator.ofFloat(upcomingInstanceLabel, View.ALPHA, 0f),
-                ObjectAnimator.ofFloat(preemptiveDismissButton, View.ALPHA, 0f),
-                ObjectAnimator.ofFloat(hairLine, View.ALPHA, 0f))
+            ObjectAnimator.ofFloat(alarmLabel, View.ALPHA, 0f),
+            ObjectAnimator.ofFloat(daysOfWeek, View.ALPHA, 0f),
+            ObjectAnimator.ofFloat(upcomingInstanceLabel, View.ALPHA, 0f),
+            ObjectAnimator.ofFloat(preemptiveDismissButton, View.ALPHA, 0f),
+            ObjectAnimator.ofFloat(hairLine, View.ALPHA, 0f)
+        )
         alphaAnimatorSet.setDuration((duration * ANIM_SHORT_DURATION_MULTIPLIER).toLong())
 
         val oldView: View = itemView
         val newView: View = newHolder.itemView
         val boundsAnimator: Animator = AnimatorUtils.getBoundsAnimator(oldView, oldView, newView)
-                .setDuration(duration)
+            .setDuration(duration)
         boundsAnimator.interpolator = AnimatorUtils.INTERPOLATOR_FAST_OUT_SLOW_IN
 
         val animatorSet = AnimatorSet()
@@ -193,11 +195,12 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
     private fun createCollapsingAnimator(oldHolder: AlarmItemViewHolder, duration: Long): Animator {
         val alphaAnimatorSet = AnimatorSet()
         alphaAnimatorSet.playTogether(
-                ObjectAnimator.ofFloat(alarmLabel, View.ALPHA, 1f),
-                ObjectAnimator.ofFloat(daysOfWeek, View.ALPHA, 1f),
-                ObjectAnimator.ofFloat(upcomingInstanceLabel, View.ALPHA, 1f),
-                ObjectAnimator.ofFloat(preemptiveDismissButton, View.ALPHA, 1f),
-                ObjectAnimator.ofFloat(hairLine, View.ALPHA, 1f))
+            ObjectAnimator.ofFloat(alarmLabel, View.ALPHA, 1f),
+            ObjectAnimator.ofFloat(daysOfWeek, View.ALPHA, 1f),
+            ObjectAnimator.ofFloat(upcomingInstanceLabel, View.ALPHA, 1f),
+            ObjectAnimator.ofFloat(preemptiveDismissButton, View.ALPHA, 1f),
+            ObjectAnimator.ofFloat(hairLine, View.ALPHA, 1f)
+        )
         val standardDelay = (duration * ANIM_STANDARD_DELAY_MULTIPLIER).toLong()
         alphaAnimatorSet.setDuration(standardDelay)
         alphaAnimatorSet.setStartDelay(duration - standardDelay)
@@ -205,7 +208,7 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
         val oldView: View = oldHolder.itemView
         val newView: View = itemView
         val boundsAnimator: Animator = AnimatorUtils.getBoundsAnimator(newView, oldView, newView)
-                .setDuration(duration)
+            .setDuration(duration)
         boundsAnimator.interpolator = AnimatorUtils.INTERPOLATOR_FAST_OUT_SLOW_IN
 
         val oldArrow: View = oldHolder.arrow
@@ -220,7 +223,7 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
         onOff.visibility = View.VISIBLE
 
         val arrowAnimation: Animator = ObjectAnimator.ofFloat(arrow, View.TRANSLATION_Y, 0f)
-                .setDuration(duration)
+            .setDuration(duration)
         arrowAnimation.interpolator = AnimatorUtils.INTERPOLATOR_FAST_OUT_SLOW_IN
 
         val animatorSet = AnimatorSet()
@@ -243,8 +246,11 @@ class CollapsedAlarmViewHolder private constructor(itemView: View) : AlarmItemVi
 
     class Factory(private val layoutInflater: LayoutInflater) : ItemViewHolder.Factory {
         override fun createViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<*> {
-            return CollapsedAlarmViewHolder(layoutInflater.inflate(
-                    viewType, parent, false /* attachToRoot */))
+            return CollapsedAlarmViewHolder(
+                layoutInflater.inflate(
+                    viewType, parent, false /* attachToRoot */
+                )
+            )
         }
     }
 

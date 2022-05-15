@@ -70,10 +70,15 @@ class TimerItem @JvmOverloads constructor(
         val c = mTimerText.context
         val colorAccent = ThemeUtils.resolveColor(c, com.google.android.material.R.attr.colorAccent)
         val textColorPrimary = ThemeUtils.resolveColor(c, attr.textColorPrimary)
-        mTimerText.setTextColor(ColorStateList(
-                arrayOf(intArrayOf(-attr.state_activated, -attr.state_pressed),
-                intArrayOf()),
-                intArrayOf(textColorPrimary, colorAccent)))
+        mTimerText.setTextColor(
+            ColorStateList(
+                arrayOf(
+                    intArrayOf(-attr.state_activated, -attr.state_pressed),
+                    intArrayOf()
+                ),
+                intArrayOf(textColorPrimary, colorAccent)
+            )
+        )
     }
 
     /**
@@ -117,8 +122,11 @@ class TimerItem @JvmOverloads constructor(
                     mTimerText.isClickable = true
                     mTimerText.isActivated = false
                     mTimerText.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                    ViewCompat.setAccessibilityDelegate(mTimerText, ClickAccessibilityDelegate(
-                            context.getString(R.string.timer_start), true))
+                    ViewCompat.setAccessibilityDelegate(
+                        mTimerText, ClickAccessibilityDelegate(
+                            context.getString(R.string.timer_start), true
+                        )
+                    )
                 }
                 Timer.State.RUNNING -> {
                     val addTimeDesc = context.getString(R.string.timer_plus_one)
@@ -127,8 +135,11 @@ class TimerItem @JvmOverloads constructor(
                     mTimerText.isClickable = true
                     mTimerText.isActivated = false
                     mTimerText.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                    ViewCompat.setAccessibilityDelegate(mTimerText, ClickAccessibilityDelegate(
-                            context.getString(R.string.timer_pause)))
+                    ViewCompat.setAccessibilityDelegate(
+                        mTimerText, ClickAccessibilityDelegate(
+                            context.getString(R.string.timer_pause)
+                        )
+                    )
                 }
                 Timer.State.EXPIRED, Timer.State.MISSED -> {
                     val addTimeDesc = context.getString(R.string.timer_plus_one)

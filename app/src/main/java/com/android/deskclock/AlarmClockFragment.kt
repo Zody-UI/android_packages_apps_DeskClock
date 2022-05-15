@@ -57,7 +57,7 @@ import kotlin.math.max
  * A fragment that displays a list of alarm time and allows interaction with them.
  */
 class AlarmClockFragment : DeskClockFragment(UiDataModel.Tab.ALARMS),
-        LoaderCallbacks<Cursor>, ScrollHandler, TimePickerDialogFragment.OnTimeSetListener {
+    LoaderCallbacks<Cursor>, ScrollHandler, TimePickerDialogFragment.OnTimeSetListener {
     // Updates "Today/Tomorrow" in the UI when midnight passes.
     private val mMidnightUpdater: Runnable = MidnightRunnable()
 
@@ -115,10 +115,14 @@ class AlarmClockFragment : DeskClockFragment(UiDataModel.Tab.ALARMS),
 
         mItemAdapter = ItemAdapter()
         mItemAdapter.setHasStableIds()
-        mItemAdapter.withViewTypes(CollapsedAlarmViewHolder.Factory(inflater),
-                null, CollapsedAlarmViewHolder.VIEW_TYPE)
-        mItemAdapter.withViewTypes(ExpandedAlarmViewHolder.Factory(context),
-                null, ExpandedAlarmViewHolder.VIEW_TYPE)
+        mItemAdapter.withViewTypes(
+            CollapsedAlarmViewHolder.Factory(inflater),
+            null, CollapsedAlarmViewHolder.VIEW_TYPE
+        )
+        mItemAdapter.withViewTypes(
+            ExpandedAlarmViewHolder.Factory(context),
+            null, ExpandedAlarmViewHolder.VIEW_TYPE
+        )
         mItemAdapter.setOnItemChangedListener(object : OnItemChangedListener {
             override fun onItemChanged(holder: ItemHolder<*>) {
                 if ((holder as AlarmItemHolder).isExpanded) {
@@ -129,7 +133,7 @@ class AlarmClockFragment : DeskClockFragment(UiDataModel.Tab.ALARMS),
                         // Record the freshly expanded alarm.
                         mExpandedAlarmId = holder.itemId
                         val viewHolder: RecyclerView.ViewHolder? =
-                                mRecyclerView.findViewHolderForItemId(mExpandedAlarmId)
+                            mRecyclerView.findViewHolderForItemId(mExpandedAlarmId)
                         viewHolder?.let {
                             smoothScrollTo(viewHolder.getAdapterPosition())
                         }
@@ -269,11 +273,11 @@ class AlarmClockFragment : DeskClockFragment(UiDataModel.Tab.ALARMS),
         if (mRecyclerView.getItemAnimator()!!.isRunning()) {
             // RecyclerView is currently animating -> defer update.
             mRecyclerView.getItemAnimator()!!.isRunning(
-                    object : RecyclerView.ItemAnimator.ItemAnimatorFinishedListener {
-                        override fun onAnimationsFinished() {
-                            setAdapterItems(items, updateToken)
-                        }
-                    })
+                object : RecyclerView.ItemAnimator.ItemAnimatorFinishedListener {
+                    override fun onAnimationsFinished() {
+                        setAdapterItems(items, updateToken)
+                    }
+                })
         } else if (mRecyclerView.isComputingLayout()) {
             // RecyclerView is currently computing a layout -> defer update.
             mRecyclerView.post(Runnable { setAdapterItems(items, updateToken) })
@@ -329,8 +333,12 @@ class AlarmClockFragment : DeskClockFragment(UiDataModel.Tab.ALARMS),
         } else {
             // Trying to display a deleted alarm should only happen from a missed notification for
             // an alarm that has been marked deleted after use.
-            SnackbarManager.show(Snackbar.make(mMainLayout, R.string.missed_alarm_has_been_deleted,
-                    Snackbar.LENGTH_LONG))
+            SnackbarManager.show(
+                Snackbar.make(
+                    mMainLayout, R.string.missed_alarm_has_been_deleted,
+                    Snackbar.LENGTH_LONG
+                )
+            )
         }
     }
 

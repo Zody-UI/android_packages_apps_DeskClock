@@ -42,8 +42,10 @@ class UiDataModel private constructor() {
         ALARMS(AlarmClockFragment::class.java, R.drawable.ic_tab_alarm, R.string.menu_alarm),
         CLOCKS(ClockFragment::class.java, R.drawable.ic_tab_clock, R.string.menu_clock),
         TIMERS(TimerFragment::class.java, R.drawable.ic_tab_timer, R.string.menu_timer),
-        STOPWATCH(StopwatchFragment::class.java,
-                R.drawable.ic_tab_stopwatch, R.string.menu_stopwatch);
+        STOPWATCH(
+            StopwatchFragment::class.java,
+            R.drawable.ic_tab_stopwatch, R.string.menu_stopwatch
+        );
 
         val fragmentClassName: String = fragmentClass.name
     }

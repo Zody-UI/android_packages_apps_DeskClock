@@ -16,17 +16,12 @@
 
 package com.android.deskclock.alarms.dataadapter
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
+import android.animation.*
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
@@ -36,9 +31,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-
 import com.android.deskclock.AnimatorUtils
 import com.android.deskclock.ItemAdapter.ItemViewHolder
 import com.android.deskclock.R
@@ -53,8 +46,10 @@ import com.android.deskclock.uidata.UiDataModel
 /**
  * A ViewHolder containing views for an alarm item in expanded state.
  */
-class ExpandedAlarmViewHolder private constructor(itemView: View, private val mHasVibrator: Boolean)
-    : AlarmItemViewHolder(itemView) {
+class ExpandedAlarmViewHolder private constructor(
+    itemView: View,
+    private val mHasVibrator: Boolean
+) : AlarmItemViewHolder(itemView) {
     val repeat: CheckBox = itemView.findViewById(R.id.repeat_onoff) as CheckBox
     private val editLabel: TextView = itemView.findViewById(R.id.edit_label) as TextView
     val repeatDays: LinearLayout = itemView.findViewById(R.id.repeat_days) as LinearLayout
@@ -72,10 +67,12 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         val inflater: LayoutInflater = LayoutInflater.from(context)
         val weekdays = DataModel.dataModel.weekdayOrder.calendarDays
         for (i in 0..6) {
-            val dayButtonFrame: View = inflater.inflate(R.layout.day_button, repeatDays,
-                    false /* attachToRoot */)
+            val dayButtonFrame: View = inflater.inflate(
+                R.layout.day_button, repeatDays,
+                false /* attachToRoot */
+            )
             val dayButton: CompoundButton =
-                    dayButtonFrame.findViewById(R.id.day_button_box) as CompoundButton
+                dayButtonFrame.findViewById(R.id.day_button_box) as CompoundButton
             val weekday = weekdays[i]
             dayButton.text = UiDataModel.uiDataModel.getShortWeekday(weekday)
             dayButton.setContentDescription(UiDataModel.uiDataModel.getLongWeekday(weekday))
@@ -108,8 +105,10 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         }
         // Vibrator checkbox handler
         vibrate.setOnClickListener { view ->
-            alarmTimeClickHandler.setAlarmVibrationEnabled(itemHolder!!.item,
-                    (view as CheckBox).isChecked)
+            alarmTimeClickHandler.setAlarmVibrationEnabled(
+                itemHolder!!.item,
+                (view as CheckBox).isChecked
+            )
         }
         // Ringtone editor handler
         ringtone.setOnClickListener { _ ->
@@ -157,8 +156,10 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         ringtone.setContentDescription("$description $title")
 
         val silent: Boolean = Utils.RINGTONE_SILENT == alarm.alert
-        val icon: Drawable? = Utils.getVectorDrawable(context,
-                if (silent) R.drawable.ic_ringtone_silent else R.drawable.ic_ringtone)
+        val icon: Drawable? = Utils.getVectorDrawable(
+            context,
+            if (silent) R.drawable.ic_ringtone_silent else R.drawable.ic_ringtone
+        )
         ringtone.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, null, null, null)
     }
 
@@ -169,8 +170,12 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
             dayButton?.let {
                 if (alarm.daysOfWeek.isBitOn(weekdays[i])) {
                     dayButton.isChecked = true
-                    dayButton.setTextColor(ThemeUtils.resolveColor(context,
-                            android.R.attr.windowBackground))
+                    dayButton.setTextColor(
+                        ThemeUtils.resolveColor(
+                            context,
+                            android.R.attr.windowBackground
+                        )
+                    )
                 } else {
                     dayButton.isChecked = false
                     dayButton.setTextColor(Color.WHITE)
@@ -221,35 +226,43 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
 
         val isExpansion = repeatDays.getVisibility() == View.VISIBLE
         val height: Int = repeatDays.getHeight()
-        setTranslationY(if (isExpansion) {
-            -height.toFloat()
-        } else {
-            0f
-        }, if (isExpansion) {
-            -height.toFloat()
-        } else {
-            height.toFloat()
-        })
+        setTranslationY(
+            if (isExpansion) {
+                -height.toFloat()
+            } else {
+                0f
+            }, if (isExpansion) {
+                -height.toFloat()
+            } else {
+                height.toFloat()
+            }
+        )
         repeatDays.visibility = View.VISIBLE
         repeatDays.alpha = if (isExpansion) 0f else 1f
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(AnimatorUtils.getBoundsAnimator(itemView,
+        animatorSet.playTogether(
+            AnimatorUtils.getBoundsAnimator(
+                itemView,
                 fromLeft, fromTop, fromRight, fromBottom,
-                itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom()),
-                ObjectAnimator.ofFloat(repeatDays, View.ALPHA, if (isExpansion) 1f else 0f),
-                ObjectAnimator.ofFloat(repeatDays, TRANSLATION_Y, if (isExpansion) {
+                itemView.getLeft(), itemView.getTop(), itemView.getRight(), itemView.getBottom()
+            ),
+            ObjectAnimator.ofFloat(repeatDays, View.ALPHA, if (isExpansion) 1f else 0f),
+            ObjectAnimator.ofFloat(
+                repeatDays, TRANSLATION_Y, if (isExpansion) {
                     0f
                 } else {
                     -height.toFloat()
-                }),
-                ObjectAnimator.ofFloat(ringtone, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(vibrate, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(editLabel, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(preemptiveDismissButton, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(hairLine, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(delete, TRANSLATION_Y, 0f),
-                ObjectAnimator.ofFloat(arrow, TRANSLATION_Y, 0f))
+                }
+            ),
+            ObjectAnimator.ofFloat(ringtone, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(vibrate, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(editLabel, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(preemptiveDismissButton, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(hairLine, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(delete, TRANSLATION_Y, 0f),
+            ObjectAnimator.ofFloat(arrow, TRANSLATION_Y, 0f)
+        )
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animator: Animator?) {
                 setTranslationY(0f, 0f)
@@ -281,7 +294,8 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         duration: Long
     ): Animator? {
         if (oldHolder !is AlarmItemViewHolder ||
-                newHolder !is AlarmItemViewHolder) {
+            newHolder !is AlarmItemViewHolder
+        ) {
             return null
         }
 
@@ -319,8 +333,10 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         val oldView: View = itemView
         val newView: View = newHolder.itemView
 
-        val backgroundAnimator: Animator = ObjectAnimator.ofPropertyValuesHolder(oldView,
-                PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 255, 0))
+        val backgroundAnimator: Animator = ObjectAnimator.ofPropertyValuesHolder(
+            oldView,
+            PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 255, 0)
+        )
         backgroundAnimator.duration = duration
 
         val boundsAnimator: Animator = AnimatorUtils.getBoundsAnimator(oldView, oldView, newView)
@@ -329,21 +345,23 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
 
         val shortDuration = (duration * ANIM_SHORT_DURATION_MULTIPLIER).toLong()
         val repeatAnimation: Animator = ObjectAnimator.ofFloat(repeat, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
         val editLabelAnimation: Animator = ObjectAnimator.ofFloat(editLabel, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
         val repeatDaysAnimation: Animator = ObjectAnimator.ofFloat(repeatDays, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
         val vibrateAnimation: Animator = ObjectAnimator.ofFloat(vibrate, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
         val ringtoneAnimation: Animator = ObjectAnimator.ofFloat(ringtone, View.ALPHA, 0f)
-                .setDuration(shortDuration)
-        val dismissAnimation: Animator = ObjectAnimator.ofFloat(preemptiveDismissButton,
-                View.ALPHA, 0f).setDuration(shortDuration)
+            .setDuration(shortDuration)
+        val dismissAnimation: Animator = ObjectAnimator.ofFloat(
+            preemptiveDismissButton,
+            View.ALPHA, 0f
+        ).setDuration(shortDuration)
         val deleteAnimation: Animator = ObjectAnimator.ofFloat(delete, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
         val hairLineAnimation: Animator = ObjectAnimator.ofFloat(hairLine, View.ALPHA, 0f)
-                .setDuration(shortDuration)
+            .setDuration(shortDuration)
 
         // Set the staggered delays; use the first portion (duration * (1 - 1/4 - 1/6)) of the time,
         // so that the final animation, with a duration of 1/4 the total duration, finishes exactly
@@ -370,9 +388,11 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         repeatAnimation.setStartDelay(startDelay)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(backgroundAnimator, boundsAnimator, repeatAnimation,
-                repeatDaysAnimation, vibrateAnimation, ringtoneAnimation, editLabelAnimation,
-                deleteAnimation, hairLineAnimation, dismissAnimation)
+        animatorSet.playTogether(
+            backgroundAnimator, boundsAnimator, repeatAnimation,
+            repeatDaysAnimation, vibrateAnimation, ringtoneAnimation, editLabelAnimation,
+            deleteAnimation, hairLineAnimation, dismissAnimation
+        )
         return animatorSet
     }
 
@@ -383,8 +403,10 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         boundsAnimator.duration = duration
         boundsAnimator.interpolator = AnimatorUtils.INTERPOLATOR_FAST_OUT_SLOW_IN
 
-        val backgroundAnimator: Animator = ObjectAnimator.ofPropertyValuesHolder(newView,
-                PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 0, 255))
+        val backgroundAnimator: Animator = ObjectAnimator.ofPropertyValuesHolder(
+            newView,
+            PropertyValuesHolder.ofInt(AnimatorUtils.BACKGROUND_ALPHA, 0, 255)
+        )
         backgroundAnimator.duration = duration
 
         val oldArrow: View = oldHolder.arrow
@@ -401,23 +423,25 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
 
         val longDuration = (duration * ANIM_LONG_DURATION_MULTIPLIER).toLong()
         val repeatAnimation: Animator = ObjectAnimator.ofFloat(repeat, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val repeatDaysAnimation: Animator = ObjectAnimator.ofFloat(repeatDays, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val ringtoneAnimation: Animator = ObjectAnimator.ofFloat(ringtone, View.ALPHA, 1f)
-                .setDuration(longDuration)
-        val dismissAnimation: Animator = ObjectAnimator.ofFloat(preemptiveDismissButton,
-                View.ALPHA, 1f).setDuration(longDuration)
+            .setDuration(longDuration)
+        val dismissAnimation: Animator = ObjectAnimator.ofFloat(
+            preemptiveDismissButton,
+            View.ALPHA, 1f
+        ).setDuration(longDuration)
         val vibrateAnimation: Animator = ObjectAnimator.ofFloat(vibrate, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val editLabelAnimation: Animator = ObjectAnimator.ofFloat(editLabel, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val hairLineAnimation: Animator = ObjectAnimator.ofFloat(hairLine, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val deleteAnimation: Animator = ObjectAnimator.ofFloat(delete, View.ALPHA, 1f)
-                .setDuration(longDuration)
+            .setDuration(longDuration)
         val arrowAnimation: Animator = ObjectAnimator.ofFloat(arrow, View.TRANSLATION_Y, 0f)
-                .setDuration(duration)
+            .setDuration(duration)
         arrowAnimation.interpolator = AnimatorUtils.INTERPOLATOR_FAST_OUT_SLOW_IN
 
         // Set the stagger delays; delay the first by the amount of time it takes for the collapse
@@ -446,9 +470,11 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
         deleteAnimation.setStartDelay(startDelay)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(backgroundAnimator, repeatAnimation, boundsAnimator,
-                repeatDaysAnimation, vibrateAnimation, ringtoneAnimation, editLabelAnimation,
-                deleteAnimation, hairLineAnimation, dismissAnimation, arrowAnimation)
+        animatorSet.playTogether(
+            backgroundAnimator, repeatAnimation, boundsAnimator,
+            repeatDaysAnimation, vibrateAnimation, ringtoneAnimation, editLabelAnimation,
+            deleteAnimation, hairLineAnimation, dismissAnimation, arrowAnimation
+        )
         animatorSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animator: Animator?) {
                 AnimatorUtils.startDrawableAnimation(arrow)
@@ -483,7 +509,7 @@ class ExpandedAlarmViewHolder private constructor(itemView: View, private val mH
     class Factory(context: Context) : ItemViewHolder.Factory {
         private val mLayoutInflater: LayoutInflater = LayoutInflater.from(context)
         private val mHasVibrator: Boolean =
-                (context.getSystemService(VIBRATOR_SERVICE) as Vibrator).hasVibrator()
+            (context.getSystemService(VIBRATOR_SERVICE) as Vibrator).hasVibrator()
 
         override fun createViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<*> {
             val itemView: View = mLayoutInflater.inflate(viewType, parent, false)

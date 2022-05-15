@@ -38,11 +38,11 @@ class CustomRingtone internal constructor(
     fun hasPermissions(): Boolean = mHasPermissions
 
     fun setHasPermissions(hasPermissions: Boolean): CustomRingtone =
-            if (mHasPermissions == hasPermissions) {
-                this
-            } else {
-                CustomRingtone(id, mUri, title, hasPermissions)
-            }
+        if (mHasPermissions == hasPermissions) {
+            this
+        } else {
+            CustomRingtone(id, mUri, title, hasPermissions)
+        }
 
     override fun compareTo(other: CustomRingtone): Int {
         return String.CASE_INSENSITIVE_ORDER.compare(title, other.title)

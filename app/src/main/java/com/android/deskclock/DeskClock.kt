@@ -35,11 +35,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING
-import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
-import androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING
-
+import androidx.viewpager.widget.ViewPager.*
 import com.android.deskclock.FabContainer.UpdateFabFlag
 import com.android.deskclock.LabelDialogFragment.AlarmLabelDialogHandler
 import com.android.deskclock.actionbarmenu.MenuItemControllerFactory
@@ -53,7 +49,6 @@ import com.android.deskclock.provider.Alarm
 import com.android.deskclock.uidata.TabListener
 import com.android.deskclock.uidata.UiDataModel
 import com.android.deskclock.widget.toast.SnackbarManager
-
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 
@@ -143,9 +138,11 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
 
         // Configure the menu item controllers add behavior to the toolbar.
         mOptionsMenuManager.addMenuItemController(
-                NightModeMenuItemController(this), SettingsMenuItemController(this))
+            NightModeMenuItemController(this), SettingsMenuItemController(this)
+        )
         mOptionsMenuManager.addMenuItemController(
-                *MenuItemControllerFactory.buildMenuItemControllers(this))
+            *MenuItemControllerFactory.buildMenuItemControllers(this)
+        )
 
         // Inflate the menu during creation to avoid a double layout pass. Otherwise, the menu
         // inflation occurs *after* the initial draw and a second layout pass adds in the menu.
@@ -161,9 +158,9 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
             @StringRes val labelResId: Int = tabModel.labelResId
 
             val tab: TabLayout.Tab = mTabLayout.newTab()
-                    .setTag(tabModel)
-                    .setIcon(tabModel.iconResId)
-                    .setContentDescription(labelResId)
+                .setTag(tabModel)
+                .setIcon(tabModel.iconResId)
+                .setContentDescription(labelResId)
 
             if (showTabLabel) {
                 tab.setText(labelResId)
@@ -224,30 +221,30 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
         // Build the reusable animations that hide and show the fab and left/right buttons.
         // These may be used independently or be chained together.
         mHideAnimation
-                .setDuration(duration)
-                .play(hideFabAnimation)
-                .with(leftHideAnimation)
-                .with(rightHideAnimation)
+            .setDuration(duration)
+            .play(hideFabAnimation)
+            .with(leftHideAnimation)
+            .with(rightHideAnimation)
 
         mShowAnimation
-                .setDuration(duration)
-                .play(showFabAnimation)
-                .with(leftShowAnimation)
-                .with(rightShowAnimation)
+            .setDuration(duration)
+            .play(showFabAnimation)
+            .with(leftShowAnimation)
+            .with(rightShowAnimation)
 
         // Build the reusable animation that hides and shows only the fab.
         mUpdateFabOnlyAnimation
-                .setDuration(duration)
-                .play(showFabAnimation)
-                .after(hideFabAnimation)
+            .setDuration(duration)
+            .play(showFabAnimation)
+            .after(hideFabAnimation)
 
         // Build the reusable animation that hides and shows only the buttons.
         mUpdateButtonsOnlyAnimation
-                .setDuration(duration)
-                .play(leftShowAnimation)
-                .with(rightShowAnimation)
-                .after(leftHideAnimation)
-                .after(rightHideAnimation)
+            .setDuration(duration)
+            .play(leftShowAnimation)
+            .with(rightShowAnimation)
+            .after(leftHideAnimation)
+            .after(rightHideAnimation)
 
         // Customize the view pager.
         mFragmentTabPagerAdapter = FragmentTabPagerAdapter(this)
@@ -381,7 +378,8 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // Recreate the activity if any settings have been changed
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS &&
-                resultCode == RESULT_OK) {
+            resultCode == RESULT_OK
+        ) {
             mRecreateActivity = true
         }
     }
@@ -538,8 +536,10 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
                 SnackbarManager.dismiss()
             } else {
                 mShowSilentSettingSnackbarRunnable = ShowSilentSettingSnackbarRunnable(after)
-                mSnackbarAnchor.postDelayed(mShowSilentSettingSnackbarRunnable,
-                        DateUtils.SECOND_IN_MILLIS)
+                mSnackbarAnchor.postDelayed(
+                    mShowSilentSettingSnackbarRunnable,
+                    DateUtils.SECOND_IN_MILLIS
+                )
             }
         }
     }

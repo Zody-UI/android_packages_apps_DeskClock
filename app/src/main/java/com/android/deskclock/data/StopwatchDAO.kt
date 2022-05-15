@@ -68,14 +68,14 @@ internal object StopwatchDAO {
 
         if (stopwatch.isReset) {
             editor.remove(STATE)
-                    .remove(LAST_START_TIME)
-                    .remove(LAST_WALL_CLOCK_TIME)
-                    .remove(ACCUMULATED_TIME)
+                .remove(LAST_START_TIME)
+                .remove(LAST_WALL_CLOCK_TIME)
+                .remove(ACCUMULATED_TIME)
         } else {
             editor.putInt(STATE, stopwatch.state.ordinal)
-                    .putLong(LAST_START_TIME, stopwatch.lastStartTime)
-                    .putLong(LAST_WALL_CLOCK_TIME, stopwatch.lastWallClockTime)
-                    .putLong(ACCUMULATED_TIME, stopwatch.accumulatedTime)
+                .putLong(LAST_START_TIME, stopwatch.lastStartTime)
+                .putLong(LAST_WALL_CLOCK_TIME, stopwatch.lastWallClockTime)
+                .putLong(ACCUMULATED_TIME, stopwatch.accumulatedTime)
         }
 
         editor.apply()
@@ -119,9 +119,9 @@ internal object StopwatchDAO {
      */
     fun addLap(prefs: SharedPreferences, newLapCount: Int, accumulatedTime: Long) {
         prefs.edit()
-                .putInt(LAP_COUNT, newLapCount)
-                .putLong(LAP_ACCUMULATED_TIME + newLapCount, accumulatedTime)
-                .apply()
+            .putInt(LAP_COUNT, newLapCount)
+            .putLong(LAP_ACCUMULATED_TIME + newLapCount, accumulatedTime)
+            .apply()
     }
 
     /**

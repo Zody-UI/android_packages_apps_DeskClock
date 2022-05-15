@@ -218,8 +218,10 @@ class CircleView @JvmOverloads constructor(
      * `centerY`, and `radius`.
      */
     private fun invalidate(centerX: Float, centerY: Float, radius: Float) {
-        invalidate((centerX - radius - 0.5f).toInt(), (centerY - radius - 0.5f).toInt(),
-                (centerX + radius + 0.5f).toInt(), (centerY + radius + 0.5f).toInt())
+        invalidate(
+            (centerX - radius - 0.5f).toInt(), (centerY - radius - 0.5f).toInt(),
+            (centerX + radius + 0.5f).toInt(), (centerY + radius + 0.5f).toInt()
+        )
     }
 
     /**
@@ -269,15 +271,15 @@ class CircleView @JvmOverloads constructor(
          */
         @JvmField
         val FILL_COLOR: Property<CircleView, Int> =
-                object : Property<CircleView, Int>(Int::class.java, "fillColor") {
-                    override fun get(view: CircleView): Int {
-                        return view.fillColor
-                    }
-
-                    override fun set(view: CircleView, value: Int) {
-                        view.setFillColor(value)
-                    }
+            object : Property<CircleView, Int>(Int::class.java, "fillColor") {
+                override fun get(view: CircleView): Int {
+                    return view.fillColor
                 }
+
+                override fun set(view: CircleView, value: Int) {
+                    view.setFillColor(value)
+                }
+            }
 
         /**
          * A Property wrapper around the radius functionality handled by the
@@ -285,14 +287,14 @@ class CircleView @JvmOverloads constructor(
          */
         @JvmField
         val RADIUS: Property<CircleView, Float> =
-                object : Property<CircleView, Float>(Float::class.java, "radius") {
-                    override fun get(view: CircleView): Float {
-                        return view.radius
-                    }
-
-                    override fun set(view: CircleView, value: Float) {
-                        view.setRadius(value)
-                    }
+            object : Property<CircleView, Float>(Float::class.java, "radius") {
+                override fun get(view: CircleView): Float {
+                    return view.radius
                 }
+
+                override fun set(view: CircleView, value: Float) {
+                    view.setRadius(value)
+                }
+            }
     }
 }

@@ -31,8 +31,10 @@ class LogEventTracker(val context: Context) : EventTracker {
         if (label == 0) {
             LOGGER.d("[%s] [%s]", safeGetString(category), safeGetString(action))
         } else {
-            LOGGER.d("[%s] [%s] [%s]", safeGetString(category), safeGetString(action),
-                    safeGetString(label))
+            LOGGER.d(
+                "[%s] [%s] [%s]", safeGetString(category), safeGetString(action),
+                safeGetString(label)
+            )
         }
     }
 

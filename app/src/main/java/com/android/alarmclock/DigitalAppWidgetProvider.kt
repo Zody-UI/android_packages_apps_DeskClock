@@ -22,19 +22,12 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_NO_CREATE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
+import android.appwidget.AppWidgetManager.*
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_DATE_CHANGED
-import android.content.Intent.ACTION_LOCALE_CHANGED
-import android.content.Intent.ACTION_SCREEN_ON
-import android.content.Intent.ACTION_TIMEZONE_CHANGED
-import android.content.Intent.ACTION_TIME_CHANGED
+import android.content.Intent.*
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
@@ -51,7 +44,6 @@ import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import android.widget.TextClock
 import android.widget.TextView
-
 import com.android.deskclock.DeskClock
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
@@ -60,11 +52,7 @@ import com.android.deskclock.alarms.AlarmStateManager
 import com.android.deskclock.data.DataModel
 import com.android.deskclock.uidata.UiDataModel
 import com.android.deskclock.worldclock.CitySelectionActivity
-
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 /**
  * This provider produces a widget resembling one of the formats below.
@@ -186,7 +174,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
 
         // Schedule the next day-change callback; at least one city is displayed.
         val pi: PendingIntent =
-                PendingIntent.getBroadcast(context, 0, DAY_CHANGE_INTENT, FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(context, 0, DAY_CHANGE_INTENT, FLAG_UPDATE_CURRENT)
         getAlarmManager(context).setExact(AlarmManager.RTC, nextDay.time, pi)
     }
 
@@ -195,7 +183,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
      */
     private fun removeDayChangeCallback(context: Context) {
         val pi: PendingIntent? =
-                PendingIntent.getBroadcast(context, 0, DAY_CHANGE_INTENT, FLAG_NO_CREATE)
+            PendingIntent.getBroadcast(context, 0, DAY_CHANGE_INTENT, FLAG_NO_CREATE)
         if (pi != null) {
             getAlarmManager(context).cancel(pi)
             pi.cancel()
@@ -255,17 +243,25 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             val builder = StringBuilder(1000)
             builder.append("\n")
             append(builder, "Target dimensions: %dpx x %dpx\n", mTargetWidthPx, mTargetHeightPx)
-            append(builder, "Last valid widget container measurement: %dpx x %dpx\n",
-                    mMeasuredWidthPx, mMeasuredHeightPx)
-            append(builder, "Last text clock measurement: %dpx x %dpx\n",
-                    mMeasuredTextClockWidthPx, mMeasuredTextClockHeightPx)
+            append(
+                builder, "Last valid widget container measurement: %dpx x %dpx\n",
+                mMeasuredWidthPx, mMeasuredHeightPx
+            )
+            append(
+                builder, "Last text clock measurement: %dpx x %dpx\n",
+                mMeasuredTextClockWidthPx, mMeasuredTextClockHeightPx
+            )
             if (mMeasuredWidthPx > mTargetWidthPx) {
-                append(builder, "Measured width %dpx exceeded widget width %dpx\n",
-                        mMeasuredWidthPx, mTargetWidthPx)
+                append(
+                    builder, "Measured width %dpx exceeded widget width %dpx\n",
+                    mMeasuredWidthPx, mTargetWidthPx
+                )
             }
             if (mMeasuredHeightPx > mTargetHeightPx) {
-                append(builder, "Measured height %dpx exceeded widget height %dpx\n",
-                        mMeasuredHeightPx, mTargetHeightPx)
+                append(
+                    builder, "Measured height %dpx exceeded widget height %dpx\n",
+                    mMeasuredHeightPx, mTargetHeightPx
+                )
             }
             append(builder, "Clock font: %dpx\n", mClockFontSizePx)
             return builder.toString()
@@ -356,7 +352,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             val targetWidthPx = if (portrait) minWidthPx else maxWidthPx
             val targetHeightPx = if (portrait) maxHeightPx else minHeightPx
             val largestClockFontSizePx: Int =
-                    resources.getDimensionPixelSize(R.dimen.widget_max_clock_font_size)
+                resources.getDimensionPixelSize(R.dimen.widget_max_clock_font_size)
 
             // Create a size template that describes the widget bounds.
             val template = Sizes(targetWidthPx, targetHeightPx, largestClockFontSizePx)
@@ -374,7 +370,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             rv.setTextViewTextSize(R.id.clock, COMPLEX_UNIT_PX, sizes.mClockFontSizePx.toFloat())
 
             val smallestWorldCityListSizePx: Int =
-                    resources.getDimensionPixelSize(R.dimen.widget_min_world_city_list_size)
+                resources.getDimensionPixelSize(R.dimen.widget_min_world_city_list_size)
             if (sizes.listHeight <= smallestWorldCityListSizePx) {
                 // Insufficient space; hide the world city list.
                 rv.setViewVisibility(R.id.world_city_list, GONE)
@@ -409,7 +405,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             // Inflate a test layout to compute sizes at different font sizes.
             val inflater: LayoutInflater = LayoutInflater.from(context)
             @SuppressLint("InflateParams") val sizer: View =
-                    inflater.inflate(R.layout.digital_widget_sizer, null /* root */)
+                inflater.inflate(R.layout.digital_widget_sizer, null /* root */)
 
             // Configure the date to display the current date string.
             val dateFormat: CharSequence = getDateFormat(context)
@@ -486,7 +482,7 @@ class DigitalAppWidgetProvider : AppWidgetProvider() {
             nextAlarm.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mFontSizePx.toFloat())
             nextAlarmIcon.setTextSize(COMPLEX_UNIT_PX, measuredSizes.mIconFontSizePx.toFloat())
             nextAlarmIcon
-                    .setPadding(measuredSizes.mIconPaddingPx, 0, measuredSizes.mIconPaddingPx, 0)
+                .setPadding(measuredSizes.mIconPaddingPx, 0, measuredSizes.mIconPaddingPx, 0)
 
             // Measure and layout the sizer.
             val widthSize: Int = View.MeasureSpec.getSize(measuredSizes.mTargetWidthPx)

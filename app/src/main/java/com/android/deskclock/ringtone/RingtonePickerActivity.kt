@@ -17,8 +17,8 @@
 package com.android.deskclock.ringtone
 
 import android.app.Dialog
-import android.content.Context
 import android.content.ContentResolver
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.media.AudioManager
@@ -31,7 +31,6 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.annotation.Keep
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
@@ -42,15 +41,8 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
-import com.android.deskclock.BaseActivity
-import com.android.deskclock.LogUtils
-import com.android.deskclock.R
-import com.android.deskclock.RingtonePreviewKlaxon
-import com.android.deskclock.ItemAdapter
-import com.android.deskclock.ItemAdapter.ItemHolder
-import com.android.deskclock.ItemAdapter.ItemViewHolder
-import com.android.deskclock.ItemAdapter.OnItemClickedListener
+import com.android.deskclock.*
+import com.android.deskclock.ItemAdapter.*
 import com.android.deskclock.actionbarmenu.MenuItemControllerFactory
 import com.android.deskclock.actionbarmenu.NavUpMenuItemController
 import com.android.deskclock.actionbarmenu.OptionsMenuManager
@@ -104,7 +96,7 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
 
         mOptionsMenuManager = OptionsMenuManager()
         mOptionsMenuManager.addMenuItemController(NavUpMenuItemController(this))
-                .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
+            .addMenuItemController(*MenuItemControllerFactory.buildMenuItemControllers(this))
 
         val context: Context = getApplicationContext()
         val intent: Intent = getIntent()
@@ -130,11 +122,13 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
         val addNewFactory: ItemViewHolder.Factory = AddCustomRingtoneViewHolder.Factory(inflater)
         mRingtoneAdapter = ItemAdapter()
         mRingtoneAdapter
-                .withViewTypes(headerFactory, null, HeaderViewHolder.VIEW_TYPE_ITEM_HEADER)
-                .withViewTypes(addNewFactory, listener,
-                        AddCustomRingtoneViewHolder.VIEW_TYPE_ADD_NEW)
-                .withViewTypes(ringtoneFactory, listener, RingtoneViewHolder.VIEW_TYPE_SYSTEM_SOUND)
-                .withViewTypes(ringtoneFactory, listener, RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND)
+            .withViewTypes(headerFactory, null, HeaderViewHolder.VIEW_TYPE_ITEM_HEADER)
+            .withViewTypes(
+                addNewFactory, listener,
+                AddCustomRingtoneViewHolder.VIEW_TYPE_ADD_NEW
+            )
+            .withViewTypes(ringtoneFactory, listener, RingtoneViewHolder.VIEW_TYPE_SYSTEM_SOUND)
+            .withViewTypes(ringtoneFactory, listener, RingtoneViewHolder.VIEW_TYPE_CUSTOM_SOUND)
 
         mRecyclerView = findViewById(R.id.ringtone_content) as RecyclerView
         mRecyclerView.setLayoutManager(LinearLayoutManager(context))
@@ -152,8 +146,10 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
         val titleResourceId = intent.getIntExtra(EXTRA_TITLE, 0)
         setTitle(context.getString(titleResourceId))
 
-        LoaderManager.getInstance(this).initLoader(0 /* id */, Bundle.EMPTY /* args */,
-                this /* callback */)
+        LoaderManager.getInstance(this).initLoader(
+            0 /* id */, Bundle.EMPTY /* args */,
+            this /* callback */
+        )
 
         registerForContextMenu(mRecyclerView)
     }
@@ -180,7 +176,7 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
 
                         // Start a second background task to persist the updated alarm.
                         AlarmUpdateHandler(context, mScrollHandler = null, mSnackbarAnchor = null)
-                                .asyncUpdateAlarm(alarm, popToast = false, minorUpdate = true)
+                            .asyncUpdateAlarm(alarm, popToast = false, minorUpdate = true)
                     }
                 }.execute()
             } else {
@@ -221,8 +217,10 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<List<ItemHolder<Uri?>>> {
-        return RingtoneLoader(getApplicationContext(), mDefaultRingtoneUri!!,
-                mDefaultRingtoneTitle!!)
+        return RingtoneLoader(
+            getApplicationContext(), mDefaultRingtoneUri!!,
+            mDefaultRingtoneTitle!!
+        )
     }
 
     override fun onLoadFinished(
@@ -364,15 +362,15 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
 
             return if (arguments.getBoolean(ARG_RINGTONE_HAS_PERMISSIONS)) {
                 AlertDialog.Builder(requireActivity())
-                        .setPositiveButton(R.string.remove_sound, okListener)
-                        .setNegativeButton(android.R.string.cancel, null /* listener */)
-                        .setMessage(R.string.confirm_remove_custom_ringtone)
-                        .create()
+                    .setPositiveButton(R.string.remove_sound, okListener)
+                    .setNegativeButton(android.R.string.cancel, null /* listener */)
+                    .setMessage(R.string.confirm_remove_custom_ringtone)
+                    .create()
             } else {
                 AlertDialog.Builder(requireActivity())
-                        .setPositiveButton(R.string.remove_sound, okListener)
-                        .setMessage(R.string.custom_ringtone_lost_permissions)
-                        .create()
+                    .setPositiveButton(R.string.remove_sound, okListener)
+                    .setMessage(R.string.custom_ringtone_lost_permissions)
+                    .create()
             }
         }
 
@@ -406,10 +404,12 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
             when (id) {
                 AddCustomRingtoneViewHolder.CLICK_ADD_NEW -> {
                     stopPlayingRingtone(selectedRingtoneHolder, false)
-                    startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    startActivityForResult(
+                        Intent(Intent.ACTION_OPEN_DOCUMENT)
                             .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                             .addCategory(Intent.CATEGORY_OPENABLE)
-                            .setType("audio/*"), 0)
+                            .setType("audio/*"), 0
+                    )
                 }
                 RingtoneViewHolder.CLICK_NORMAL -> {
                     val oldSelection = selectedRingtoneHolder
@@ -432,8 +432,10 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
                     mIndexOfRingtoneToRemove = viewHolder.getAdapterPosition()
                 }
                 RingtoneViewHolder.CLICK_NO_PERMISSIONS -> {
-                    ConfirmRemoveCustomRingtoneDialogFragment.show(supportFragmentManager,
-                            (viewHolder.itemHolder as RingtoneHolder).uri, false)
+                    ConfirmRemoveCustomRingtoneDialogFragment.show(
+                        supportFragmentManager,
+                        (viewHolder.itemHolder as RingtoneHolder).uri, false
+                    )
                 }
             }
         }
@@ -443,8 +445,8 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
      * This task locates a displayable string in the background that is fit for use as the title of
      * the audio content. It adds a custom ringtone using the uri and title on the main thread.
      */
-    private inner class AddCustomRingtoneTask(private val mUri: Uri)
-        : AsyncTask<Void?, Void?, String>() {
+    private inner class AddCustomRingtoneTask(private val mUri: Uri) :
+        AsyncTask<Void?, Void?, String>() {
         private val mContext: Context = getApplicationContext()
 
         override fun doInBackground(vararg voids: Void?): String {
@@ -452,7 +454,7 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
 
             // Take the long-term permission to read (playback) the audio at the uri.
             contentResolver
-                    .takePersistableUriPermission(mUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                .takePersistableUriPermission(mUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             try {
                 contentResolver.query(mUri, null, null, null, null).use { cursor ->
                     if (cursor != null && cursor.moveToFirst()) {
@@ -492,8 +494,10 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
             mIsPlaying = true
 
             // Reload the data to reflect the change in the UI.
-            LoaderManager.getInstance(this@RingtonePickerActivity).restartLoader(0 /* id */,
-                    null /* args */, this@RingtonePickerActivity /* callback */)
+            LoaderManager.getInstance(this@RingtonePickerActivity).restartLoader(
+                0 /* id */,
+                null /* args */, this@RingtonePickerActivity /* callback */
+            )
         }
     }
 
@@ -504,8 +508,8 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
      * Android system default alarm ringtone. If the application's timer ringtone is being removed,
      * it is reset to the application's default timer ringtone.
      */
-    private inner class RemoveCustomRingtoneTask(private val mRemoveUri: Uri)
-        : AsyncTask<Void?, Void?, Void?>() {
+    private inner class RemoveCustomRingtoneTask(private val mRemoveUri: Uri) :
+        AsyncTask<Void?, Void?, Void?>() {
         private lateinit var mSystemDefaultRingtoneUri: Uri
 
         override fun doInBackground(vararg voids: Void?): Void? {
@@ -519,14 +523,16 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
                     alarm.alert = mSystemDefaultRingtoneUri
                     // Start a second background task to persist the updated alarm.
                     AlarmUpdateHandler(this@RingtonePickerActivity, null, null)
-                            .asyncUpdateAlarm(alarm, popToast = false, minorUpdate = true)
+                        .asyncUpdateAlarm(alarm, popToast = false, minorUpdate = true)
                 }
             }
 
             try {
                 // Release the permission to read (playback) the audio at the uri.
-                cr.releasePersistableUriPermission(mRemoveUri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                cr.releasePersistableUriPermission(
+                    mRemoveUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
             } catch (ignore: SecurityException) {
                 // If the file was already deleted from the file system, a SecurityException is
                 // thrown indicating this app did not hold the read permission being released.
@@ -598,12 +604,14 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
         @Keep
         fun createAlarmRingtonePickerIntent(context: Context, alarm: Alarm): Intent {
             return Intent(context, RingtonePickerActivity::class.java)
-                    .putExtra(EXTRA_TITLE, R.string.alarm_sound)
-                    .putExtra(EXTRA_ALARM_ID, alarm.id)
-                    .putExtra(EXTRA_RINGTONE_URI, alarm.alert)
-                    .putExtra(EXTRA_DEFAULT_RINGTONE_URI,
-                            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
-                    .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_alarm_ringtone_title)
+                .putExtra(EXTRA_TITLE, R.string.alarm_sound)
+                .putExtra(EXTRA_ALARM_ID, alarm.id)
+                .putExtra(EXTRA_RINGTONE_URI, alarm.alert)
+                .putExtra(
+                    EXTRA_DEFAULT_RINGTONE_URI,
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+                )
+                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_alarm_ringtone_title)
         }
 
         /**
@@ -614,10 +622,10 @@ class RingtonePickerActivity : BaseActivity(), LoaderCallbacks<List<ItemHolder<U
         fun createTimerRingtonePickerIntent(context: Context): Intent {
             val dataModel = DataModel.dataModel
             return Intent(context, RingtonePickerActivity::class.java)
-                    .putExtra(EXTRA_TITLE, R.string.timer_sound)
-                    .putExtra(EXTRA_RINGTONE_URI, dataModel.timerRingtoneUri)
-                    .putExtra(EXTRA_DEFAULT_RINGTONE_URI, dataModel.defaultTimerRingtoneUri)
-                    .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_timer_ringtone_title)
+                .putExtra(EXTRA_TITLE, R.string.timer_sound)
+                .putExtra(EXTRA_RINGTONE_URI, dataModel.timerRingtoneUri)
+                .putExtra(EXTRA_DEFAULT_RINGTONE_URI, dataModel.defaultTimerRingtoneUri)
+                .putExtra(EXTRA_DEFAULT_RINGTONE_NAME, R.string.default_timer_ringtone_title)
         }
     }
 }

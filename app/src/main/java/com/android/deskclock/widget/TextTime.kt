@@ -26,12 +26,9 @@ import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
-
 import com.android.deskclock.Utils
 import com.android.deskclock.data.DataModel
-
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * Based on [android.widget.TextClock], This widget displays a constant time of day using
@@ -52,17 +49,17 @@ class TextTime @JvmOverloads constructor(
     private var mMinute = 0
 
     private val mFormatChangeObserver: ContentObserver =
-            object : ContentObserver(Handler(Looper.myLooper()!!)) {
-        override fun onChange(selfChange: Boolean) {
-            chooseFormat()
-            updateTime()
-        }
+        object : ContentObserver(Handler(Looper.myLooper()!!)) {
+            override fun onChange(selfChange: Boolean) {
+                chooseFormat()
+                updateTime()
+            }
 
-        override fun onChange(selfChange: Boolean, uri: Uri?) {
-            chooseFormat()
-            updateTime()
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                chooseFormat()
+                updateTime()
+            }
         }
-    }
 
     var format12Hour: CharSequence?
         get() = mFormat12

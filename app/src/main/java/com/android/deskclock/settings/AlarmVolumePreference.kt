@@ -38,7 +38,8 @@ import com.android.deskclock.RingtonePreviewKlaxon
 import com.android.deskclock.Utils
 import com.android.deskclock.data.DataModel
 
-class AlarmVolumePreference(context: Context?, attrs: AttributeSet?) : Preference(context!!, attrs) {
+class AlarmVolumePreference(context: Context?, attrs: AttributeSet?) :
+    Preference(context!!, attrs) {
     private lateinit var mSeekbar: SeekBar
     private lateinit var mAlarmIcon: ImageView
 
@@ -66,8 +67,10 @@ class AlarmVolumePreference(context: Context?, attrs: AttributeSet?) : Preferenc
 
         mSeekbar.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View?) {
-                context.getContentResolver().registerContentObserver(Settings.System.CONTENT_URI,
-                        true, volumeObserver)
+                context.getContentResolver().registerContentObserver(
+                    Settings.System.CONTENT_URI,
+                    true, volumeObserver
+                )
             }
 
             override fun onViewDetachedFromWindow(v: View?) {
@@ -90,7 +93,7 @@ class AlarmVolumePreference(context: Context?, attrs: AttributeSet?) : Preferenc
                 if (!mPreviewPlaying && seekBar.getProgress() != 0) {
                     // If we are not currently playing and progress is set to non-zero, start.
                     RingtonePreviewKlaxon
-                            .start(context, DataModel.dataModel.defaultAlarmRingtoneUri)
+                        .start(context, DataModel.dataModel.defaultAlarmRingtoneUri)
                     mPreviewPlaying = true
                     seekBar.postDelayed(Runnable {
                         RingtonePreviewKlaxon.stop(context)
@@ -118,7 +121,7 @@ class AlarmVolumePreference(context: Context?, attrs: AttributeSet?) : Preferenc
     @TargetApi(Build.VERSION_CODES.N)
     private fun doesDoNotDisturbAllowAlarmPlaybackNPlus(): Boolean {
         val notificationManager =
-                getContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            getContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         return notificationManager.getCurrentInterruptionFilter() !=
                 NotificationManager.INTERRUPTION_FILTER_NONE
     }

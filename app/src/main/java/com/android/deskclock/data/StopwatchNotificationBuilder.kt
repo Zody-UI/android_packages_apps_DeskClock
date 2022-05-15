@@ -46,9 +46,10 @@ internal class StopwatchNotificationBuilder {
     fun buildChannel(context: Context, notificationManager: NotificationManagerCompat) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                    STOPWATCH_NOTIFICATION_CHANNEL_ID,
-                    context.getString(R.string.default_label),
-                    NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                STOPWATCH_NOTIFICATION_CHANNEL_ID,
+                context.getString(R.string.default_label),
+                NotificationManagerCompat.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -58,11 +59,13 @@ internal class StopwatchNotificationBuilder {
 
         // Intent to load the app when the notification is tapped.
         val showApp: Intent = Intent(context, StopwatchService::class.java)
-                .setAction(StopwatchService.ACTION_SHOW_STOPWATCH)
-                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
+            .setAction(StopwatchService.ACTION_SHOW_STOPWATCH)
+            .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
 
-        val pendingShowApp: PendingIntent = PendingIntent.getService(context, 0, showApp,
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingShowApp: PendingIntent = PendingIntent.getService(
+            context, 0, showApp,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         // Compute some values required below.
         val running = stopwatch!!.isRunning
@@ -78,8 +81,8 @@ internal class StopwatchNotificationBuilder {
         if (running) {
             // Left button: Pause
             val pause: Intent = Intent(context, StopwatchService::class.java)
-                    .setAction(StopwatchService.ACTION_PAUSE_STOPWATCH)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
+                .setAction(StopwatchService.ACTION_PAUSE_STOPWATCH)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
 
             @DrawableRes val icon1: Int = R.drawable.ic_pause_24dp
             val title1: CharSequence = res.getText(R.string.sw_pause_button)
@@ -89,8 +92,8 @@ internal class StopwatchNotificationBuilder {
             // Right button: Add Lap
             if (DataModel.dataModel.canAddMoreLaps()) {
                 val lap: Intent = Intent(context, StopwatchService::class.java)
-                        .setAction(StopwatchService.ACTION_LAP_STOPWATCH)
-                        .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
+                    .setAction(StopwatchService.ACTION_LAP_STOPWATCH)
+                    .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
 
                 @DrawableRes val icon2: Int = R.drawable.ic_sw_lap_24dp
                 val title2: CharSequence = res.getText(R.string.sw_lap_button)
@@ -111,8 +114,8 @@ internal class StopwatchNotificationBuilder {
         } else {
             // Left button: Start
             val start: Intent = Intent(context, StopwatchService::class.java)
-                    .setAction(StopwatchService.ACTION_START_STOPWATCH)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
+                .setAction(StopwatchService.ACTION_START_STOPWATCH)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
 
             @DrawableRes val icon1: Int = R.drawable.ic_start_24dp
             val title1: CharSequence = res.getText(R.string.sw_start_button)
@@ -121,8 +124,8 @@ internal class StopwatchNotificationBuilder {
 
             // Right button: Reset (dismisses notification and resets stopwatch)
             val reset: Intent = Intent(context, StopwatchService::class.java)
-                    .setAction(StopwatchService.ACTION_RESET_STOPWATCH)
-                    .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
+                .setAction(StopwatchService.ACTION_RESET_STOPWATCH)
+                .putExtra(Events.EXTRA_EVENT_LABEL, eventLabel)
 
             @DrawableRes val icon2: Int = R.drawable.ic_reset_24dp
             val title2: CharSequence = res.getText(R.string.sw_reset_button)
@@ -134,16 +137,17 @@ internal class StopwatchNotificationBuilder {
             content.setViewVisibility(R.id.state, VISIBLE)
         }
         val notification: Builder = Builder(
-                context, STOPWATCH_NOTIFICATION_CHANNEL_ID)
-                .setLocalOnly(true)
-                .setOngoing(running)
-                .setCustomContentView(content)
-                .setContentIntent(pendingShowApp)
-                .setAutoCancel(stopwatch.isPaused)
-                .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-                .setSmallIcon(R.drawable.stat_notify_stopwatch)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setColor(ContextCompat.getColor(context, R.color.default_background))
+            context, STOPWATCH_NOTIFICATION_CHANNEL_ID
+        )
+            .setLocalOnly(true)
+            .setOngoing(running)
+            .setCustomContentView(content)
+            .setContentIntent(pendingShowApp)
+            .setAutoCancel(stopwatch.isPaused)
+            .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+            .setSmallIcon(R.drawable.stat_notify_stopwatch)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setColor(ContextCompat.getColor(context, R.color.default_background))
 
         if (Utils.isNOrLater) {
             notification.setGroup(nm.stopwatchNotificationGroupKey)

@@ -82,51 +82,61 @@ object LogUtils {
 
         fun v(message: String, vararg args: Any?) {
             if (isVerboseLoggable) {
-                Log.v(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.v(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 
         fun d(message: String, vararg args: Any?) {
             if (isDebugLoggable) {
-                Log.d(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.d(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 
         fun i(message: String, vararg args: Any?) {
             if (isInfoLoggable) {
-                Log.i(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.i(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 
         fun w(message: String, vararg args: Any?) {
             if (isWarnLoggable) {
-                Log.w(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.w(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 
         fun e(message: String, vararg args: Any?) {
             if (isErrorLoggable) {
-                Log.e(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.e(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 
@@ -138,11 +148,13 @@ object LogUtils {
 
         fun wtf(message: String, vararg args: Any?) {
             if (isWtfLoggable) {
-                Log.wtf(logTag, if (args.isEmpty() || args[0] == null) {
-                    message
-                } else {
-                    String.format(message, *args)
-                })
+                Log.wtf(
+                    logTag, if (args.isEmpty() || args[0] == null) {
+                        message
+                    } else {
+                        String.format(message, *args)
+                    }
+                )
             }
         }
 

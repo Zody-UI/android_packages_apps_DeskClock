@@ -51,7 +51,8 @@ class StopwatchTextController(
         // Avoid unnecessary computations and garbage creation if seconds have not changed since
         // last layout pass.
         if (mLastTime / DateUtils.SECOND_IN_MILLIS !=
-                accumulatedTime / DateUtils.SECOND_IN_MILLIS) {
+            accumulatedTime / DateUtils.SECOND_IN_MILLIS
+        ) {
             val context = mMainTextView.context
             val time = Utils.getTimeString(context, hours, minutes, seconds)
             mMainTextView.text = time

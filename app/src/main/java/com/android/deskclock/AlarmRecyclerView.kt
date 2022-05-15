@@ -48,7 +48,8 @@ class AlarmRecyclerView @JvmOverloads constructor(
 
     override fun requestLayout() {
         if (!mIgnoreRequestLayout &&
-                (getItemAnimator() == null || !getItemAnimator()!!.isRunning())) {
+            (getItemAnimator() == null || !getItemAnimator()!!.isRunning())
+        ) {
             super.requestLayout()
         }
     }

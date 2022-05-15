@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +14,15 @@
   limitations under the License.
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.android.deskclock">
 
     <original-package android:name="com.android.alarmclock" />
     <original-package android:name="com.android.deskclock" />
 
-    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="29" />
+    <uses-sdk
+        android:minSdkVersion="26"
+        android:targetSdkVersion="29" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -60,9 +60,9 @@
 
         <activity
             android:name=".DeskClock"
+            android:exported="true"
             android:label="@string/app_label"
             android:launchMode="singleTask"
-            android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -107,13 +107,13 @@
 
         <activity
             android:name="com.android.deskclock.HandleApiCalls"
-            android:permission="com.android.alarm.permission.SET_ALARM"
             android:directBootAware="true"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:launchMode="singleInstance"
+            android:permission="com.android.alarm.permission.SET_ALARM"
             android:showWhenLocked="true"
             android:taskAffinity=""
-            android:exported="true"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.DISMISS_ALARM" />
@@ -129,8 +129,8 @@
 
         <activity-alias
             android:name="com.android.deskclock.HandleSetAlarmApiCalls"
-            android:permission="com.android.alarm.permission.SET_ALARM"
             android:exported="true"
+            android:permission="com.android.alarm.permission.SET_ALARM"
             android:targetActivity="com.android.deskclock.HandleApiCalls">
             <intent-filter>
                 <action android:name="android.intent.action.SET_ALARM" />
@@ -151,7 +151,7 @@
             android:excludeFromRecents="true"
             android:resizeableActivity="false"
             android:showOnLockScreen="true"
-	    android:showWhenLocked="true"
+            android:showWhenLocked="true"
             android:taskAffinity=""
             android:windowSoftInputMode="stateAlwaysHidden" />
 
@@ -168,8 +168,8 @@
 
         <receiver
             android:name=".AlarmInitReceiver"
-            android:exported="true"
-            android:directBootAware="true">
+            android:directBootAware="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
@@ -245,8 +245,8 @@
 
         <service
             android:name=".Screensaver"
-            android:label="@string/app_label"
             android:exported="true"
+            android:label="@string/app_label"
             android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />

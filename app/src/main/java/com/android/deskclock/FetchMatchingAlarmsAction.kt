@@ -21,16 +21,14 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.provider.AlarmClock
-
 import com.android.deskclock.alarms.AlarmStateManager
 import com.android.deskclock.controller.Controller
 import com.android.deskclock.provider.Alarm
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.provider.ClockContract.AlarmsColumns
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-
 import java.text.DateFormatSymbols
-import java.util.Calendar
+import java.util.*
 
 /**
  * Returns a list of alarms that are specified by the intent
@@ -95,7 +93,8 @@ internal class FetchMatchingAlarmsAction(
                 for (alarm in mAlarms) {
                     val alarmInstance = AlarmInstance.getNextUpcomingInstanceByAlarmId(cr, alarm.id)
                     if (alarmInstance != null &&
-                            alarmInstance.mAlarmState == InstancesColumns.FIRED_STATE) {
+                        alarmInstance.mAlarmState == InstancesColumns.FIRED_STATE
+                    ) {
                         mMatchingAlarms.add(alarm)
                     }
                 }
@@ -113,7 +112,8 @@ internal class FetchMatchingAlarmsAction(
                 // get time from nextAlarm and see if there are any other alarms matching this time
                 val nextTime: Calendar = nextAlarm.alarmTime
                 val alarmsFiringAtSameTime = getAlarmsByHourMinutes(
-                        nextTime[Calendar.HOUR_OF_DAY], nextTime[Calendar.MINUTE], cr)
+                    nextTime[Calendar.HOUR_OF_DAY], nextTime[Calendar.MINUTE], cr
+                )
                 // there might me multiple alarms firing next
                 mMatchingAlarms.addAll(alarmsFiringAtSameTime)
             }
@@ -149,8 +149,10 @@ internal class FetchMatchingAlarmsAction(
         cr: ContentResolver
     ): List<Alarm> {
         // if we want to dismiss we should only add enabled alarms
-        val selection = String.format("%s=? AND %s=? AND %s=?",
-                AlarmsColumns.HOUR, AlarmsColumns.MINUTES, AlarmsColumns.ENABLED)
+        val selection = String.format(
+            "%s=? AND %s=? AND %s=?",
+            AlarmsColumns.HOUR, AlarmsColumns.MINUTES, AlarmsColumns.ENABLED
+        )
         val args = arrayOf(hour24.toString(), minutes.toString(), "1")
         return Alarm.getAlarms(cr, selection, *args)
     }

@@ -47,11 +47,11 @@ internal object CustomRingtoneDAO {
         ids.add(id.toString())
 
         prefs.edit()
-                .putString(RINGTONE_URI + id, uri.toString())
-                .putString(RINGTONE_TITLE + id, title)
-                .putLong(NEXT_RINGTONE_ID, id + 1)
-                .putStringSet(RINGTONE_IDS, ids)
-                .apply()
+            .putString(RINGTONE_URI + id, uri.toString())
+            .putString(RINGTONE_TITLE + id, title)
+            .putLong(NEXT_RINGTONE_ID, id + 1)
+            .putStringSet(RINGTONE_IDS, ids)
+            .apply()
 
         return CustomRingtone(id, uri, title, true)
     }

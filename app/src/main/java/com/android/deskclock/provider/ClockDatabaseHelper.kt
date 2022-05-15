@@ -25,21 +25,19 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
 import android.provider.BaseColumns
 import android.text.TextUtils
-
 import com.android.deskclock.LogUtils
 import com.android.deskclock.data.Weekdays
 import com.android.deskclock.provider.ClockContract.AlarmSettingColumns
 import com.android.deskclock.provider.ClockContract.AlarmsColumns
 import com.android.deskclock.provider.ClockContract.InstancesColumns
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * Helper class for opening the database from multiple providers.  Also provides
  * some common functionality.
  */
-class ClockDatabaseHelper(context: Context)
-    : SQLiteOpenHelper(context, DATABASE_NAME, null, VERSION_8) {
+class ClockDatabaseHelper(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, VERSION_8) {
 
     override fun onCreate(db: SQLiteDatabase) {
         createAlarmsTable(db)
@@ -62,8 +60,10 @@ class ClockDatabaseHelper(context: Context)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, currentVersion: Int) {
-        LogUtils.v("Upgrading alarms database from version %d to %d",
-                oldVersion, currentVersion)
+        LogUtils.v(
+            "Upgrading alarms database from version %d to %d",
+            oldVersion, currentVersion
+        )
 
         if (oldVersion <= VERSION_7) {
             // This was not used in VERSION_7 or prior, so we can just drop it.
@@ -80,17 +80,17 @@ class ClockDatabaseHelper(context: Context)
 
             LogUtils.i("Copying old alarms to new table")
             val OLD_TABLE_COLUMNS: Array<String> = arrayOf(
-                    "_id",
-                    "hour",
-                    "minutes",
-                    "daysofweek",
-                    "enabled",
-                    "vibrate",
-                    "message",
-                    "alert"
+                "_id",
+                "hour",
+                "minutes",
+                "daysofweek",
+                "enabled",
+                "vibrate",
+                "message",
+                "alert"
             )
             val cursor: Cursor? =
-                    db.query(OLD_ALARMS_TABLE_NAME, OLD_TABLE_COLUMNS, null, null, null, null, null)
+                db.query(OLD_ALARMS_TABLE_NAME, OLD_TABLE_COLUMNS, null, null, null, null, null)
             val currentTime: Calendar = Calendar.getInstance()
             while (cursor != null && cursor.moveToNext()) {
                 val alarm = Alarm()
@@ -117,8 +117,10 @@ class ClockDatabaseHelper(context: Context)
                 db.insert(ALARMS_TABLE_NAME, null, Alarm.createContentValues(alarm))
                 if (alarm.enabled) {
                     val newInstance: AlarmInstance = alarm.createInstanceAfter(currentTime)
-                    db.insert(INSTANCES_TABLE_NAME, null,
-                            AlarmInstance.createContentValues(newInstance))
+                    db.insert(
+                        INSTANCES_TABLE_NAME, null,
+                        AlarmInstance.createContentValues(newInstance)
+                    )
                 }
             }
 
@@ -143,8 +145,10 @@ class ClockDatabaseHelper(context: Context)
                     val selection: String = BaseColumns._ID + " = ?"
                     val selectionArgs: Array<String> = arrayOf(id.toString())
                     val cursor: Cursor =
-                            db.query(ALARMS_TABLE_NAME, columns,
-                                    selection, selectionArgs, null, null, null)
+                        db.query(
+                            ALARMS_TABLE_NAME, columns,
+                            selection, selectionArgs, null, null, null
+                        )
                     if (cursor.moveToFirst()) {
                         // Record exists. Remove the id so sqlite can generate a new one.
                         values.putNull(BaseColumns._ID)
@@ -203,35 +207,39 @@ class ClockDatabaseHelper(context: Context)
         private const val SELECTED_CITIES_TABLE_NAME: String = "selected_cities"
 
         private fun createAlarmsTable(db: SQLiteDatabase) {
-            db.execSQL("CREATE TABLE " + ALARMS_TABLE_NAME + " (" +
-                    BaseColumns._ID + " INTEGER PRIMARY KEY," +
-                    AlarmsColumns.HOUR + " INTEGER NOT NULL, " +
-                    AlarmsColumns.MINUTES + " INTEGER NOT NULL, " +
-                    AlarmsColumns.DAYS_OF_WEEK + " INTEGER NOT NULL, " +
-                    AlarmsColumns.ENABLED + " INTEGER NOT NULL, " +
-                    AlarmSettingColumns.VIBRATE + " INTEGER NOT NULL, " +
-                    AlarmSettingColumns.LABEL + " TEXT NOT NULL, " +
-                    AlarmSettingColumns.RINGTONE + " TEXT, " +
-                    AlarmsColumns.DELETE_AFTER_USE + " INTEGER NOT NULL DEFAULT 0);")
+            db.execSQL(
+                "CREATE TABLE " + ALARMS_TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER PRIMARY KEY," +
+                        AlarmsColumns.HOUR + " INTEGER NOT NULL, " +
+                        AlarmsColumns.MINUTES + " INTEGER NOT NULL, " +
+                        AlarmsColumns.DAYS_OF_WEEK + " INTEGER NOT NULL, " +
+                        AlarmsColumns.ENABLED + " INTEGER NOT NULL, " +
+                        AlarmSettingColumns.VIBRATE + " INTEGER NOT NULL, " +
+                        AlarmSettingColumns.LABEL + " TEXT NOT NULL, " +
+                        AlarmSettingColumns.RINGTONE + " TEXT, " +
+                        AlarmsColumns.DELETE_AFTER_USE + " INTEGER NOT NULL DEFAULT 0);"
+            )
             LogUtils.i("Alarms Table created")
         }
 
         private fun createInstanceTable(db: SQLiteDatabase) {
-            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " (" +
-                    BaseColumns._ID + " INTEGER PRIMARY KEY," +
-                    InstancesColumns.YEAR + " INTEGER NOT NULL, " +
-                    InstancesColumns.MONTH + " INTEGER NOT NULL, " +
-                    InstancesColumns.DAY + " INTEGER NOT NULL, " +
-                    InstancesColumns.HOUR + " INTEGER NOT NULL, " +
-                    InstancesColumns.MINUTES + " INTEGER NOT NULL, " +
-                    AlarmSettingColumns.VIBRATE + " INTEGER NOT NULL, " +
-                    AlarmSettingColumns.LABEL + " TEXT NOT NULL, " +
-                    AlarmSettingColumns.RINGTONE + " TEXT, " +
-                    InstancesColumns.ALARM_STATE + " INTEGER NOT NULL, " +
-                    InstancesColumns.ALARM_ID + " INTEGER REFERENCES " +
-                    ALARMS_TABLE_NAME + "(" + BaseColumns._ID + ") " +
-                    "ON UPDATE CASCADE ON DELETE CASCADE" +
-                    ");")
+            db.execSQL(
+                "CREATE TABLE " + INSTANCES_TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER PRIMARY KEY," +
+                        InstancesColumns.YEAR + " INTEGER NOT NULL, " +
+                        InstancesColumns.MONTH + " INTEGER NOT NULL, " +
+                        InstancesColumns.DAY + " INTEGER NOT NULL, " +
+                        InstancesColumns.HOUR + " INTEGER NOT NULL, " +
+                        InstancesColumns.MINUTES + " INTEGER NOT NULL, " +
+                        AlarmSettingColumns.VIBRATE + " INTEGER NOT NULL, " +
+                        AlarmSettingColumns.LABEL + " TEXT NOT NULL, " +
+                        AlarmSettingColumns.RINGTONE + " TEXT, " +
+                        InstancesColumns.ALARM_STATE + " INTEGER NOT NULL, " +
+                        InstancesColumns.ALARM_ID + " INTEGER REFERENCES " +
+                        ALARMS_TABLE_NAME + "(" + BaseColumns._ID + ") " +
+                        "ON UPDATE CASCADE ON DELETE CASCADE" +
+                        ");"
+            )
             LogUtils.i("Instance table created")
         }
     }

@@ -52,7 +52,7 @@ class LabelDialogFragment : DialogFragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // As long as the label box exists, save its state.
-        mLabelBox?. let {
+        mLabelBox?.let {
             outState.putString(ARG_LABEL, it.getText().toString())
         }
     }
@@ -69,19 +69,26 @@ class LabelDialogFragment : DialogFragment() {
         }
 
         val dialog: AlertDialog = AlertDialog.Builder(requireActivity())
-                .setPositiveButton(android.R.string.ok, OkListener())
-                .setNegativeButton(android.R.string.cancel, null)
-                .setMessage(R.string.label)
-                .create()
+            .setPositiveButton(android.R.string.ok, OkListener())
+            .setNegativeButton(android.R.string.cancel, null)
+            .setMessage(R.string.label)
+            .create()
         val context: Context = dialog.context
 
-        val colorControlActivated = ThemeUtils.resolveColor(context, com.google.android.material.R.attr.colorControlActivated)
-        val colorControlNormal = ThemeUtils.resolveColor(context, com.google.android.material.R.attr.colorControlNormal)
+        val colorControlActivated = ThemeUtils.resolveColor(
+            context,
+            com.google.android.material.R.attr.colorControlActivated
+        )
+        val colorControlNormal =
+            ThemeUtils.resolveColor(context, com.google.android.material.R.attr.colorControlNormal)
 
         mLabelBox = AppCompatEditText(context)
-        mLabelBox?.setSupportBackgroundTintList(ColorStateList(
+        mLabelBox?.setSupportBackgroundTintList(
+            ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_activated), intArrayOf()),
-                intArrayOf(colorControlActivated, colorControlNormal)))
+                intArrayOf(colorControlActivated, colorControlNormal)
+            )
+        )
         mLabelBox?.setOnEditorActionListener(ImeDoneListener())
         mLabelBox?.addTextChangedListener(TextChangeListener())
         mLabelBox?.setSingleLine()
@@ -92,7 +99,7 @@ class LabelDialogFragment : DialogFragment() {
         // The line at the bottom of EditText is part of its background therefore the padding
         // must be added to its container.
         val padding = context.resources
-                .getDimensionPixelSize(R.dimen.label_edittext_padding)
+            .getDimensionPixelSize(R.dimen.label_edittext_padding)
         dialog.setView(mLabelBox, padding, 0, padding, 0)
 
         val alertDialogWindow: Window? = dialog.window

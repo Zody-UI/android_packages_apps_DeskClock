@@ -18,22 +18,12 @@ package com.android.deskclock
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.AudioAttributes
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.media.Ringtone
-import android.media.RingtoneManager
+import android.media.*
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
-import android.os.Message
+import android.os.*
 import android.telephony.TelephonyManager
-
 import java.io.IOException
 import java.lang.reflect.Method
-
 import kotlin.math.pow
 
 /**
@@ -127,36 +117,38 @@ class AsyncRingtonePlayer(private val mContext: Context) {
      */
     @SuppressLint("HandlerLeak")
     private fun getNewHandler(): Handler {
-            val thread = HandlerThread("ringtone-player")
-            thread.start()
+        val thread = HandlerThread("ringtone-player")
+        thread.start()
 
-            return object : Handler(thread.looper) {
-                override fun handleMessage(msg: Message) {
-                    when (msg.what) {
-                        EVENT_PLAY -> {
-                            val data = msg.data
-                            val ringtoneUri = data.getParcelable<Uri>(RINGTONE_URI_KEY)
-                            val crescendoDuration = data.getLong(CRESCENDO_DURATION_KEY)
-                            if (playbackDelegate.play(mContext, ringtoneUri, crescendoDuration)) {
-                                scheduleVolumeAdjustment()
-                            }
-                        }
-                        EVENT_STOP -> playbackDelegate.stop(mContext)
-                        EVENT_VOLUME -> if (playbackDelegate.adjustVolume(mContext)) {
+        return object : Handler(thread.looper) {
+            override fun handleMessage(msg: Message) {
+                when (msg.what) {
+                    EVENT_PLAY -> {
+                        val data = msg.data
+                        val ringtoneUri = data.getParcelable<Uri>(RINGTONE_URI_KEY)
+                        val crescendoDuration = data.getLong(CRESCENDO_DURATION_KEY)
+                        if (playbackDelegate.play(mContext, ringtoneUri, crescendoDuration)) {
                             scheduleVolumeAdjustment()
                         }
+                    }
+                    EVENT_STOP -> playbackDelegate.stop(mContext)
+                    EVENT_VOLUME -> if (playbackDelegate.adjustVolume(mContext)) {
+                        scheduleVolumeAdjustment()
                     }
                 }
             }
         }
+    }
 
     /**
      * Check if the executing thread is the one dedicated to controlling the ringtone playback.
      */
     private fun checkAsyncRingtonePlayerThread() {
         if (Looper.myLooper() != mHandler!!.looper) {
-            LOGGER.e("Must be on the AsyncRingtonePlayer thread!",
-                    IllegalStateException())
+            LOGGER.e(
+                "Must be on the AsyncRingtonePlayer thread!",
+                IllegalStateException()
+            )
         }
     }
 
@@ -287,10 +279,12 @@ class AsyncRingtonePlayer(private val mContext: Context) {
 
             // Indicate the ringtone should be played via the alarm stream.
             if (Utils.isLOrLater) {
-                mMediaPlayer!!.setAudioAttributes(AudioAttributes.Builder()
+                mMediaPlayer!!.setAudioAttributes(
+                    AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_ALARM)
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build())
+                        .build()
+                )
             }
 
             // Check if we are in a call. If we are, use the in-call alarm resource at a low volume
@@ -310,8 +304,10 @@ class AsyncRingtonePlayer(private val mContext: Context) {
             mMediaPlayer!!.setAudioStreamType(AudioManager.STREAM_ALARM)
             mMediaPlayer!!.isLooping = true
             mMediaPlayer!!.prepare()
-            mAudioManager!!.requestAudioFocus(null, AudioManager.STREAM_ALARM,
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+            mAudioManager!!.requestAudioFocus(
+                null, AudioManager.STREAM_ALARM,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+            )
             mMediaPlayer!!.start()
 
             return scheduleVolumeAdjustment
@@ -396,14 +392,18 @@ class AsyncRingtonePlayer(private val mContext: Context) {
 
         init {
             try {
-                mSetVolumeMethod = Ringtone::class.java.getDeclaredMethod("setVolume",
-                        Float::class.javaPrimitiveType)
+                mSetVolumeMethod = Ringtone::class.java.getDeclaredMethod(
+                    "setVolume",
+                    Float::class.javaPrimitiveType
+                )
             } catch (nsme: NoSuchMethodException) {
                 LOGGER.e("Unable to locate method: Ringtone.setVolume(float).", nsme)
             }
             try {
-                mSetLoopingMethod = Ringtone::class.java.getDeclaredMethod("setLooping",
-                        Boolean::class.javaPrimitiveType)
+                mSetLoopingMethod = Ringtone::class.java.getDeclaredMethod(
+                    "setLooping",
+                    Boolean::class.javaPrimitiveType
+                )
             } catch (nsme: NoSuchMethodException) {
                 LOGGER.e("Unable to locate method: Ringtone.setLooping(boolean).", nsme)
             }
@@ -483,9 +483,9 @@ class AsyncRingtonePlayer(private val mContext: Context) {
             // Indicate the ringtone should be played via the alarm stream.
             if (Utils.isLOrLater) {
                 mRingtone!!.audioAttributes = AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
             }
 
             // Attempt to adjust the ringtone volume if the user is in a telephone call.
@@ -501,8 +501,10 @@ class AsyncRingtonePlayer(private val mContext: Context) {
                 scheduleVolumeAdjustment = true
             }
 
-            mAudioManager!!.requestAudioFocus(null, AudioManager.STREAM_ALARM,
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+            mAudioManager!!.requestAudioFocus(
+                null, AudioManager.STREAM_ALARM,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+            )
 
             mRingtone!!.play()
 
@@ -629,8 +631,10 @@ class AsyncRingtonePlayer(private val mContext: Context) {
             // Convert the target gain (in decibels) into the corresponding volume scalar.
             val volume = 10.0.pow(gain / 20f.toDouble()).toFloat()
 
-            LOGGER.v("Ringtone crescendo %,.2f%% complete (scalar: %f, volume: %f dB)",
-                    fractionComplete * 100, volume, gain)
+            LOGGER.v(
+                "Ringtone crescendo %,.2f%% complete (scalar: %f, volume: %f dB)",
+                fractionComplete * 100, volume, gain
+            )
 
             return volume
         }

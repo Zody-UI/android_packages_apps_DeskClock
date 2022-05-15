@@ -21,14 +21,9 @@ import android.os.SystemClock
 import android.text.TextUtils
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
-import android.view.Gravity
-import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-
 import com.android.deskclock.BaseActivity
 import com.android.deskclock.LogUtils
 import com.android.deskclock.R
@@ -76,8 +71,10 @@ class ExpiredTimersActivity : BaseActivity() {
         val view: View = findViewById(R.id.expired_timers_activity)
         view.systemUiVisibility = View.SYSTEM_UI_FLAG_LOW_PROFILE
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON)
+        getWindow().addFlags(
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+        )
 
         setTurnScreenOn(true)
         setShowWhenLocked(true)
@@ -154,7 +151,7 @@ class ExpiredTimersActivity : BaseActivity() {
 
         val timerId: Int = timer.id
         val timerItem = getLayoutInflater()
-                .inflate(R.layout.timer_item, mExpiredTimersView, false) as TimerItem
+            .inflate(R.layout.timer_item, mExpiredTimersView, false) as TimerItem
         // Store the timer id as a tag on the view so it can be located on delete.
         timerItem.id = timerId
         mExpiredTimersView.addView(timerItem)

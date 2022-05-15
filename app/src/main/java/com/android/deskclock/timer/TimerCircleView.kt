@@ -70,7 +70,8 @@ class TimerCircleView @JvmOverloads constructor(
         mRadiusOffset = Utils.calculateRadiusOffset(mStrokeSize, dotDiameter, 0f)
 
         mRemainderColor = Color.WHITE
-        mCompletedColor = ThemeUtils.resolveColor(context, com.google.android.material.R.attr.colorAccent)
+        mCompletedColor =
+            ThemeUtils.resolveColor(context, com.google.android.material.R.attr.colorAccent)
 
         mPaint.isAntiAlias = true
         mPaint.style = Paint.Style.STROKE
@@ -126,8 +127,10 @@ class TimerCircleView @JvmOverloads constructor(
                 mArcRect.bottom = yCenter + radius
                 mArcRect.left = xCenter - radius
                 mArcRect.right = xCenter + radius
-                redPercent = min(1f,
-                        mTimer!!.elapsedTime.toFloat() / mTimer!!.totalLength.toFloat())
+                redPercent = min(
+                    1f,
+                    mTimer!!.elapsedTime.toFloat() / mTimer!!.totalLength.toFloat()
+                )
                 val whitePercent = 1 - redPercent
 
                 // Draw a white arc to indicate the amount of timer that remains.

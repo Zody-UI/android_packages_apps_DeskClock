@@ -17,29 +17,24 @@
 package com.android.deskclock.ringtone
 
 import android.graphics.PorterDuff
-import android.view.ContextMenu
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ContextMenu.ContextMenuInfo
 import android.view.View.OnCreateContextMenuListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-
 import com.android.deskclock.AnimatorUtils
 import com.android.deskclock.ItemAdapter.ItemViewHolder
 import com.android.deskclock.R
 import com.android.deskclock.ThemeUtils
 import com.android.deskclock.Utils
 
-internal class RingtoneViewHolder private constructor(itemView: View)
-    : ItemViewHolder<RingtoneHolder>(itemView), View.OnClickListener, OnCreateContextMenuListener {
+internal class RingtoneViewHolder private constructor(itemView: View) :
+    ItemViewHolder<RingtoneHolder>(itemView), View.OnClickListener, OnCreateContextMenuListener {
     private val mSelectedView: View = itemView.findViewById(R.id.sound_image_selected)
     private val mNameView: TextView = itemView.findViewById<View>(R.id.ringtone_name) as TextView
     private val mImageView: ImageView =
-            itemView.findViewById<View>(R.id.ringtone_image) as ImageView
+        itemView.findViewById<View>(R.id.ringtone_image) as ImageView
 
     init {
         itemView.setOnClickListener(this)
@@ -56,8 +51,10 @@ internal class RingtoneViewHolder private constructor(itemView: View)
         if (itemViewType == VIEW_TYPE_CUSTOM_SOUND) {
             if (!itemHolder.hasPermissions()) {
                 mImageView.setImageResource(R.drawable.ic_ringtone_not_found)
-                val colorAccent = ThemeUtils.resolveColor(itemView.getContext(),
-                        com.google.android.material.R.attr.colorAccent)
+                val colorAccent = ThemeUtils.resolveColor(
+                    itemView.getContext(),
+                    com.google.android.material.R.attr.colorAccent
+                )
                 mImageView.setColorFilter(colorAccent, PorterDuff.Mode.SRC_ATOP)
             } else {
                 mImageView.setImageResource(R.drawable.placeholder_album_artwork)
@@ -98,8 +95,8 @@ internal class RingtoneViewHolder private constructor(itemView: View)
         contextMenu.add(Menu.NONE, 0, Menu.NONE, R.string.remove_sound)
     }
 
-    class Factory internal constructor(private val mInflater: LayoutInflater)
-        : ItemViewHolder.Factory {
+    class Factory internal constructor(private val mInflater: LayoutInflater) :
+        ItemViewHolder.Factory {
         override fun createViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder<*> {
             val itemView = mInflater.inflate(R.layout.ringtone_item_sound, parent, false)
             return RingtoneViewHolder(itemView)

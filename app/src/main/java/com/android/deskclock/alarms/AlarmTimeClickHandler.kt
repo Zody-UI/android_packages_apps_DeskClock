@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Vibrator
 import androidx.fragment.app.Fragment
-
 import com.android.deskclock.AlarmClockFragment
 import com.android.deskclock.LabelDialogFragment
 import com.android.deskclock.LogUtils
@@ -34,8 +33,7 @@ import com.android.deskclock.provider.Alarm
 import com.android.deskclock.provider.AlarmInstance
 import com.android.deskclock.provider.ClockContract.InstancesColumns
 import com.android.deskclock.ringtone.RingtonePickerActivity
-
-import java.util.Calendar
+import java.util.*
 
 /**
  * Click handler for an alarm time item.
@@ -71,8 +69,10 @@ class AlarmTimeClickHandler(
     fun setAlarmEnabled(alarm: Alarm, newState: Boolean) {
         if (newState != alarm.enabled) {
             alarm.enabled = newState
-            Events.sendAlarmEvent(if (newState) R.string.action_enable else R.string.action_disable,
-                    R.string.label_deskclock)
+            Events.sendAlarmEvent(
+                if (newState) R.string.action_enable else R.string.action_disable,
+                R.string.label_deskclock
+            )
             mAlarmUpdateHandler.asyncUpdateAlarm(alarm, alarm.enabled, minorUpdate = false)
             LOGGER.d("Updating alarm enabled state to $newState")
         }
@@ -155,8 +155,9 @@ class AlarmTimeClickHandler(
 
     fun dismissAlarmInstance(alarmInstance: AlarmInstance) {
         val dismissIntent: Intent = AlarmStateManager.createStateChangeIntent(
-                mContext, AlarmStateManager.ALARM_DISMISS_TAG, alarmInstance,
-                InstancesColumns.PREDISMISSED_STATE)
+            mContext, AlarmStateManager.ALARM_DISMISS_TAG, alarmInstance,
+            InstancesColumns.PREDISMISSED_STATE
+        )
         mContext.startService(dismissIntent)
         mAlarmUpdateHandler.showPredismissToast(alarmInstance)
     }
@@ -189,7 +190,7 @@ class AlarmTimeClickHandler(
             mSelectedAlarm!!.enabled = true
             mScrollHandler.setSmoothScrollStableId(mSelectedAlarm!!.id)
             mAlarmUpdateHandler
-                    .asyncUpdateAlarm(mSelectedAlarm!!, popToast = true, minorUpdate = false)
+                .asyncUpdateAlarm(mSelectedAlarm!!, popToast = true, minorUpdate = false)
             mSelectedAlarm = null
         }
     }

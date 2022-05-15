@@ -19,8 +19,7 @@ package com.android.deskclock.uidata
 import android.content.SharedPreferences
 import android.text.TextUtils
 import android.view.View
-
-import java.util.Locale
+import java.util.*
 
 /**
  * All tab data is accessed via this model.

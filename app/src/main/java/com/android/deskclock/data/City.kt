@@ -17,8 +17,7 @@
 package com.android.deskclock.data
 
 import java.text.Collator
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 /**
  * A read-only domain object representing a city of the world and associated time information. It
@@ -82,9 +81,11 @@ class City internal constructor(
     }
 
     override fun toString(): String {
-        return String.format(Locale.US,
-                "City {id=%s, index=%d, indexString=%s, name=%s, phonetic=%s, tz=%s}",
-                id, index, indexString, name, phoneticName, timeZone.id)
+        return String.format(
+            Locale.US,
+            "City {id=%s, index=%d, indexString=%s, name=%s, phonetic=%s, tz=%s}",
+            id, index, indexString, name, phoneticName, timeZone.id
+        )
     }
 
     /**

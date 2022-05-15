@@ -18,8 +18,6 @@ package com.android.deskclock.actionbarmenu
 
 import android.app.Activity
 
-import kotlin.collections.ArrayList
-
 /**
  * Factory that builds optional [MenuItemController] instances.
  */
