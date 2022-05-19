@@ -46,6 +46,7 @@ android_app {
         "androidx.appcompat_appcompat",
         "androidx.gridlayout_gridlayout",
         "androidx.recyclerview_recyclerview",
+        "androidx-constraintlayout_constraintlayout",
     ],
 
     aaptflags: ["--legacy"],
