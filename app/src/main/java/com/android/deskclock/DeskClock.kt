@@ -120,20 +120,20 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
         super.onNewIntent(newIntent)
 
         // Fragments may query the latest intent for information, so update the intent.
-        setIntent(newIntent)
+        intent = newIntent
     }
 
-    protected override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.desk_clock)
         mSnackbarAnchor = findViewById(R.id.content)
 
         // Configure the toolbar.
-        val toolbar: Toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val actionBar: ActionBar? = getSupportActionBar()
+        val actionBar: ActionBar? = supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)
 
         // Configure the menu item controllers add behavior to the toolbar.
@@ -146,12 +146,12 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
 
         // Inflate the menu during creation to avoid a double layout pass. Otherwise, the menu
         // inflation occurs *after* the initial draw and a second layout pass adds in the menu.
-        onCreateOptionsMenu(toolbar.getMenu())
+        onCreateOptionsMenu(toolbar.menu)
 
         // Configure the buttons shared by the tabs.
-        mFab = findViewById(R.id.fab) as ImageView
-        mLeftButton = findViewById(R.id.left_button) as Button
-        mRightButton = findViewById(R.id.right_button) as Button
+        mFab = findViewById(R.id.fab)
+        mLeftButton = findViewById(R.id.left_button)
+        mRightButton = findViewById(R.id.right_button)
 
         mFab.setOnClickListener { selectedDeskClockFragment.onFabClick(mFab) }
         mLeftButton.setOnClickListener {
@@ -213,21 +213,21 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
 
         // Customize the view pager.
         mFragmentTabPagerAdapter = FragmentTabPagerAdapter(this)
-        mFragmentTabPager = findViewById(R.id.desk_clock_pager) as ViewPager
+        mFragmentTabPager = findViewById(R.id.desk_clock_pager)
         // Keep all four tabs to minimize jank.
-        mFragmentTabPager.setOffscreenPageLimit(3)
+        mFragmentTabPager.offscreenPageLimit = 3
         // Set Accessibility Delegate to null so view pager doesn't intercept movements and
         // prevent the fab from being selected.
-        mFragmentTabPager.setAccessibilityDelegate(null)
+        mFragmentTabPager.accessibilityDelegate = null
         // Mirror changes made to the selected page of the view pager into UiDataModel.
         mFragmentTabPager.addOnPageChangeListener(PageChangeWatcher())
-        mFragmentTabPager.setAdapter(mFragmentTabPagerAdapter)
+        mFragmentTabPager.adapter = mFragmentTabPagerAdapter
 
         // Mirror changes made to the selected tab into UiDataModel.
         mBottomNavigation = findViewById(R.id.bottom_navigation)
         mBottomNavigation.setOnItemSelectedListener {
             var tab: UiDataModel.Tab? = null
-            when (it.getItemId()) {
+            when (it.itemId) {
                 R.id.alarmClockFragment -> tab = UiDataModel.Tab.ALARMS
                 R.id.clockFragment -> tab = UiDataModel.Tab.CLOCKS
                 R.id.timerFragment -> tab = UiDataModel.Tab.TIMERS
@@ -265,13 +265,13 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
 
             // A runnable must be posted here or the new DeskClock activity will be recreated in a
             // paused state, even though it is the foreground activity.
-            mFragmentTabPager.post(Runnable { recreate() })
+            mFragmentTabPager.post { recreate() }
         }
     }
 
     override fun onStop() {
         DataModel.dataModel.removeSilentSettingsListener(mSilentSettingChangeWatcher)
-        if (!isChangingConfigurations()) {
+        if (!isChangingConfigurations) {
             DataModel.dataModel.isApplicationInForeground = false
         }
 
@@ -317,34 +317,35 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
                 super.onKeyDown(keyCode, event))
     }
 
-    override fun updateFab(@UpdateFabFlag updateType: Int) {
+    override fun updateFab(@UpdateFabFlag updateTypes: Int) {
         val f = selectedDeskClockFragment
 
-        when (updateType and FabContainer.FAB_ANIMATION_MASK) {
+        when (updateTypes and FabContainer.FAB_ANIMATION_MASK) {
             FabContainer.FAB_SHRINK_AND_EXPAND -> mUpdateFabOnlyAnimation.start()
             FabContainer.FAB_IMMEDIATE -> f.onUpdateFab(mFab)
             FabContainer.FAB_MORPH -> f.onMorphFab(mFab)
         }
-        when (updateType and FabContainer.FAB_REQUEST_FOCUS_MASK) {
+        when (updateTypes and FabContainer.FAB_REQUEST_FOCUS_MASK) {
             FabContainer.FAB_REQUEST_FOCUS -> mFab.requestFocus()
         }
-        when (updateType and FabContainer.BUTTONS_ANIMATION_MASK) {
+        when (updateTypes and FabContainer.BUTTONS_ANIMATION_MASK) {
             FabContainer.BUTTONS_IMMEDIATE -> f.onUpdateFabButtons(mLeftButton, mRightButton)
             FabContainer.BUTTONS_SHRINK_AND_EXPAND -> mUpdateButtonsOnlyAnimation.start()
         }
-        when (updateType and FabContainer.BUTTONS_DISABLE_MASK) {
+        when (updateTypes and FabContainer.BUTTONS_DISABLE_MASK) {
             FabContainer.BUTTONS_DISABLE -> {
                 mLeftButton.isClickable = false
                 mRightButton.isClickable = false
             }
         }
-        when (updateType and FabContainer.FAB_AND_BUTTONS_SHRINK_EXPAND_MASK) {
+        when (updateTypes and FabContainer.FAB_AND_BUTTONS_SHRINK_EXPAND_MASK) {
             FabContainer.FAB_AND_BUTTONS_SHRINK -> mHideAnimation.start()
             FabContainer.FAB_AND_BUTTONS_EXPAND -> mShowAnimation.start()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         // Recreate the activity if any settings have been changed
         if (requestCode == SettingsMenuItemController.REQUEST_CHANGE_SETTINGS &&
             resultCode == RESULT_OK
@@ -362,13 +363,13 @@ class DeskClock : BaseActivity(), FabContainer, AlarmLabelDialogHandler {
         val selectedTab: UiDataModel.Tab = uiDataModel.selectedTab
 
         // Update the selected tab in the mBottomNavigation if it does not agree with UiDataModel.
-        mBottomNavigation.setSelectedItemId(selectedTab.fragmentResId)
+        mBottomNavigation.selectedItemId = selectedTab.fragmentResId
 
         // Update the selected fragment in the viewpager if it does not agree with UiDataModel.
         for (i in 0 until mFragmentTabPagerAdapter.count) {
             val fragment = mFragmentTabPagerAdapter.getDeskClockFragment(i)
-            if (fragment.isTabSelected && mFragmentTabPager.getCurrentItem() != i) {
-                mFragmentTabPager.setCurrentItem(i)
+            if (fragment.isTabSelected && mFragmentTabPager.currentItem != i) {
+                mFragmentTabPager.currentItem = i
                 break
             }
         }
