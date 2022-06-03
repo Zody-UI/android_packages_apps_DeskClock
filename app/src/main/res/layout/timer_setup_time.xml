@@ -33,8 +33,7 @@
         android:includeFontPadding="false"
         android:singleLine="true"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="@dimen/timer_setup_digit_font_size"
-        tools:targetApi="21" />
+        android:textSize="40sp" />
 
     <ImageButton
         android:id="@+id/timer_setup_delete"
@@ -42,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/timer_setup_delete_margin"
         android:contentDescription="@string/timer_delete"
-        android:padding="12dp"
+        android:padding="8dp"
         android:scaleType="center"
         app:srcCompat="@drawable/ic_backspace" />
 

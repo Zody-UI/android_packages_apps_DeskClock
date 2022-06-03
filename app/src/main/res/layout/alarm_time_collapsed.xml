@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/label"
-            style="@style/Widget.MaterialComponents.TextView.Body"
+            style="@style/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -69,25 +69,27 @@
 
         <TextView
             android:id="@+id/days_of_week"
-            style="@style/Widget.MaterialComponents.TextView.Body"
+            style="@style/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="none"
             android:focusable="true"
             android:maxLines="1"
             android:paddingStart="@dimen/icon_margin"
-            android:paddingEnd="@dimen/icon_margin" />
+            android:paddingEnd="@dimen/icon_margin"
+            android:textColor="@color/auto_change_color" />
 
         <TextView
             android:id="@+id/upcoming_instance_label"
-            style="@style/Widget.MaterialComponents.TextView.Body"
+            style="@style/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="none"
             android:focusable="true"
             android:paddingStart="@dimen/icon_margin"
             android:paddingEnd="@dimen/icon_margin"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/auto_change_color" />
 
     </com.android.deskclock.widget.EllipsizeLayout>
 
@@ -111,7 +113,8 @@
         app:layout_gravity="bottom"
         app:layout_row="1"
         app:layout_rowSpan="2"
-        app:srcCompat="@drawable/ic_caret_down" />
+        app:srcCompat="@drawable/ic_caret_down"
+        android:textColor="@color/auto_change_color" />
 
     <View
         android:id="@+id/hairline"
@@ -123,6 +126,7 @@
         app:layout_column="0"
         app:layout_columnSpan="5"
         app:layout_gravity="fill_horizontal"
-        app:layout_row="3" />
+        app:layout_row="3"
+        android:textColor="@color/auto_change_color" />
 
 </androidx.gridlayout.widget.GridLayout>

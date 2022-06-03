@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# One UI Design Library (de.dlyt.yanndroid.oneui)
+-keep class de.dlyt.yanndroid.oneui.** { *; }
+-keep class androidx.appcompat.widget.Sesl** { *; }
+-keep class android.view.WindowInsetsController { *; }

@@ -23,5 +23,5 @@
     android:paddingStart="20dp"
     android:text="@string/selected_cities_label"
     android:textAlignment="viewStart"
-    android:textColor="?attr/colorOnSurface"
+    android:textColor="@color/auto_change_color"
     android:textSize="20sp" />

@@ -14,13 +14,10 @@
   limitations under the License.
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:tint="@color/auto_change_color"
-    android:viewportWidth="24.0"
-    android:viewportHeight="24.0">
-    <path
-        android:fillColor="#FFF"
-        android:pathData="M9,16.2L4.8,12l-1.4,1.4L9,19 21,7l-1.4,-1.4L9,16.2z" />
-</vector>
+<resources>
+
+    <style name="Theme.DeskClock" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="bottomNavigationStyle">@style/Widget.Design.BottomNavigationView</item>
+    </style>
+
+</resources>

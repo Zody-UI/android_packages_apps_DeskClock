@@ -20,4 +20,4 @@
     android:includeFontPadding="false"
     android:singleLine="true"
     android:text="@string/loading_widget"
-    android:textColor="?attr/colorOnSurface" />
+    android:textColor="@color/auto_change_color" />

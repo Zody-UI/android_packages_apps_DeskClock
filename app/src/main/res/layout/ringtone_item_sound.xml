@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="@color/auto_change_color"
                     android:textSize="@dimen/alarm_text_font_size" />
 
             </LinearLayout>

@@ -17,7 +17,7 @@
     android:name="day_button_circle_vector"
     android:width="24dp"
     android:height="24dp"
-    android:tint="?attr/colorOnSurface"
+    android:tint="#000000"
     android:viewportWidth="24.0"
     android:viewportHeight="24.0">
     <group
@@ -27,7 +27,7 @@
         android:translateY="12">
         <path
             android:name="path"
-            android:fillColor="#00FFFFFF"
+            android:fillColor="#3b3c3e"
             android:pathData="M 0.0,8.0 c -4.41999816895,0.0 -8.0,-3.58200073242 -8.0,-8.0 c 0.0,-4.41799926758 3.58000183105,-8.0 8.0,-8.0 c 4.41999816895,0.0 8.0,3.58200073242 8.0,8.0 c 0.0,4.41799926758 -3.58000183105,8.0 -8.0,8.0 Z" />
     </group>
 </vector>

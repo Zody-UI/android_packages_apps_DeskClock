@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/Widget.MaterialComponents.TextView.Body"
+            style="@style/body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -62,7 +62,7 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:layerType="hardware"
-            app:fillColor="?attr/colorOnSurface"
+            app:fillColor="@color/auto_change_color"
             app:layout_column="0"
             app:layout_columnSpan="3"
             app:layout_gravity="fill"
@@ -73,7 +73,7 @@
             android:id="@+id/snooze"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_circle_white"
+            android:background="@drawable/bg_circle_auto_change_color"
             android:contentDescription="@string/alarm_alert_snooze_text"
             app:backgroundTint="?attr/colorAccent"
             app:layout_column="0"
@@ -86,7 +86,7 @@
             android:id="@+id/dismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_circle_white"
+            android:background="@drawable/bg_circle_auto_change_color"
             android:contentDescription="@string/alarm_alert_dismiss_text"
             app:layout_column="2"
             app:layout_columnWeight="1"
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/alarm_lockscreen_bottom_margin"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/auto_change_color"
             android:textSize="@dimen/bottom_text_size"
             android:visibility="gone"
             app:layout_column="0"
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textAppearance="@style/alarm_lockscreen_thin"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/auto_change_color" />
 
         <TextView
             android:id="@+id/alert_info"
@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textAppearance="@style/alarm_lockscreen_thin"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/auto_change_color"
             android:textStyle="bold"
             android:visibility="gone" />
 

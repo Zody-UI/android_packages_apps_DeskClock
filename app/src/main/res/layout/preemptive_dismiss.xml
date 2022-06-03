@@ -23,5 +23,6 @@
     android:minHeight="@dimen/touch_target_min_size"
     android:paddingStart="@dimen/icon_margin"
     android:textAllCaps="false"
-    android:textAppearance="@style/Widget.MaterialComponents.TextView.Body"
+    android:textAppearance="@style/body"
+    android:textColor="@color/auto_change_color"
     android:visibility="gone" />

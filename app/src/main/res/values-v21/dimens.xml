@@ -19,7 +19,7 @@
     <dimen name="fab_margin">8dp</dimen>
 
     <!-- Lollipop and later mini floating action button container height. -->
-    <dimen name="fab_height">56dp</dimen>
+    <dimen name="fab_height">40dp</dimen>
 
     <!-- Size of margin between icon and text / title text. -->
     <dimen name="notification_content_margin_start">0dp</dimen>

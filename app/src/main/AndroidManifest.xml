@@ -53,6 +53,7 @@
         android:requiredForAllUsers="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.DeskClock">
+        <meta-data android:name="SamsungBasicInteraction" android:value="SEP10"/>
 
         <!-- ============================================================== -->
         <!-- Main app components.                                           -->

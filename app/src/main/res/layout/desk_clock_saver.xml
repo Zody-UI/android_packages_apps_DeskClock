@@ -48,7 +48,7 @@
             android:ellipsize="none"
             android:gravity="center"
             android:singleLine="true"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/auto_change_color"
             android:textSize="@dimen/main_clock_font_size" />
 
         <include layout="@layout/date_and_next_alarm_time" />

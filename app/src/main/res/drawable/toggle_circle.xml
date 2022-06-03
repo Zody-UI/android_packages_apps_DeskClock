@@ -16,7 +16,7 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
-        <bitmap android:gravity="center" android:src="@drawable/bg_day_selected" />
+        <bitmap android:gravity="center" android:src="@drawable/bg_circle_auto_change_color" />
     </item>
     <item android:drawable="@android:color/transparent" />
 </selector>

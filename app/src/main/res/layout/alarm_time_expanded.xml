@@ -49,12 +49,13 @@
 
     <CheckBox
         android:id="@+id/repeat_onoff"
-        style="@style/Widget.MaterialComponents.TextView.Body"
+        style="@style/body"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/touch_target_min_size"
         android:paddingStart="@dimen/checkbox_start_padding"
         android:paddingEnd="@dimen/checkbox_start_padding"
         android:text="@string/alarm_repeat"
+        android:textColor="@color/auto_change_color"
         app:layout_column="0"
         app:layout_columnSpan="2"
         app:layout_row="1" />
@@ -66,6 +67,7 @@
         android:layout_height="@dimen/touch_target_min_size"
         android:orientation="horizontal"
         android:visibility="gone"
+        android:textColor="@color/auto_change_color"
         app:layout_column="0"
         app:layout_columnSpan="8"
         app:layout_gravity="fill_horizontal"
@@ -73,7 +75,7 @@
 
     <TextView
         android:id="@+id/choose_ringtone"
-        style="@style/Widget.MaterialComponents.TextView.Body"
+        style="@style/body"
         android:layout_width="0dp"
         android:layout_height="@dimen/touch_target_min_size"
         android:background="?attr/selectableItemBackground"
@@ -87,6 +89,7 @@
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:textAlignment="viewStart"
+        android:textColor="@color/auto_change_color"
         app:layout_column="0"
         app:layout_columnSpan="5"
         app:layout_gravity="fill_horizontal"
@@ -94,12 +97,13 @@
 
     <CheckBox
         android:id="@+id/vibrate_onoff"
-        style="@style/Widget.MaterialComponents.TextView.Body"
+        style="@style/body"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/touch_target_min_size"
         android:paddingStart="@dimen/checkbox_start_padding"
         android:paddingEnd="@dimen/checkbox_start_padding"
         android:text="@string/alarm_vibrate"
+        android:textColor="@color/auto_change_color"
         app:layout_column="5"
         app:layout_columnSpan="3"
         app:layout_gravity="center_vertical"
@@ -107,7 +111,7 @@
 
     <TextView
         android:id="@+id/edit_label"
-        style="@style/Widget.MaterialComponents.TextView.Body"
+        style="@style/body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -121,6 +125,7 @@
         android:paddingBottom="12dp"
         android:singleLine="true"
         android:textAlignment="viewStart"
+        android:textColor="@color/auto_change_color"
         app:layout_column="0"
         app:layout_columnSpan="8"
         app:layout_gravity="fill_horizontal"
@@ -144,6 +149,7 @@
         app:layout_column="0"
         app:layout_columnSpan="8"
         app:layout_gravity="fill_horizontal"
+        android:textColor="@color/auto_change_color"
         app:layout_row="6" />
 
     <Button
@@ -158,8 +164,9 @@
         android:paddingStart="@dimen/icon_margin"
         android:paddingEnd="@dimen/checkbox_start_padding"
         android:text="@string/delete"
+        android:textColor="@color/auto_change_color"
         android:textAllCaps="false"
-        android:textAppearance="@style/Widget.MaterialComponents.TextView.Body"
+        android:textAppearance="@style/body"
         app:layout_column="0"
         app:layout_gravity="center_vertical"
         app:layout_row="7" />
@@ -172,6 +179,7 @@
         android:layout_marginBottom="@dimen/alarm_clock_vertical_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/collapse_alarm"
+        android:textColor="@color/auto_change_color"
         android:padding="@dimen/checkbox_start_padding"
         android:scaleType="center"
         app:layout_column="7"

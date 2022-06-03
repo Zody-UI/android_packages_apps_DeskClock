@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textAppearance="@style/Widget.MaterialComponents.TextView.Body" />
+        android:textAppearance="@style/body" />
 
     <TextView
         android:id="@+id/hours_ahead"

@@ -14,5 +14,5 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:alpha="0.7" android:color="?attr/colorOnSurface" />
+    <item android:alpha="0.7" android:color="@color/auto_change_color" />
 </selector>

@@ -36,7 +36,7 @@
     <!-- shadowColor for widget text -->
     <color name="widget_shadow_color">#67000000</color>
 
-    <color name="auto_change_color">@color/black</color>
-    <color name="auto_change_color_reverse">@color/white</color>
+    <color name="auto_change_color">@color/white</color>
+    <color name="auto_change_color_reverse">@color/black</color>
 
 </resources>
